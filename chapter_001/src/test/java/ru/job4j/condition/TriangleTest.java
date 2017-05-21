@@ -17,17 +17,25 @@ public class TriangleTest {
 	* Test area.
 	*/
 	@Test
-	public  void whenNoExistTriangleThenMinusOne() {
-		assertThat(areaTest(0, 0, 1, 1, 2, 2), closeTo(-1, 0.01));
+	public  void whenNoExistTriangleThenZero() {
+		assertThat(areaTest(0, 0, 1, 1, 2, 2), closeTo(0, 0.01));
 	}
 	/**
 	* Test area.
 	*/
 	@Test
-	public void whenExistTriangleThenArea() {
+	public void whenExistTriangleThenAreaSix() {
 		assertThat(areaTest(0, 1, 3, 1, 2, 5), closeTo(6, 0.01));
 
 	}
+        /**
+         * Test area.
+         */
+        @Test
+        public void whenExistTriangleAgainThenAreaNine() {
+            assertThat(areaTest(5, 1, 3, 6, 7, 5), closeTo(9, 0.01));
+
+        }
 	/**
 	* Вспомогательный тест метод.
 	* @param ax сторона ax
@@ -46,4 +54,5 @@ public class TriangleTest {
 									new Point(cx, cy));
 	return triangle.area();
 	}
+
 }
