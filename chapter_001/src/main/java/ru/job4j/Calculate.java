@@ -1,7 +1,18 @@
 package ru.job4j;
 
+	/**
+	* Class Calculate
+	* @author Igor Kovalkov
+	* @since 20.05.2017
+	* @version 1
+	*/
 public class Calculate{
-	public static void main(String arg[]){
+	
+	/**
+	* точка входа
+	* @param args аргументы приложения
+	*/
+	public static void main(String args[]) {
 		System.out.println("Hello world");
 	}
 }
