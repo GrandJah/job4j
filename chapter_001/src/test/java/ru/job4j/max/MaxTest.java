@@ -17,7 +17,7 @@ public class MaxTest {
 	* Test max.
 	*/
 	@Test
-	public  void whenTwoandThreeThenTree() {
+	public  void whenTwoAndThreeThenTree() {
 		Max maximum = new Max();
 		assertThat(maximum.max(2, 3), is(3));
 	}
@@ -25,8 +25,24 @@ public class MaxTest {
 	* Test max.
 	*/
 	@Test
-	public  void whenSixandSixThenSix() {
+	public  void whenSixAndSixThenSix() {
 		Max maximum = new Max();
 		assertThat(maximum.max(6, 6), is(6));
+	}
+	/**
+	* Test max.
+	*/
+	@Test
+	public  void whenSixAndFourAndOneThenSix() {
+		Max maximum = new Max();
+		assertThat(maximum.max(6, 4, 1), is(6));
+	}
+	/**
+	* Test max.
+	*/
+	@Test
+	public  void whenZeroAndSevenAndTwoThenSeven() {
+		Max maximum = new Max();
+		assertThat(maximum.max(0, 7, 2), is(7));
 	}
 }
