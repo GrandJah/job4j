@@ -14,7 +14,7 @@ public class Calculator {
 	* @param second второй аргумент
 	*/
 public void add(double first, double second) {
-	result = first + second;
+	this.result = first + second;
 	}
 	/**
 	* Вычитание.
@@ -22,7 +22,7 @@ public void add(double first, double second) {
 	* @param second второй аргумент
 	*/
 public void substruct(double first, double second) {
-	result = first - second;
+	this.result = first - second;
 	}
 	/**
 	* Деление.
@@ -30,7 +30,7 @@ public void substruct(double first, double second) {
 	* @param second второй аргумент
 	*/
 public void div(double first, double second) {
-	result = first / second;
+	this.result = first / second;
 	}
 	/**
 	* Умножение.
@@ -38,7 +38,7 @@ public void div(double first, double second) {
 	* @param second второй аргумент
 	*/
 public void multiple(double first, double second) {
-	result = first * second;
+	this.result = first * second;
 	}
 	/**
 	* Результат.
