@@ -1,4 +1,3 @@
-target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -10,8 +9,7 @@ buildNumber.properties
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
-/chapter_001/chapter_001.iml
-/junior.iml
-/.idea/
-/chapter_001_test/chapter_001_test.iml
-/chapter_002/chapter_002.iml
+
+*.iml
+.idea
+target
