@@ -7,6 +7,7 @@ package ru.job4j.action;
  * @since 25.05.2017
  */
 public class Exit extends TrackerAction {
+    @Override
     public void execute() {
         getInput().println("Программа завершена.");
         System.exit(0);

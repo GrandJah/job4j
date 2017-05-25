@@ -29,6 +29,10 @@ class MenuTracker {
      */
     private MenuItem[] menu;
 
+    /**
+     * @param tracker трэкер заявок
+     * @param input интерфейс взаимодействия
+     */
     MenuTracker(Tracker tracker, Input input) {
         this.tracker = tracker;
         this.input = input;
@@ -43,6 +47,9 @@ class MenuTracker {
         };
     }
 
+    /**
+     * Проход взаимодействия с пользователем.
+     */
     void pass() {
         printMenu();
         try {
@@ -54,6 +61,9 @@ class MenuTracker {
 
     }
 
+    /**
+     * Вывод полного меню.
+     */
     private void printMenu() {
         StringBuilder out = new StringBuilder();
         for (int index = 0; index < this.menu.length; index++) {
@@ -79,29 +89,55 @@ class MenuTracker {
         }
     }
 
+    /**
+     * Элемент пункта меню.
+     */
     private static class MenuItem {
+        /**
+         * Строка меню.
+         */
         private String string;
+        /**
+         * Выполняемое действие.
+         */
         private TrackerAction action;
 
+        /** Пункт с действием по умолчанию.
+         * @param string Строка меню
+         */
         MenuItem(String string) {
             this.string = string;
             this.action = new EmptyAction();
         }
 
+        /**
+         * @param string Строка меню
+         * @param action Выполняемое действие
+         */
         MenuItem(String string, TrackerAction action) {
             this.string = string;
             this.action = action;
         }
 
+        /**
+         * @return Строка меню
+         */
         String getString() {
             return this.string;
         }
 
+        /**
+         * @return TrackerAction пункта меню
+         */
         TrackerAction getAction() {
             return this.action;
         }
 
+        /**
+         * Действие по умолчанию, для пункта меню.
+         */
         private class EmptyAction extends TrackerAction {
+            @Override
             public void execute() {
                 getInput().println("Действие на этот пункт не реализвано!");
             }
