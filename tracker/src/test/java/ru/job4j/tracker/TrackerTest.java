@@ -85,7 +85,7 @@ public class TrackerTest {
     }
 
     /**
-     * Test.
+     * Проверка сохранения порядка при удалении элемента.
      */
     @Test
     public void WhenDeleteItemThenSaveOrder() {
