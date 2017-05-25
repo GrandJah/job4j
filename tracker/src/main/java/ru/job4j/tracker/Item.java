@@ -38,8 +38,8 @@ public class Item {
      */
     private void init() {
         this.created = System.currentTimeMillis();
-        this.id = String.format("%tD-%080d",
-                this.created, this.created % 100000000);
+        this.id = String.format("%tD-%08d-%04d",
+                this.created, this.created % 100000000, this.hashCode());
     }
 
     /**
@@ -59,7 +59,7 @@ public class Item {
     }
 
     /**
-     * @param name Имя пользователя
+     * @param name        Имя пользователя
      * @param description Описание заявки
      */
     public Item(String name, String description) {
@@ -82,7 +82,9 @@ public class Item {
         return this.name;
     }
 
-    /** Редактирование имени.
+    /**
+     * Редактирование имени.
+     *
      * @param name новое имя.
      */
     public void setName(String name) {

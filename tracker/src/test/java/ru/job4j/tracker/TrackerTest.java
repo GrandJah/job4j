@@ -84,4 +84,26 @@ public class TrackerTest {
         assertThat(tracker.findByName("Заявка"), is(item));
     }
 
+    /**
+     * Test.
+     */
+    @Test
+    public void WhenDeleteItemThenSaveOrder() {
+        Tracker tracker = new Tracker();
+        tracker.add(new Item("Первый"));
+        tracker.add(new Item("Второй"));
+        tracker.add(new Item("Третий"));
+        tracker.add(new Item("Четвертый"));
+        tracker.add(new Item("Пятый"));
+        tracker.delete(tracker.findByName("Третий"));
+        tracker.delete(tracker.findByName("Первый"));
+        StringBuilder result = new StringBuilder();
+        Item[] items = tracker.getAll();
+        for (Item item : items) {
+            result.append(item.getName());
+            result.append(", ");
+        }
+        String expectOrder = "Второй, Четвертый, Пятый, ";
+        assertThat(result.toString(),is(expectOrder) );
+    }
 }
