@@ -13,15 +13,8 @@ public class Item {
      */
     private String id;
 
-    /** Редактирование названия.
-     * @param name новое название
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
     /**
-     * Название заявки.
+     * Имя пользователя.
      */
     private String name;
 
@@ -45,8 +38,8 @@ public class Item {
      */
     private void init() {
         this.created = System.currentTimeMillis();
-        this.id = String.format("%tD-%03d",
-                this.created, this.created % 1000);
+        this.id = String.format("%tD-%080d",
+                this.created, this.created % 100000000);
     }
 
     /**
@@ -54,14 +47,25 @@ public class Item {
      */
     public Item() {
         init();
+        this.name = "unknown";
     }
 
     /**
-     * @param name Название заявки
+     * @param name Имя пользователя
      */
     public Item(String name) {
         init();
         this.name = name;
+    }
+
+    /**
+     * @param name Имя пользователя
+     * @param description Описание заявки
+     */
+    public Item(String name, String description) {
+        init();
+        this.name = name;
+        this.description = description;
     }
 
     /**
@@ -76,5 +80,12 @@ public class Item {
      */
     public String getName() {
         return this.name;
+    }
+
+    /** Редактирование имени.
+     * @param name новое имя.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 }
