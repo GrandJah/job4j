@@ -88,7 +88,7 @@ public class TrackerTest {
      * Проверка сохранения порядка при удалении элемента.
      */
     @Test
-    public void WhenDeleteItemThenSaveOrder() {
+    public void whenDeleteItemThenSaveOrder() {
         Tracker tracker = new Tracker();
         tracker.add(new Item("Первый"));
         tracker.add(new Item("Второй"));
@@ -104,6 +104,6 @@ public class TrackerTest {
             result.append(", ");
         }
         String expectOrder = "Второй, Четвертый, Пятый, ";
-        assertThat(result.toString(),is(expectOrder) );
+        assertThat(result.toString(), is(expectOrder));
     }
 }

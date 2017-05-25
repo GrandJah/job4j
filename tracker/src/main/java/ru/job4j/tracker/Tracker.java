@@ -63,7 +63,7 @@ public class Tracker {
         if (item != null) {
             int position = findPositionId(item.getId());
             if (position >= 0) {
-                System.arraycopy(this.items, position+1,
+                System.arraycopy(this.items, position + 1,
                         this.items, position, --this.size - position);
             }
         }
