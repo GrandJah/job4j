@@ -16,7 +16,7 @@ import ru.job4j.tracker.Tracker;
  * @version 0.1
  * @since 25.05.2017
  */
-class MenuTracker {
+class Menu {
     /**
      * User menu.
      */

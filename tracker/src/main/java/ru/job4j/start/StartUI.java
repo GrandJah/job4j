@@ -24,14 +24,14 @@ public class StartUI {
     /**
      * Меню.
      */
-    private MenuTracker menu;
+    private Menu menu;
 
     /**
      * @param tracker трэкер
      * @param input интерфейс пользователя
      * @param menu меню взаимодействия
      */
-    private StartUI(Tracker tracker, ConsoleInput input, MenuTracker menu) {
+    private StartUI(Tracker tracker, ConsoleInput input, Menu menu) {
         this.input = input;
         this.tracker = tracker;
         this.menu = menu;
@@ -41,7 +41,7 @@ public class StartUI {
      * @param args аргументы
      */
     public static void main(String[] args) {
-        StartUI startUI = new StartUI(new Tracker(), new ConsoleInput(), new MenuTracker());
+        StartUI startUI = new StartUI(new Tracker(), new ConsoleInput(), new Menu());
         startUI.run();
     }
 
