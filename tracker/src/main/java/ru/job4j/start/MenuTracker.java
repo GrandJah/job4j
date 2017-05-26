@@ -21,20 +21,20 @@ class MenuTracker {
      * User menu.
      */
     private MenuItem[] menu = new MenuItem[]{
-                new MenuItem("Add new Item", new Add()),
-                new MenuItem("Show all items", new GetAll()),
-                new MenuItem("Edit item", new Edit()),
-                new MenuItem("Delete item", new Delete()),
-                new MenuItem("Find item by Id", new FindById()),
-                new MenuItem("Find items by name", new FindByName()),
-                new MenuItem("Exit Program", null)
-        };
+            new MenuItem("Add new Item", new Add()),
+            new MenuItem("Show all items", new GetAll()),
+            new MenuItem("Edit item", new Edit()),
+            new MenuItem("Delete item", new Delete()),
+            new MenuItem("Find item by Id", new FindById()),
+            new MenuItem("Find items by name", new FindByName()),
+            new MenuItem("Exit Program", null)
+    };
 
     /** Выполенение пункта меню.
      * @param index пункт меню
      * @return действие
      */
-    public TrackerAction getAction(int index) {
+    TrackerAction getAction(int index) {
         TrackerAction action;
         if (index < this.menu.length && index >= 0) {
             action = this.menu[index].getAction();
@@ -48,7 +48,7 @@ class MenuTracker {
      * Вывод полного меню.
      * @return Меню
      */
-    public String printMenu() {
+    String printMenu() {
         StringBuilder out = new StringBuilder();
         for (int index = 0; index < this.menu.length; index++) {
             out.append(index);
