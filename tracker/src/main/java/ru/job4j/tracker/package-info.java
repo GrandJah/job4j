@@ -1,7 +1,7 @@
 /**
  * junior.
  *
- * @author Igor Kovalkov aka Atlant
+ * @author Igor Kovalkov
  * @version 0.1
  * @since 24.05.2017
  */

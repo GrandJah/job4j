@@ -1,21 +1,47 @@
 package ru.job4j.start;
 
+import ru.job4j.action.TrackerAction;
 import ru.job4j.tracker.Tracker;
 
 /**
  * junior.
  *
- * @author Igor Kovalkov aka Atlant
+ * @author Igor Kovalkov
  * @version 0.1
  * @since 25.05.2017
  */
 public class StartUI {
+    /**
+     * Ввод-вывод.
+     */
+    private Input input;
+
+    /**
+     * Трэкер заявок.
+     */
+    private Tracker tracker;
+
+    /**
+     * Меню.
+     */
+    private MenuTracker menu;
+
+    /**
+     * @param tracker трэкер
+     * @param input интерфейс пользователя
+     * @param menu меню взаимодействия
+     */
+    private StartUI(Tracker tracker, ConsoleInput input, MenuTracker menu) {
+        this.input = input;
+        this.tracker = tracker;
+        this.menu = menu;
+    }
 
     /**
      * @param args аргументы
      */
     public static void main(String[] args) {
-        StartUI startUI = new StartUI();
+        StartUI startUI = new StartUI(new Tracker(), new ConsoleInput(), new MenuTracker());
         startUI.run();
     }
 
@@ -23,9 +49,20 @@ public class StartUI {
      * Application body.
      */
     private void run() {
-        MenuTracker menu = new MenuTracker(new Tracker(), new ConsoleInput());
-        while (true) {
-            menu.pass();
+        boolean exit = false;
+        while (!exit) {
+            this.input.println(this.menu.printMenu());
+            try {
+                int answer = Integer.parseInt(this.input.ask("Select : "));
+                TrackerAction action = this.menu.getAction(answer);
+                if (action != null) {
+                    action.execute(this.input, this.tracker);
+                } else {
+                    exit = true;
+                }
+            } catch (NumberFormatException e) {
+                this.input.println("Ошибка ввода: введите число");
+            }
         }
     }
 }

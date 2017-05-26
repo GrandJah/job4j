@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**
  * junior.
  *
- * @author Igor Kovalkov aka Atlant
+ * @author Igor Kovalkov
  * @version 0.1
  * @since 25.05.2017
  */

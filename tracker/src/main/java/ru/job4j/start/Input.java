@@ -3,7 +3,7 @@ package ru.job4j.start;
 /**
  * junior.
  *
- * @author Igor Kovalkov aka Atlant
+ * @author Igor Kovalkov
  * @version 0.1
  * @since 25.05.2017
  */

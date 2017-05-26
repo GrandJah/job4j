@@ -1,7 +1,10 @@
 package ru.job4j.start;
 
 import ru.job4j.action.Add;
-import ru.job4j.action.Exit;
+import ru.job4j.action.Delete;
+import ru.job4j.action.Edit;
+import ru.job4j.action.FindById;
+import ru.job4j.action.FindByName;
 import ru.job4j.action.GetAll;
 import ru.job4j.action.TrackerAction;
 import ru.job4j.tracker.Tracker;
@@ -9,62 +12,43 @@ import ru.job4j.tracker.Tracker;
 /**
  * junior.
  *
- * @author Igor Kovalkov aka Atlant
+ * @author Igor Kovalkov
  * @version 0.1
  * @since 25.05.2017
  */
 class MenuTracker {
     /**
-     * Ввод-вывод.
-     */
-    private Input input;
-
-    /**
-     * Трэкер заявок.
-     */
-    private Tracker tracker;
-
-    /**
      * User menu.
      */
-    private MenuItem[] menu;
-
-    /**
-     * @param tracker трэкер заявок
-     * @param input интерфейс взаимодействия
-     */
-    MenuTracker(Tracker tracker, Input input) {
-        this.tracker = tracker;
-        this.input = input;
-        this.menu = new MenuItem[]{
+    private MenuItem[] menu = new MenuItem[]{
                 new MenuItem("Add new Item", new Add()),
                 new MenuItem("Show all items", new GetAll()),
-                new MenuItem("Edit item"),
-                new MenuItem("Delete item"),
-                new MenuItem("Find item by Id"),
-                new MenuItem("Find items by name"),
-                new MenuItem("Exit Program", new Exit())
+                new MenuItem("Edit item", new Edit()),
+                new MenuItem("Delete item", new Delete()),
+                new MenuItem("Find item by Id", new FindById()),
+                new MenuItem("Find items by name", new FindByName()),
+                new MenuItem("Exit Program", null)
         };
-    }
 
-    /**
-     * Проход взаимодействия с пользователем.
+    /** Выполенение пункта меню.
+     * @param index пункт меню
+     * @return действие
      */
-    void pass() {
-        printMenu();
-        try {
-            int answer = Integer.parseInt(input.ask("Select : "));
-            action(answer);
-        } catch (NumberFormatException e) {
-            this.input.println("Ошибка ввода: введите число");
+    public TrackerAction getAction(int index) {
+        TrackerAction action;
+        if (index < this.menu.length && index >= 0) {
+            action = this.menu[index].getAction();
+        } else {
+            action = new ErrorAction();
         }
-
+        return action;
     }
 
     /**
      * Вывод полного меню.
+     * @return Меню
      */
-    private void printMenu() {
+    public String printMenu() {
         StringBuilder out = new StringBuilder();
         for (int index = 0; index < this.menu.length; index++) {
             out.append(index);
@@ -72,19 +56,17 @@ class MenuTracker {
             out.append(this.menu[index].getString());
             out.append(System.lineSeparator());
         }
-        this.input.print(out.toString());
+        return out.toString();
     }
 
-    /** Выполенение пункта меню.
-     * @param index пункт меню
+
+
+    /**
+     * Действие по умолчанию, для пункта меню.
      */
-    private void action(int index) {
-        if (index < this.menu.length && index >= 0) {
-            TrackerAction action = this.menu[index].getAction();
-            action.setInput(this.input);
-            action.setTracker(this.tracker);
-            action.execute();
-        } else {
+    private static class ErrorAction implements TrackerAction {
+        @Override
+        public void execute(Input input, Tracker tracker) {
             input.println("Ошибка: данного пункта нет в меню");
         }
     }
@@ -136,10 +118,10 @@ class MenuTracker {
         /**
          * Действие по умолчанию, для пункта меню.
          */
-        private class EmptyAction extends TrackerAction {
+        private class EmptyAction implements TrackerAction {
             @Override
-            public void execute() {
-                getInput().println("Действие на этот пункт не реализвано!");
+            public void execute(Input input, Tracker tracker) {
+                input.println("Действие на этот пункт не реализвано!");
             }
         }
     }

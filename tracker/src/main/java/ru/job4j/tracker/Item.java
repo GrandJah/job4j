@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.Arrays;
+
 /**
  * junior.
  *
@@ -39,7 +41,7 @@ public class Item {
     private void init() {
         this.created = System.currentTimeMillis();
         this.id = String.format("%tD-%08d-%04d",
-                this.created, this.created % 100000000, this.hashCode());
+                this.created, this.created % 100000000, this.hashCode() % 1000);
     }
 
     /**
@@ -89,5 +91,20 @@ public class Item {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * * Редактирование описания.
+     *
+     * @param description описание
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Item{%6$s id = '%s',%6$s name = '%s',%6$s description = '%s',%6$s created = '%4$te %4$tb,%4$tY - %4$tH:%4$tM:%4$tS',%6$s comments = '%5$s',%6$s}%6$s",
+                id, name, description, created, Arrays.toString(comments), System.lineSeparator());
     }
 }
