@@ -8,6 +8,9 @@ package ru.job4j.paint;
  * @since 26.05.2017
  */
 public class Paint {
+    /** Рисуем фигуру.
+     * @param shape фигура
+     */
     public void draw(Shape shape) {
         System.out.println(shape.pic());
     }
