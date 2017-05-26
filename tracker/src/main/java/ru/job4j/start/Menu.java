@@ -3,6 +3,7 @@ package ru.job4j.start;
 import ru.job4j.action.Add;
 import ru.job4j.action.Delete;
 import ru.job4j.action.Edit;
+import ru.job4j.action.Exit;
 import ru.job4j.action.FindById;
 import ru.job4j.action.FindByName;
 import ru.job4j.action.GetAll;
@@ -27,7 +28,7 @@ class Menu {
             new MenuItem("Delete item", new Delete()),
             new MenuItem("Find item by Id", new FindById()),
             new MenuItem("Find items by name", new FindByName()),
-            new MenuItem("Exit Program", null)
+            new MenuItem("Exit Program", new Exit())
     };
 
     /** Выполенение пункта меню.

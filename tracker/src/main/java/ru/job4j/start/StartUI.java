@@ -1,7 +1,8 @@
 package ru.job4j.start;
 
-import ru.job4j.action.TrackerAction;
-import ru.job4j.tracker.Tracker;
+        import ru.job4j.action.Exit;
+        import ru.job4j.action.TrackerAction;
+        import ru.job4j.tracker.Tracker;
 
 /**
  * junior.
@@ -49,19 +50,13 @@ public class StartUI {
      * Application body.
      */
     private void run() {
-        boolean exit = false;
-        while (!exit) {
+        while (true) {
             this.input.println(this.menu.printMenu());
-            try {
-                int answer = Integer.parseInt(this.input.ask("Select : "));
-                TrackerAction action = this.menu.getAction(answer);
-                if (action != null) {
-                    action.execute(this.input, this.tracker);
-                } else {
-                    exit = true;
-                }
-            } catch (NumberFormatException e) {
-                this.input.println("Ошибка ввода: введите число");
+            int answer = Integer.parseInt(this.input.ask("Select : "));
+            TrackerAction action = this.menu.getAction(answer);
+            action.execute(this.input, this.tracker);
+            if (action instanceof Exit) {
+                break;
             }
         }
     }
