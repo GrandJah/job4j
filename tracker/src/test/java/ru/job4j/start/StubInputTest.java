@@ -15,6 +15,19 @@ import static org.junit.Assert.assertThat;
  * @since 27.05.2017
  */
 public class StubInputTest {
+    /** Заполняем трекер.
+     * @param tracker трэкер
+     * @return средний элемент
+     */
+    private Item fillTracker(Tracker tracker) {
+        tracker.add(new Item("Один"));
+        tracker.add(new Item("Два"));
+        Item itemReturn = new Item("Три");
+        tracker.add(itemReturn);
+        tracker.add(new Item("Четыре"));
+        tracker.add(new Item("Пять"));
+        return itemReturn;
+    }
 
     /**
      * Test exit.
@@ -51,9 +64,7 @@ public class StubInputTest {
     @Test
     public void whenGetAllThenReturnAll() {
         Tracker tracker = new Tracker();
-        tracker.add(new Item("Один"));
-        tracker.add(new Item("Два"));
-        tracker.add(new Item("Три"));
+        fillTracker(tracker);
         String[] answer = {"1", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(tracker, input).run();
@@ -61,7 +72,7 @@ public class StubInputTest {
         for (Item item : tracker.getAll()) {
             builder.append(item.getName());
         }
-        assertThat(builder.toString(), is("ОдинДваТри"));
+        assertThat(builder.toString(), is("ОдинДваТриЧетыреПять"));
     }
 
     /**
@@ -70,12 +81,7 @@ public class StubInputTest {
     @Test
     public void whenDeleteItemThenSaveOrder() {
         Tracker tracker = new Tracker();
-        tracker.add(new Item("Один"));
-        tracker.add(new Item("Два"));
-        Item itemDelete = new Item("Три");
-        tracker.add(itemDelete);
-        tracker.add(new Item("Четыре"));
-        tracker.add(new Item("Пять"));
+        Item itemDelete = fillTracker(tracker);
         String[] answer = {"3", itemDelete.getId(), "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(tracker, input).run();
@@ -92,12 +98,7 @@ public class StubInputTest {
     @Test
     public void whenFindByIdThenReturnCorrect() {
         Tracker tracker = new Tracker();
-        tracker.add(new Item("Один"));
-        tracker.add(new Item("Два"));
-        Item itemReturn = new Item("Три");
-        tracker.add(itemReturn);
-        tracker.add(new Item("Четыре"));
-        tracker.add(new Item("Пять"));
+        Item itemReturn = fillTracker(tracker);
         String[] answer = {"4", itemReturn.getId(), "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(tracker, input).run();
@@ -110,12 +111,7 @@ public class StubInputTest {
     @Test
     public void whenFindByNameThenReturnCorrect() {
         Tracker tracker = new Tracker();
-        tracker.add(new Item("Один"));
-        tracker.add(new Item("Два"));
-        Item itemReturn = new Item("Три");
-        tracker.add(itemReturn);
-        tracker.add(new Item("Четыре"));
-        tracker.add(new Item("Пять"));
+        Item itemReturn = fillTracker(tracker);
         String[] answer = {"5", "Три", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(tracker, input).run();
@@ -128,12 +124,7 @@ public class StubInputTest {
     @Test
     public void whenEditThenEditCorrect() {
         Tracker tracker = new Tracker();
-        tracker.add(new Item("Один"));
-        tracker.add(new Item("Два"));
-        Item itemEdit = new Item("Три");
-        tracker.add(itemEdit);
-        tracker.add(new Item("Четыре"));
-        tracker.add(new Item("Пять"));
+        Item itemEdit = fillTracker(tracker);
         String[] answer = {"2", itemEdit.getId(), "НольТриПятнадцать", "Новое описание", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(tracker, input).run();
