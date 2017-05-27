@@ -21,18 +21,6 @@ class Menu {
     private TrackerAction[] menu;
 
     /**
-     * Флаг выхода.
-     */
-    private boolean exit = false;
-
-    /**
-     * @return флаг выхода
-     */
-    boolean getExit() {
-        return this.exit;
-    }
-
-    /**
      * Конструктор Меню.
      */
     Menu() {
@@ -67,11 +55,8 @@ class Menu {
         this.menu[this.size++] = action;
     }
 
-    /**
-     * Вывод полного меню.
-     * @return Меню
-     */
-    String printMenu() {
+    @Override
+    public String toString() {
         StringBuilder out = new StringBuilder();
         for (int index = 0; index < this.size; index++) {
             out.append(index);
@@ -94,66 +79,6 @@ class Menu {
         @Override
         public String getInfo() {
             return "Ошибка";
-        }
-    }
-
-    /**
-     * Элемент пункта меню.
-     */
-    private static class MenuItem {
-        /**
-         * Строка меню.
-         */
-        private String string;
-        /**
-         * Выполняемое действие.
-         */
-        private TrackerAction action;
-
-        /** Пункт с действием по умолчанию.
-         * @param string Строка меню
-         */
-        MenuItem(String string) {
-            this.string = string;
-            this.action = this.new EmptyAction();
-        }
-
-        /**
-         * @param string Строка меню
-         * @param action Выполняемое действие
-         */
-        MenuItem(String string, TrackerAction action) {
-            this.string = string;
-            this.action = action;
-        }
-
-        /**
-         * @return Строка меню
-         */
-        String getString() {
-            return this.string;
-        }
-
-        /**
-         * @return TrackerAction пункта меню
-         */
-        TrackerAction getAction() {
-            return this.action;
-        }
-
-        /**
-         * Действие по умолчанию, для пункта меню.
-         */
-        private class EmptyAction implements TrackerAction {
-            @Override
-            public void execute(Input input, Tracker tracker) {
-                input.println("Действие на этот пункт не реализвано!");
-            }
-
-            @Override
-            public String getInfo() {
-                return "Пустой пункт";
-            }
         }
     }
 
@@ -238,7 +163,6 @@ class Menu {
         @Override
         public void execute(Input input, Tracker tracker) {
             input.println("Программа завершена");
-            exit = true;
         }
 
         @Override

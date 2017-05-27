@@ -47,11 +47,12 @@ public class StartUI {
      * Application body.
      */
     void run() {
+        TrackerAction action;
         do {
-            this.input.println(this.menu.printMenu());
+            this.input.println(this.menu.toString());
             int answer = Integer.parseInt(this.input.ask("Select : "));
-            TrackerAction action = this.menu.getAction(answer);
+            action = this.menu.getAction(answer);
             action.execute(this.input, this.tracker);
-        } while (!menu.getExit());
+        } while (!(action instanceof Menu.Exit));
     }
 }
