@@ -12,19 +12,39 @@ import ru.job4j.tracker.Tracker;
  */
 class Menu {
     /**
+     * размер меню.
+     */
+    private int size = 0;
+    /**
      * User menu.
      */
-    private MenuItem[] menu = new MenuItem[]{
-            new MenuItem("Add new Item", new Add()),
-            new MenuItem("Show all items", new GetAll()),
-            new MenuItem("Edit item", new Edit()),
-            new MenuItem("Delete item", new Delete()),
-            new MenuItem("Find item by Id", new FindById()),
-            new MenuItem("Find items by name", new FindByName()),
-            new MenuItem("Exit Program", new Exit())
-    };
+    private TrackerAction[] menu;
 
+    /**
+     * Флаг выхода.
+     */
     private boolean exit = false;
+
+    /**
+     * @return флаг выхода
+     */
+    boolean getExit() {
+        return this.exit;
+    }
+
+    /**
+     * Конструктор Меню.
+     */
+    Menu() {
+        menu = new TrackerAction[8];
+        addAction(new Add());
+        addAction(new GetAll());
+        addAction(new Edit());
+        addAction(new Delete());
+        addAction(new FindById());
+        addAction(new FindByName());
+        addAction(new Exit());
+    }
 
     /** Выполенение пункта меню.
      * @param index пункт меню
@@ -32,12 +52,19 @@ class Menu {
      */
     TrackerAction getAction(int index) {
         TrackerAction action;
-        if (index < this.menu.length && index >= 0) {
-            action = this.menu[index].getAction();
+        if (index < this.size && index >= 0) {
+            action = this.menu[index];
         } else {
-            action = new ErrorAction();
+            action = new Menu.ErrorAction();
         }
         return action;
+    }
+
+    /** Добавление пункта в меню.
+     * @param action Дейсвтие
+     */
+    private void addAction(TrackerAction action) {
+        this.menu[this.size++] = action;
     }
 
     /**
@@ -46,17 +73,13 @@ class Menu {
      */
     String printMenu() {
         StringBuilder out = new StringBuilder();
-        for (int index = 0; index < this.menu.length; index++) {
+        for (int index = 0; index < this.size; index++) {
             out.append(index);
             out.append(". ");
-            out.append(this.menu[index].getString());
+            out.append(this.menu[index].getInfo());
             out.append(System.lineSeparator());
         }
         return out.toString();
-    }
-
-    boolean getExit() {
-        return this.exit;
     }
 
     /**
@@ -66,6 +89,11 @@ class Menu {
         @Override
         public void execute(Input input, Tracker tracker) {
             input.println("Ошибка: данного пункта нет в меню");
+        }
+
+        @Override
+        public String getInfo() {
+            return "Ошибка";
         }
     }
 
@@ -87,7 +115,7 @@ class Menu {
          */
         MenuItem(String string) {
             this.string = string;
-            this.action = new EmptyAction();
+            this.action = this.new EmptyAction();
         }
 
         /**
@@ -121,8 +149,17 @@ class Menu {
             public void execute(Input input, Tracker tracker) {
                 input.println("Действие на этот пункт не реализвано!");
             }
+
+            @Override
+            public String getInfo() {
+                return "Пустой пункт";
+            }
         }
     }
+
+    /**
+     * Вывод всех элементов.
+     */
     class GetAll implements TrackerAction {
         @Override
         public void execute(Input input, Tracker tracker) {
@@ -131,8 +168,22 @@ class Menu {
                 input.println(item.toString());
             }
         }
+
+        @Override
+        public String getInfo() {
+            return "Show all items";
+        }
     }
+
+    /**
+     * Добавление.
+     */
     class Add implements TrackerAction {
+        @Override
+        public String getInfo() {
+            return "Add new Item";
+        }
+
         @Override
         public void execute(Input input, Tracker tracker) {
             String name = input.ask("Введите ваше имя: ");
@@ -140,12 +191,25 @@ class Menu {
             tracker.add(new Item(name, description));
         }
     }
+
+    /**
+     * Удаление.
+     */
     class Delete implements TrackerAction {
         @Override
         public void execute(Input input, Tracker tracker) {
             tracker.delete(tracker.findById(input.ask("Введите идентификатор:")));
         }
+
+        @Override
+        public String getInfo() {
+            return "Delete item";
+        }
     }
+
+    /**
+     * Редактирование.
+     */
     class Edit implements TrackerAction {
         @Override
         public void execute(Input input, Tracker tracker) {
@@ -160,24 +224,56 @@ class Menu {
             }
             tracker.update(item);
         }
+
+        @Override
+        public String getInfo() {
+            return "Edit item";
+        }
     }
+
+    /**
+     * Выход.
+     */
     class Exit implements TrackerAction {
         @Override
         public void execute(Input input, Tracker tracker) {
             input.println("Программа завершена");
             exit = true;
         }
+
+        @Override
+        public String getInfo() {
+            return "Exit Program";
+        }
     }
+
+    /**
+     * Поиск по id.
+     */
     class FindById implements TrackerAction {
         @Override
         public void execute(Input input, Tracker tracker) {
             input.println(tracker.findById(input.ask("Введите идентификатор:")).toString());
         }
+
+        @Override
+        public String getInfo() {
+            return "Find item by Id";
+        }
     }
+
+    /**
+     * Поиск по имени.
+     */
     class FindByName implements TrackerAction {
         @Override
         public void execute(Input input, Tracker tracker) {
             input.println(tracker.findByName(input.ask("Введите имя:")).toString());
+        }
+
+        @Override
+        public String getInfo() {
+            return "Find items by name";
         }
     }
 

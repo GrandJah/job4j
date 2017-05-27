@@ -1,6 +1,5 @@
 package ru.job4j.start;
 
-import ru.job4j.start.Input;
 import ru.job4j.tracker.Tracker;
 
 /**
@@ -17,4 +16,9 @@ public interface TrackerAction {
      * @param tracker трэкер
      */
     void execute(Input input, Tracker tracker);
+
+    /**
+     * @return Строка описания действия
+     */
+    String getInfo();
 }
