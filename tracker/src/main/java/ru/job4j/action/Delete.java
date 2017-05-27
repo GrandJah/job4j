@@ -13,7 +13,6 @@ import ru.job4j.tracker.Tracker;
 public class Delete implements TrackerAction {
     @Override
     public void execute(Input input, Tracker tracker) {
-        input.println(tracker.findById(input.ask("Введите идентификатор:")).toString());
-
+        tracker.delete(tracker.findById(input.ask("Введите идентификатор:")));
     }
 }

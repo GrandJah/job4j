@@ -30,26 +30,25 @@ public class StartUI {
     /**
      * @param tracker трэкер
      * @param input интерфейс пользователя
-     * @param menu меню взаимодействия
      */
-    private StartUI(Tracker tracker, ConsoleInput input, Menu menu) {
+    StartUI(Tracker tracker, Input input) {
         this.input = input;
         this.tracker = tracker;
-        this.menu = menu;
+        this.menu = new Menu();
     }
 
     /**
      * @param args аргументы
      */
     public static void main(String[] args) {
-        StartUI startUI = new StartUI(new Tracker(), new ConsoleInput(), new Menu());
+        StartUI startUI = new StartUI(new Tracker(), new ConsoleInput());
         startUI.run();
     }
 
     /**
      * Application body.
      */
-    private void run() {
+    void run() {
         while (true) {
             this.input.println(this.menu.printMenu());
             int answer = Integer.parseInt(this.input.ask("Select : "));

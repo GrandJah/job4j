@@ -14,7 +14,7 @@ import ru.job4j.tracker.Tracker;
 public class Edit implements TrackerAction {
     @Override
     public void execute(Input input, Tracker tracker) {
-        Item item = tracker.findByName(input.ask("Введите идентификатор:"));
+        Item item = tracker.findById(input.ask("Введите идентификатор:"));
         String answer = input.ask("Введите новое имя:");
         if (!answer.equals("")) {
             item.setName(answer);
