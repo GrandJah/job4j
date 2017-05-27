@@ -1,13 +1,6 @@
 package ru.job4j.start;
 
-import ru.job4j.action.Add;
-import ru.job4j.action.Delete;
-import ru.job4j.action.Edit;
-import ru.job4j.action.Exit;
-import ru.job4j.action.FindById;
-import ru.job4j.action.FindByName;
-import ru.job4j.action.GetAll;
-import ru.job4j.action.TrackerAction;
+import ru.job4j.tracker.Item;
 import ru.job4j.tracker.Tracker;
 
 /**
@@ -30,6 +23,8 @@ class Menu {
             new MenuItem("Find items by name", new FindByName()),
             new MenuItem("Exit Program", new Exit())
     };
+
+    private boolean exit = false;
 
     /** Выполенение пункта меню.
      * @param index пункт меню
@@ -60,7 +55,9 @@ class Menu {
         return out.toString();
     }
 
-
+    boolean getExit() {
+        return this.exit;
+    }
 
     /**
      * Действие по умолчанию, для пункта меню.
@@ -126,6 +123,64 @@ class Menu {
             }
         }
     }
+    class GetAll implements TrackerAction {
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            Item[] items = tracker.getAll();
+            for (Item item : items) {
+                input.println(item.toString());
+            }
+        }
+    }
+    class Add implements TrackerAction {
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            String name = input.ask("Введите ваше имя: ");
+            String description = input.ask("Введите описание заявки: ");
+            tracker.add(new Item(name, description));
+        }
+    }
+    class Delete implements TrackerAction {
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            tracker.delete(tracker.findById(input.ask("Введите идентификатор:")));
+        }
+    }
+    class Edit implements TrackerAction {
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            Item item = tracker.findById(input.ask("Введите идентификатор:"));
+            String answer = input.ask("Введите новое имя:");
+            if (!answer.equals("")) {
+                item.setName(answer);
+            }
+            answer = input.ask("Введите новое описание:");
+            if (!answer.equals("")) {
+                item.setDescription(answer);
+            }
+            tracker.update(item);
+        }
+    }
+    class Exit implements TrackerAction {
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            input.println("Программа завершена");
+            exit = true;
+        }
+    }
+    class FindById implements TrackerAction {
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            input.println(tracker.findById(input.ask("Введите идентификатор:")).toString());
+        }
+    }
+    class FindByName implements TrackerAction {
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            input.println(tracker.findByName(input.ask("Введите имя:")).toString());
+        }
+    }
+
 }
 
 

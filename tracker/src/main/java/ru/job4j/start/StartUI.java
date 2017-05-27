@@ -1,7 +1,5 @@
 package ru.job4j.start;
 
-        import ru.job4j.action.Exit;
-        import ru.job4j.action.TrackerAction;
         import ru.job4j.tracker.Tracker;
 
 /**
@@ -49,14 +47,11 @@ public class StartUI {
      * Application body.
      */
     void run() {
-        while (true) {
+        do {
             this.input.println(this.menu.printMenu());
             int answer = Integer.parseInt(this.input.ask("Select : "));
             TrackerAction action = this.menu.getAction(answer);
             action.execute(this.input, this.tracker);
-            if (action instanceof Exit) {
-                break;
-            }
-        }
+        } while (!menu.getExit());
     }
 }
