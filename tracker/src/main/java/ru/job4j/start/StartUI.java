@@ -39,7 +39,7 @@ public class StartUI {
      * @param args аргументы
      */
     public static void main(String[] args) {
-        StartUI startUI = new StartUI(new Tracker(), new ConsoleInput());
+        StartUI startUI = new StartUI(new Tracker(), new ValidateInput());
         startUI.run();
     }
 
@@ -47,12 +47,15 @@ public class StartUI {
      * Application body.
      */
     void run() {
-        TrackerAction action;
+        TrackerAction action = null;
         do {
             this.input.println(this.menu.toString());
-            int answer = Integer.parseInt(this.input.ask("Select : "));
-            action = this.menu.getAction(answer);
-            action.execute(this.input, this.tracker);
+            try {
+                action = this.menu.selectAction(input);
+                action.execute(this.input, this.tracker);
+            } catch (MenuOutException ex) {
+                this.input.println(ex.getMessage());
+            }
         } while (!(action instanceof Menu.Exit));
     }
 }

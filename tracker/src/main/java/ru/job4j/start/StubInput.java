@@ -49,6 +49,10 @@ public class StubInput implements Input {
         print(question);
         return this.answer[currentAnswer++];
     }
+    @Override
+    public int ask(String question, int range) {
+        return Integer.parseInt(ask(question));
+    }
 
     @Override
     public void print(String data) {

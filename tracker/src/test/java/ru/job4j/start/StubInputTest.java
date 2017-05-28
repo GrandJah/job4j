@@ -130,4 +130,17 @@ public class StubInputTest {
         new StartUI(tracker, input).run();
         assertThat(itemEdit.getName(), is("НольТриПятнадцать"));
     }
+
+    /**
+     * Test.
+     */
+    @Test
+    public void whenIdFoundNotResultThenCorrectMessage() {
+        Tracker tracker = new Tracker();
+        Item itemEdit = fillTracker(tracker);
+        String[] answer = {"2", "123", "6"};
+        StubInput input = new StubInput(answer, 10);
+        new StartUI(tracker, input).run();
+        assertThat(input.getOut()[3], is(String.format("Заявка не найдена.%s", System.lineSeparator())));
+    }
 }

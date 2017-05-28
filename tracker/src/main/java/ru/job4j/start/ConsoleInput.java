@@ -38,6 +38,11 @@ public class ConsoleInput implements Input {
         return input.nextLine();
     }
 
+    @Override
+    public int ask(String question, int range) {
+        throw new RuntimeException("ConsoleInput.ask - not realisation");//все равно перекрываем
+    }
+
     /** Вывод данных в консоль.
      * @param data данные
      */

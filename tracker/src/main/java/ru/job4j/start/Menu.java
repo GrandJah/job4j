@@ -55,6 +55,10 @@ class Menu {
         this.menu[this.size++] = action;
     }
 
+    TrackerAction selectAction(Input input) {
+        return this.menu[input.ask("Select : ", this.size)];
+    }
+
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
@@ -139,15 +143,19 @@ class Menu {
         @Override
         public void execute(Input input, Tracker tracker) {
             Item item = tracker.findById(input.ask("Введите идентификатор:"));
-            String answer = input.ask("Введите новое имя:");
-            if (!answer.equals("")) {
-                item.setName(answer);
+            if (item != null) {
+                String answer = input.ask("Введите новое имя:");
+                if (!answer.equals("")) {
+                    item.setName(answer);
+                }
+                answer = input.ask("Введите новое описание:");
+                if (!answer.equals("")) {
+                    item.setDescription(answer);
+                }
+                tracker.update(item);
+            } else {
+                input.println("Заявка не найдена.");
             }
-            answer = input.ask("Введите новое описание:");
-            if (!answer.equals("")) {
-                item.setDescription(answer);
-            }
-            tracker.update(item);
         }
 
         @Override
