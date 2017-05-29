@@ -40,7 +40,7 @@ public class ConsoleInput implements Input {
 
     @Override
     public int ask(String question, int range) {
-        throw new RuntimeException("ConsoleInput.ask - not realisation");//все равно перекрываем
+        throw new RuntimeException("ConsoleInput.ask - not realisation"); //все равно перекрываем
     }
 
     /** Вывод данных в консоль.

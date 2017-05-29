@@ -8,6 +8,9 @@ package ru.job4j.start;
  * @since 28.05.2017
  */
 class MenuOutException extends RuntimeException {
+    /**
+     * @param message сообщение об ошибке
+     */
     MenuOutException(String message) {
         super(message);
     }

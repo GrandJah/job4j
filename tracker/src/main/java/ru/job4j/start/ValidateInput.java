@@ -1,7 +1,5 @@
 package ru.job4j.start;
 
-import java.util.Collections;
-
 /**
  * junior.
  *
@@ -14,7 +12,7 @@ public class ValidateInput extends ConsoleInput {
     public int ask(String question, int rangeMax) {
         try {
             int answer = Integer.parseInt(ask(question));
-            if (answer >= rangeMax || answer < 0 ) {
+            if (answer >= rangeMax || answer < 0) {
                 throw new MenuOutException("Неверный пункт меню");
             } else {
                 return answer;
