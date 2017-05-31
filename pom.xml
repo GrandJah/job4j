@@ -18,7 +18,8 @@
 		<module>chapter_001_test</module>
 		<module>chapter_002</module>
 		<module>tracker</module>
-	</modules>
+        <module>chapter_002_test</module>
+    </modules>
 
 	<dependencies>
 		<dependency>
