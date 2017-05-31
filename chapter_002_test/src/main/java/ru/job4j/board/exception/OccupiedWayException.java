@@ -8,6 +8,9 @@ package ru.job4j.board.exception;
  * @since 30.05.2017
  */
 public class OccupiedWayException extends BoardException {
+    /**
+     * Default constructor.
+     */
     public OccupiedWayException() {
         super("Occupied way");
     }

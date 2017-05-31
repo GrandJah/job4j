@@ -8,6 +8,9 @@ package ru.job4j.board.exception;
  * @since 30.05.2017
  */
 public class BoardException extends Exception {
+    /**
+     * @param message сообщение об ошибке.
+     */
     public BoardException(String message) {
         super(message);
     }

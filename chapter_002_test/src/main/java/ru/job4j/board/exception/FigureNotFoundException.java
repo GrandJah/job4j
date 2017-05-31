@@ -8,6 +8,9 @@ package ru.job4j.board.exception;
  * @since 30.05.2017
  */
 public class FigureNotFoundException extends BoardException {
+    /**
+     * Default constructor.
+     */
     public FigureNotFoundException() {
         super("Figure not found");
     }

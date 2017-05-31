@@ -8,7 +8,10 @@ package ru.job4j.board.exception;
  * @since 30.05.2017
  */
 public class ImpossibleMoveException extends BoardException {
+    /**
+     * Default constructor.
+     */
     public ImpossibleMoveException() {
-        super("Imposible move.");
+        super("Impossible move.");
     }
 }
