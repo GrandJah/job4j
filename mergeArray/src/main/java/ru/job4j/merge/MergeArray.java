@@ -18,7 +18,6 @@ public class MergeArray {
         int firstArrayPosition = 0, secondArrayPosition = 0;
         for (int index = 0; index < returnArray.length; index++) {
             if (firstArrayPosition == firstArray.length) {
-                returnArray[index] = secondArray[secondArrayPosition];
                 System.arraycopy(secondArray, secondArrayPosition, returnArray, index, returnArray.length - index);
                 break;
             } else if (secondArrayPosition == secondArray.length) {

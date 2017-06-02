@@ -20,6 +20,7 @@
 		<module>tracker</module>
         <module>chapter_002_test</module>
         <module>mergeArray</module>
+        <module>bank</module>
     </modules>
 
 	<dependencies>
