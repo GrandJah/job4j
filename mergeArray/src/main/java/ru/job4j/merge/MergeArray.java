@@ -19,10 +19,11 @@ public class MergeArray {
         for (int index = 0; index < returnArray.length; index++) {
             if (firstArrayPosition == firstArray.length) {
                 returnArray[index] = secondArray[secondArrayPosition];
-                secondArrayPosition++;
+                System.arraycopy(secondArray, secondArrayPosition, returnArray, index, returnArray.length - index);
+                break;
             } else if (secondArrayPosition == secondArray.length) {
-                returnArray[index] = firstArray[firstArrayPosition];
-                firstArrayPosition++;
+                System.arraycopy(firstArray, firstArrayPosition, returnArray, index, returnArray.length - index);
+                break;
             } else {
                 int first = firstArray[firstArrayPosition];
                 int second = secondArray[secondArrayPosition];
