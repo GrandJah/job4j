@@ -44,4 +44,21 @@ public class BankTest {
                 {new Time(9, 20), new Time(12, 20)}
         }));
     }
+
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenInAndOutSameThenOneRangeReturn() {
+        Client[] clients = {
+                new Client(new Time(9, 40), new Time(10, 20)),
+                new Client(new Time(9, 20), new Time(11, 20)),
+                new Client(new Time(10, 20), new Time(12, 20)),
+                new Client(new Time(9, 20), new Time(12, 20)) };
+        Bank bank = new Bank(clients);
+        Time[][] result = bank.getRangeMaxClient();
+        assertThat(result, is(new Time[][]{
+                {new Time(9, 40), new Time(11, 20)}
+        }));
+    }
 }

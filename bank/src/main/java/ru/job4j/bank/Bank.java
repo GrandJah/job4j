@@ -43,14 +43,22 @@ public class Bank {
         int[] clientInBank = new int[clientSize * 2];
 
         int counter = 0, maxCounter = 0, inPosition = 0, outPosition = 0;
-        for (int i = 0; i < timeLine.length; i++) {
+
+        int sizeTimeline = timeLine.length;
+
+        for (int i = 0; i < sizeTimeline; i++) {
             if (inPosition == clientSize) {
                 timeLine[i] = out[outPosition++];
                 clientInBank[i] = --counter;
             } else {
                 int inTime = in[inPosition];
                 int outTime = out[outPosition];
-                if (inTime < outTime) {
+                if (inTime == outTime) {
+                    inPosition++;
+                    outPosition++;
+                    sizeTimeline -= 2;
+                    i--;
+                } else if (inTime < outTime) {
                     timeLine[i] = inTime;
                     clientInBank[i] = ++counter;
                     maxCounter = maxCounter < counter ? counter : maxCounter;
