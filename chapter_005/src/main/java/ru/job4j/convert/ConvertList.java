@@ -3,7 +3,6 @@ package ru.job4j.convert;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * junior.
@@ -42,9 +41,9 @@ public class ConvertList {
         int[][] array = new int[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                try {
+                if (iterator.hasNext()) {
                     array[i][j] = iterator.next();
-                } catch (NoSuchElementException ex) {
+                } else {
                     array[i][j] = 0;
                 }
             }
