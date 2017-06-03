@@ -1,9 +1,12 @@
 package ru.job4j.tracker;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
+
 /**
  * junior.
  *
- * @author Igor Kovalkov aka Atlant
+ * @author Igor Kovalkov
  * @version 0.1
  * @since 24.05.2017
  */
@@ -11,100 +14,101 @@ public class Tracker {
     /**
      * Массив заявок.
      */
-    private Item[] items = new Item[100];
+    private ArrayList<Item> items = new ArrayList<>();
 
     /**
-     * Размер заполнения.
+     * @param item item
+     * @throws ErrorValue ошибка параметра
      */
-    private int size = 0;
-
-    /** Добавление заявок.
-     * @param item заявка
-     * @return заявка
-     */
-    public Item add(Item item) {
-        if (item != null) {
-            this.items[this.size++] = item;
-        }
-        return item;
+    private void validate(Item item) throws ErrorValue {
+        if (item == null) throw new ErrorValue();
     }
 
     /** Поиск позиции в массиве по ID.
      * @param id ID заявки
-     * @return позиция в массиве
+     * @return итератор в установленном месте
+     * @throws NotFound элемент не найден
      */
-    private int findPositionId(String id) {
-        int position = -1;
-        for (int index = 0; index < size; index++) {
-            if (id.equals(this.items[index].getId())) {
-                position = index;
-                break;
+    private ListIterator<Item> iteratorFindId(String id) throws NotFound {
+        ListIterator<Item> it = this.items.listIterator();
+        while (it.hasNext()) {
+            if(id.equals(it.next().getId())) {
+                it.previous();
+                return it;
             }
         }
-        return position;
+        throw new NotFound();
     }
 
     /** Обновление заявки.
      * @param item Заявка
+     * @throws NotFound элемент не найден
+     * @throws ErrorValue ошибка параметра
      */
-    public void update(Item item) {
+    public void update(Item item) throws ErrorValue, NotFound {
         if (item != null) {
-            int position = findPositionId(item.getId());
-            if (position >= 0) {
-                this.items[position] = item;
-            }
+            iteratorFindId(item.getId()).set(item);
+        } else {
+            throw new ErrorValue();
         }
+    }
+
+    /** Добавление заявок.
+     * @param item заявка
+     * @return заявка
+     * @throws ErrorValue ошибка параметра
+     */
+    public Item add(Item item) throws ErrorValue {
+        validate(item);
+        this.items.add(item);
+        return item;
     }
 
     /** Удаление заявки.
      * @param item Заявка
+     * @throws NotFound элемент не найден
+     * @throws ErrorValue ошибка параметра
      */
-    public void delete(Item item) {
-        if (item != null) {
-            int position = findPositionId(item.getId());
-            if (position >= 0) {
-                System.arraycopy(this.items, position + 1,
-                        this.items, position, --this.size - position);
-            }
-        }
+    public void delete(Item item) throws ErrorValue, NotFound {
+        validate(item);
+        iteratorFindId(item.getId()).remove();
     }
 
     /** Поиск по ID.
      * @param id ID заявки
      * @return заявка
      */
-    public Item findById(String id) {
-        Item item = null;
-        int position = findPositionId(id);
-        if (position >= 0) {
-            item = this.items[position];
-        }
-        return item;
-    }
-
-    /** Получение всех заявок.
-     * @return массив заявок
-     */
-    public Item[] getAll() {
-        Item[] allItem = new Item[size];
-        // Всё прверяется на null поэтому выводим всё
-        System.arraycopy(this.items, 0,
-                allItem, 0, size);
-        return allItem;
+    public Item findById(String id) throws NotFound {
+        return iteratorFindId(id).next();
     }
 
     /** Поиск по названию заявки.
      * @param key ключ поиска
      * @return найденая заявка
      */
-    public Item findByName(String key) {
-        Item findItem = null;
-        for (Item item : items) {
+    public Item findByName(String key) throws NotFound {
+        for (Item item : this.items) {
             if (item.getName().equals(key)) {
-                findItem = item;
-                break;
+                return item;
             }
         }
-        return findItem;
+        throw new NotFound();
     }
+
+    /** Получение всех заявок.
+     * @return массив заявок
+     */
+    public ArrayList<Item> getAll() {
+        return (ArrayList<Item>) this.items.clone();
+    }
+
+    /**
+     * элемент не найден.
+     */
+    public class NotFound extends Exception {}
+
+    /**
+     * ошибка параметра.
+     */
+    public class ErrorValue extends Exception {}
 }

@@ -19,7 +19,7 @@ public class StubInputTest {
      * @param tracker трэкер
      * @return средний элемент
      */
-    private Item fillTracker(Tracker tracker) {
+    private Item fillTracker(Tracker tracker) throws Tracker.ErrorValue {
         tracker.add(new Item("Один"));
         tracker.add(new Item("Два"));
         Item itemReturn = new Item("Три");
@@ -33,7 +33,7 @@ public class StubInputTest {
      * Test exit.
      */
     @Test
-    public void whenExitThenExit() {
+    public void whenExitThenExit() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         String[] answer = {"6"};
         StubInput input = new StubInput(answer, 3);
@@ -50,19 +50,19 @@ public class StubInputTest {
      * Test add.
      */
     @Test
-    public void whenAddThenAdd() {
+    public void whenAddThenAdd() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         String[] answer = {"0", "name", "desc", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(tracker, input).run();
-        assertThat(tracker.getAll()[0].getName(), is("name"));
+        assertThat(tracker.getAll().get(0).getName(), is("name"));
     }
 
     /**
      * Test getAll.
      */
     @Test
-    public void whenGetAllThenReturnAll() {
+    public void whenGetAllThenReturnAll() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         fillTracker(tracker);
         String[] answer = {"1", "6"};
@@ -79,7 +79,7 @@ public class StubInputTest {
      * Test delete.
      */
     @Test
-    public void whenDeleteItemThenSaveOrder() {
+    public void whenDeleteItemThenSaveOrder() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item itemDelete = fillTracker(tracker);
         String[] answer = {"3", itemDelete.getId(), "6"};
@@ -96,7 +96,7 @@ public class StubInputTest {
      * Test find by ID.
      */
     @Test
-    public void whenFindByIdThenReturnCorrect() {
+    public void whenFindByIdThenReturnCorrect() throws Tracker.ErrorValue, Tracker.NotFound {
         Tracker tracker = new Tracker();
         Item itemReturn = fillTracker(tracker);
         String[] answer = {"4", itemReturn.getId(), "6"};
@@ -109,7 +109,7 @@ public class StubInputTest {
      * Test find by Name.
      */
     @Test
-    public void whenFindByNameThenReturnCorrect() {
+    public void whenFindByNameThenReturnCorrect() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item itemReturn = fillTracker(tracker);
         String[] answer = {"5", "Три", "6"};
@@ -122,7 +122,7 @@ public class StubInputTest {
      * Test edit.
      */
     @Test
-    public void whenEditThenEditCorrect() {
+    public void whenEditThenEditCorrect() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item itemEdit = fillTracker(tracker);
         String[] answer = {"2", itemEdit.getId(), "НольТриПятнадцать", "Новое описание", "6"};
@@ -134,8 +134,8 @@ public class StubInputTest {
     /**
      * Test.
      */
-    @Test
-    public void whenIdFoundNotResultThenCorrectMessage() {
+    @Test (expected = Tracker.NotFound.class)
+    public void whenIdFoundNotResultThenCorrectMessage() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item itemEdit = fillTracker(tracker);
         String[] answer = {"2", "123", "6"};

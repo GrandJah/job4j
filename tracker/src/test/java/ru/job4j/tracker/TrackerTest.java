@@ -17,36 +17,36 @@ public class TrackerTest {
      * Test.
      */
     @Test
-    public void whenGetAllThenTrackerReturnAll() {
+    public void whenGetAllThenTrackerReturnAll() throws Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         tracker.add(new Item("Заявка1"));
         tracker.add(new Item("Заявка2"));
         tracker.add(new Item("Заявка3"));
-        assertThat(tracker.getAll().length, is(3));
+        assertThat(tracker.getAll().size(), is(3));
     }
 
     /**
      * Test.
      */
     @Test
-    public void whenAddItemThenTrackerHasItem() {
+    public void whenAddItemThenTrackerHasItem() throws Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
-        assertThat(tracker.getAll()[0], is(item));
+        assertThat(tracker.getAll().get(0), is(item));
     }
 
     /**
      * Test.
      */
     @Test
-    public void whenUpdateItemThenItemUpdate() {
+    public void whenUpdateItemThenItemUpdate() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
         item.setName("Редактированная");
         tracker.update(item);
-        assertThat(tracker.getAll()[0].getName(),
+        assertThat(tracker.getAll().get(0).getName(),
                 is("Редактированная"));
     }
 
@@ -54,19 +54,19 @@ public class TrackerTest {
      * Test.
      */
     @Test
-    public void whenDeleteItemThenTrackerNoHasItem() {
+    public void whenDeleteItemThenTrackerNoHasItem() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
         tracker.delete(item);
-        assertThat(tracker.getAll().length, is(0));
+        assertThat(tracker.getAll().size(), is(0));
     }
 
     /**
      * Test.
      */
     @Test
-    public void whenFindByIdThenReturnItemId() {
+    public void whenFindByIdThenReturnItemId() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
@@ -77,7 +77,7 @@ public class TrackerTest {
      * Test.
      */
     @Test
-    public void whenFindByNameThenReturnItemName() {
+    public void whenFindByNameThenReturnItemName() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
@@ -88,7 +88,7 @@ public class TrackerTest {
      * Проверка сохранения порядка при удалении элемента.
      */
     @Test
-    public void whenDeleteItemThenSaveOrder() {
+    public void whenDeleteItemThenSaveOrder() throws Tracker.ErrorValue, Tracker.NotFound {
         Tracker tracker = new Tracker();
         tracker.add(new Item("Первый"));
         tracker.add(new Item("Второй"));
@@ -98,8 +98,7 @@ public class TrackerTest {
         tracker.delete(tracker.findByName("Третий"));
         tracker.delete(tracker.findByName("Первый"));
         StringBuilder result = new StringBuilder();
-        Item[] items = tracker.getAll();
-        for (Item item : items) {
+        for (Item item : tracker.getAll()) {
             result.append(item.getName());
             result.append(", ");
         }

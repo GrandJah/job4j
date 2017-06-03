@@ -55,6 +55,10 @@ public class StartUI {
                 action.execute(this.input, this.tracker);
             } catch (MenuOutException ex) {
                 this.input.println(ex.getMessage());
+            } catch (Tracker.ErrorValue errorValue) {
+                this.input.println("Ошибка ввода данных");
+            } catch (Tracker.NotFound notFound) {
+                this.input.println("Элемент не найден");
             }
         } while (!(action instanceof Menu.Exit));
     }

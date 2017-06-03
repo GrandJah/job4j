@@ -1,11 +1,12 @@
 package ru.job4j.tracker;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * junior.
  *
- * @author Igor Kovalkov aka Atlant
+ * @author Igor Kovalkov
  * @version 0.1
  * @since 24.05.2017
  */
@@ -33,7 +34,7 @@ public class Item {
     /**
      * Комментарии к заявки.
      */
-    private String[] comments;
+    private ArrayList<String> comments;
 
     /**
      * Инициализация id и created.
@@ -105,6 +106,6 @@ public class Item {
     @Override
     public String toString() {
         return String.format("Item{%6$s id = '%s',%6$s name = '%s',%6$s description = '%s',%6$s created = '%4$te %4$tb,%4$tY - %4$tH:%4$tM:%4$tS',%6$s comments = '%5$s',%6$s}%6$s",
-                id, name, description, created, Arrays.toString(comments), System.lineSeparator());
+                id, name, description, created, comments, System.lineSeparator());
     }
 }
