@@ -50,4 +50,18 @@ public class ConvertList {
         }
         return array;
     }
+
+    /** добавление всех значений массивов в общий список.
+     * @param list список массивов
+     * @return список значений
+     */
+    public List<Integer> convert(List<int[]> list) {
+        List<Integer> newList = new LinkedList<>();
+        for (int[] array:list) {
+            for (int element : array) {
+                newList.add(element);
+            }
+        }
+        return newList;
+    }
 }

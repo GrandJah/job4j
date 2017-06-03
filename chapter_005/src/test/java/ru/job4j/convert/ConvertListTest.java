@@ -3,7 +3,9 @@ package ru.job4j.convert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -43,6 +45,21 @@ public class ConvertListTest {
 
         ConvertList convert = new ConvertList();
         int[][] result = convert.toArray(list, 3);
+        assertThat(result, is(expect));
+    }
+
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenConvertListArrayToListIntegerThenOk() {
+        List<int[]> list = new LinkedList<>();
+        list.add(new int[]{1, 2});
+        list.add(new int[]{3, 4, 5, 6});
+        List<Integer> expect = new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6));
+        ConvertList convert = new ConvertList();
+        List<Integer> result = convert.convert(list);
+
         assertThat(result, is(expect));
     }
 }
