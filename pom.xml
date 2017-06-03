@@ -21,6 +21,7 @@
         <module>chapter_002_test</module>
         <module>mergeArray</module>
         <module>bank</module>
+        <module>chapter_005</module>
     </modules>
 
 	<dependencies>
