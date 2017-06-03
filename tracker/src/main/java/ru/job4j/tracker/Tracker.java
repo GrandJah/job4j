@@ -18,7 +18,6 @@ public class Tracker {
 
     /**
      * @param item item
-     * @throws ErrorValue ошибка параметра
      */
     private void validate(Item item) throws ErrorValue {
         if (item == null) {
@@ -29,7 +28,6 @@ public class Tracker {
     /** Поиск позиции в массиве по ID.
      * @param id ID заявки
      * @return итератор в установленном месте
-     * @throws NotFound элемент не найден
      */
     private ListIterator<Item> iteratorFindId(String id) throws NotFound {
         ListIterator<Item> it = this.items.listIterator();
@@ -44,8 +42,6 @@ public class Tracker {
 
     /** Обновление заявки.
      * @param item Заявка
-     * @throws NotFound элемент не найден
-     * @throws ErrorValue ошибка параметра
      */
     public void update(Item item) throws ErrorValue, NotFound {
         if (item != null) {
@@ -58,7 +54,6 @@ public class Tracker {
     /** Добавление заявок.
      * @param item заявка
      * @return заявка
-     * @throws ErrorValue ошибка параметра
      */
     public Item add(Item item) throws ErrorValue {
         validate(item);
@@ -68,10 +63,8 @@ public class Tracker {
 
     /** Удаление заявки.
      * @param item Заявка
-     * @throws NotFound элемент не найден
-     * @throws ErrorValue ошибка параметра
      */
-    public void delete(Item item) throws ErrorValue, NotFound {
+    public void delete(Item item) {
         validate(item);
         iteratorFindId(item.getId()).remove();
     }
@@ -79,18 +72,16 @@ public class Tracker {
     /** Поиск по ID.
      * @param id ID заявки
      * @return заявка
-     * @throws NotFound элемент не найден
      */
-    public Item findById(String id) throws NotFound {
+    public Item findById(String id) {
         return iteratorFindId(id).next();
     }
 
     /** Поиск по названию заявки.
      * @param key ключ поиска
      * @return найденая заявка
-     * @throws NotFound элемент не найден
      */
-    public Item findByName(String key) throws NotFound {
+    public Item findByName(String key) {
         for (Item item : this.items) {
             if (item.getName().equals(key)) {
                 return item;
@@ -109,10 +100,10 @@ public class Tracker {
     /**
      * элемент не найден.
      */
-    public class NotFound extends Exception { }
+    public class NotFound extends RuntimeException { }
 
     /**
      * ошибка параметра.
      */
-    public class ErrorValue extends Exception { }
+    public class ErrorValue extends RuntimeException { }
 }

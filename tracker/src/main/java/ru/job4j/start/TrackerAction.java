@@ -14,10 +14,8 @@ public interface TrackerAction {
     /** Выполнить действие.
      * @param input интерфейс пользователя
      * @param tracker трэкер
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
-    void execute(Input input, Tracker tracker) throws Tracker.ErrorValue, Tracker.NotFound;
+    void execute(Input input, Tracker tracker);
 
     /**
      * @return Строка описания действия

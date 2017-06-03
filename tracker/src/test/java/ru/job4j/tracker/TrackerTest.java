@@ -15,10 +15,9 @@ import static org.junit.Assert.assertThat;
 public class TrackerTest {
     /**
      * Test.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
      */
     @Test
-    public void whenGetAllThenTrackerReturnAll() throws Tracker.ErrorValue {
+    public void whenGetAllThenTrackerReturnAll() {
         Tracker tracker = new Tracker();
         tracker.add(new Item("Заявка1"));
         tracker.add(new Item("Заявка2"));
@@ -28,10 +27,9 @@ public class TrackerTest {
 
     /**
      * Test.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
      */
     @Test
-    public void whenAddItemThenTrackerHasItem() throws Tracker.ErrorValue {
+    public void whenAddItemThenTrackerHasItem() {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
@@ -40,11 +38,9 @@ public class TrackerTest {
 
     /**
      * Test.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenUpdateItemThenItemUpdate() throws Tracker.NotFound, Tracker.ErrorValue {
+    public void whenUpdateItemThenItemUpdate() {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
@@ -56,11 +52,9 @@ public class TrackerTest {
 
     /**
      * Test.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenDeleteItemThenTrackerNoHasItem() throws Tracker.NotFound, Tracker.ErrorValue {
+    public void whenDeleteItemThenTrackerNoHasItem() {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
@@ -70,11 +64,9 @@ public class TrackerTest {
 
     /**
      * Test.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenFindByIdThenReturnItemId() throws Tracker.NotFound, Tracker.ErrorValue {
+    public void whenFindByIdThenReturnItemId() {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
@@ -83,11 +75,9 @@ public class TrackerTest {
 
     /**
      * Test.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenFindByNameThenReturnItemName() throws Tracker.NotFound, Tracker.ErrorValue {
+    public void whenFindByNameThenReturnItemName() {
         Tracker tracker = new Tracker();
         Item item = new Item("Заявка");
         tracker.add(item);
@@ -96,11 +86,9 @@ public class TrackerTest {
 
     /**
      * Проверка сохранения порядка при удалении элемента.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenDeleteItemThenSaveOrder() throws Tracker.ErrorValue, Tracker.NotFound {
+    public void whenDeleteItemThenSaveOrder() {
         Tracker tracker = new Tracker();
         tracker.add(new Item("Первый"));
         tracker.add(new Item("Второй"));

@@ -58,7 +58,7 @@ public class StartUI {
             } catch (Tracker.ErrorValue errorValue) {
                 this.input.println("Ошибка ввода данных");
             } catch (Tracker.NotFound notFound) {
-                this.input.println("Элемент не найден");
+                this.input.println("Заявка не найдена.");
             }
         } while (!(action instanceof Menu.Exit));
     }
