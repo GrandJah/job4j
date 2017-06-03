@@ -18,6 +18,7 @@ public class StubInputTest {
     /** Заполняем трекер.
      * @param tracker трэкер
      * @return средний элемент
+     * @throws Tracker.ErrorValue Ошибка в воде данных
      */
     private Item fillTracker(Tracker tracker) throws Tracker.ErrorValue {
         tracker.add(new Item("Один"));
@@ -31,6 +32,8 @@ public class StubInputTest {
 
     /**
      * Test exit.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenExitThenExit() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -48,6 +51,8 @@ public class StubInputTest {
 
     /**
      * Test add.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenAddThenAdd() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -60,6 +65,8 @@ public class StubInputTest {
 
     /**
      * Test getAll.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenGetAllThenReturnAll() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -77,6 +84,8 @@ public class StubInputTest {
 
     /**
      * Test delete.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenDeleteItemThenSaveOrder() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -94,6 +103,8 @@ public class StubInputTest {
 
     /**
      * Test find by ID.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenFindByIdThenReturnCorrect() throws Tracker.ErrorValue, Tracker.NotFound {
@@ -107,6 +118,8 @@ public class StubInputTest {
 
     /**
      * Test find by Name.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenFindByNameThenReturnCorrect() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -120,6 +133,8 @@ public class StubInputTest {
 
     /**
      * Test edit.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenEditThenEditCorrect() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -133,6 +148,8 @@ public class StubInputTest {
 
     /**
      * Test.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test (expected = Tracker.NotFound.class)
     public void whenIdFoundNotResultThenCorrectMessage() throws Tracker.NotFound, Tracker.ErrorValue {

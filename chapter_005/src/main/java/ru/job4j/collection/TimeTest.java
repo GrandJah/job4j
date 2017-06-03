@@ -36,8 +36,10 @@ public class TimeTest {
         long start = System.currentTimeMillis();
         Iterator<String> iterator = collection.iterator();
         for (int i = 0; i < amount; i++) {
-            iterator.next();
-            iterator.remove();
+            if(iterator.hasNext()) {
+                iterator.next();
+                iterator.remove();
+            }
         }
         return System.currentTimeMillis() - start;
     }

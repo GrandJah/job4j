@@ -21,7 +21,9 @@ public class Tracker {
      * @throws ErrorValue ошибка параметра
      */
     private void validate(Item item) throws ErrorValue {
-        if (item == null) throw new ErrorValue();
+        if (item == null) {
+            throw new ErrorValue();
+        }
     }
 
     /** Поиск позиции в массиве по ID.
@@ -32,7 +34,7 @@ public class Tracker {
     private ListIterator<Item> iteratorFindId(String id) throws NotFound {
         ListIterator<Item> it = this.items.listIterator();
         while (it.hasNext()) {
-            if(id.equals(it.next().getId())) {
+            if (id.equals(it.next().getId())) {
                 it.previous();
                 return it;
             }
@@ -77,6 +79,7 @@ public class Tracker {
     /** Поиск по ID.
      * @param id ID заявки
      * @return заявка
+     * @throws NotFound элемент не найден
      */
     public Item findById(String id) throws NotFound {
         return iteratorFindId(id).next();
@@ -85,6 +88,7 @@ public class Tracker {
     /** Поиск по названию заявки.
      * @param key ключ поиска
      * @return найденая заявка
+     * @throws NotFound элемент не найден
      */
     public Item findByName(String key) throws NotFound {
         for (Item item : this.items) {
@@ -105,10 +109,10 @@ public class Tracker {
     /**
      * элемент не найден.
      */
-    public class NotFound extends Exception {}
+    public class NotFound extends Exception { }
 
     /**
      * ошибка параметра.
      */
-    public class ErrorValue extends Exception {}
+    public class ErrorValue extends Exception { }
 }
