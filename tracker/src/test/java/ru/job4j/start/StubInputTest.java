@@ -151,7 +151,7 @@ public class StubInputTest {
      * @throws Tracker.ErrorValue Ошибка в воде данных
      * @throws Tracker.NotFound Объект не найден
      */
-    @Test (expected = Tracker.NotFound.class)
+    @Test
     public void whenIdFoundNotResultThenCorrectMessage() throws Tracker.NotFound, Tracker.ErrorValue {
         Tracker tracker = new Tracker();
         Item itemEdit = fillTracker(tracker);

@@ -40,9 +40,9 @@ class Menu {
         });
         addAction(new BaseAction("Edit item") {
             @Override
-            public void execute(Input input, Tracker tracker) throws Tracker.NotFound, Tracker.ErrorValue {
-                Item item = tracker.findById(input.ask("Введите идентификатор:"));
-                if (item != null) {
+            public void execute(Input input, Tracker tracker) throws Tracker.ErrorValue {
+                try {
+                    Item item = tracker.findById(input.ask("Введите идентификатор:"));
                     String answer = input.ask("Введите новое имя:");
                     if (!answer.equals("")) {
                         item.setName(answer);
@@ -52,7 +52,7 @@ class Menu {
                         item.setDescription(answer);
                     }
                     tracker.update(item);
-                } else {
+                } catch (Tracker.NotFound notFound) {
                     input.println("Заявка не найдена.");
                 }
             }

@@ -15,6 +15,7 @@ import static org.junit.Assert.assertThat;
 public class TrackerTest {
     /**
      * Test.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
      */
     @Test
     public void whenGetAllThenTrackerReturnAll() throws Tracker.ErrorValue {
@@ -27,6 +28,7 @@ public class TrackerTest {
 
     /**
      * Test.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
      */
     @Test
     public void whenAddItemThenTrackerHasItem() throws Tracker.ErrorValue {
@@ -38,6 +40,8 @@ public class TrackerTest {
 
     /**
      * Test.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenUpdateItemThenItemUpdate() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -52,6 +56,8 @@ public class TrackerTest {
 
     /**
      * Test.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenDeleteItemThenTrackerNoHasItem() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -64,6 +70,8 @@ public class TrackerTest {
 
     /**
      * Test.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenFindByIdThenReturnItemId() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -75,6 +83,8 @@ public class TrackerTest {
 
     /**
      * Test.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenFindByNameThenReturnItemName() throws Tracker.NotFound, Tracker.ErrorValue {
@@ -86,6 +96,8 @@ public class TrackerTest {
 
     /**
      * Проверка сохранения порядка при удалении элемента.
+     * @throws Tracker.ErrorValue Ошибка в воде данных
+     * @throws Tracker.NotFound Объект не найден
      */
     @Test
     public void whenDeleteItemThenSaveOrder() throws Tracker.ErrorValue, Tracker.NotFound {

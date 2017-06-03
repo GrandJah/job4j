@@ -67,7 +67,7 @@ public class ConvertListTest {
      * Test method.
      */
     @Test
-    public void WhenConvertToArrayFullThenOk() {
+    public void whenConvertToArrayFullThenOk() {
         int[][] expect = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         List<Integer> list = new ArrayList<>();
         Collections.addAll(list, 1, 2, 3, 4, 5, 6, 7, 8, 9);

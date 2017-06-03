@@ -19,7 +19,7 @@ public class TimeTest {
      * @param amount количество
      * @return время выполнения
      */
-    public long add(Collection<String> collection, int amount) {
+    private long add(Collection<String> collection, int amount) {
         long start = System.currentTimeMillis();
         for (int i = 0; i < amount; i++) {
             collection.add(Double.toString(Math.random()));
@@ -32,11 +32,11 @@ public class TimeTest {
      * @param amount количество
      * @return время выполнения
      */
-    public long delete(Collection<String> collection, int amount) {
+    private long delete(Collection<String> collection, int amount) {
         long start = System.currentTimeMillis();
         Iterator<String> iterator = collection.iterator();
         for (int i = 0; i < amount; i++) {
-            if(iterator.hasNext()) {
+            if (iterator.hasNext()) {
                 iterator.next();
                 iterator.remove();
             }
@@ -60,9 +60,9 @@ public class TimeTest {
      */
     public static void main(String[] args) {
         TimeTest test = new TimeTest();
-        test.testCollection(new LinkedList<String>(), 100000, 50000);
-        test.testCollection(new ArrayList<String>(), 100000, 50000);
-        test.testCollection(new TreeSet<String>(), 100000, 50000);
+        test.testCollection(new LinkedList<>(), 100000, 50000);
+        test.testCollection(new ArrayList<>(), 100000, 50000);
+        test.testCollection(new TreeSet<>(), 100000, 50000);
 
     }
 }
