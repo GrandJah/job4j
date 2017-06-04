@@ -1,0 +1,26 @@
+Реализовать коллекцию ru.job4j.bank.Bank для банка
+Необходимо создать класс ru.job4j.bank.User с полями name, passport.
+Добавить методы eqauls() hashCode()
+
+Необходимо создать класс ru.job4j.bank.Account с полями value (кол-во денег), requisites (реквизиты счёта)
+ - это банковский счёт.
+
+Реализовать коллекцию ru.job4j.bank.Bank <ru.job4j.bank.User, List<ru.job4j.bank.Account>>,
+ обозначающую что у каждого пользователя может быть список банковских счетов.
+Необходимо реализовать возможность перечислять деньги,
+ как с одного счёта ru.job4j.bank.User на другой счёт того же ru.job4j.bank.User, так и на счёт другого ru.job4j.bank.User.
+В программе должны быть методы:
+
+public void addUser(ru.job4j.bank.User user) {} - добавление пользователя.
+
+public void deleteUser(ru.job4j.bank.User user) {} - удаление пользователя.
+
+public void addAccountToUser(ru.job4j.bank.User user, ru.job4j.bank.Account account) {} - добавить счёт пользователю.
+
+public void deleteAccountFromUser(ru.job4j.bank.User user, ru.job4j.bank.Account account) {} - удалить один счёт пользователя.
+
+public List<Accounts> getUserAccounts (ru.job4j.bank.User user) {} - получить список счетов для пользователя.
+
+public boolean transferMoney (ru.job4j.bank.User srcUser, ru.job4j.bank.Account srcAccount, ru.job4j.bank.User dstUser, ru.job4j.bank.Account dstAccount, double amount)
+ - метод для перечисления денег с одного счёта на другой счёт:
+если счёт не найден или не хватает денег на счёте srcAccount (с которого переводят) должен вернуть false.
