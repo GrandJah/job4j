@@ -63,13 +63,13 @@ public class User implements Comparable<User> {
             return false;
         }
         User user = (User) o;
-        return age == user.age && (name != null ? name.equals(user.name) : user.name == null);
+        return this.age == user.age && (this.name != null ? this.name.equals(user.name) : user.name == null);
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + age;
+        int result = this.name != null ? this.name.hashCode() : 0;
+        result = 31 * result + this.age;
         return result;
     }
 }

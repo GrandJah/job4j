@@ -21,4 +21,23 @@ public class SortUser {
         set.addAll(list);
         return set;
     }
+
+    /** сортировка по hash-коду.
+     * @param list список
+     * @return список
+     */
+    public List<User> sortHash(List<User> list) {
+        list.sort((first, second) -> first.hashCode() == second.hashCode() ? 0 : first.hashCode() < second.hashCode() ? -1 : 1);
+        return list;
+    }
+
+    /** сортировка по длине имени.
+     * @param list список
+     * @return список
+     */
+    public List<User> sortLength(List<User> list) {
+        list.sort((first, second) -> first.getName().length() == second.getName().length() ? 0
+                : first.getName().length() < second.getName().length() ? -1 : 1);
+        return list;
+    }
 }
