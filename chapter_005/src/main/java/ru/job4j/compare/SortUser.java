@@ -27,7 +27,7 @@ public class SortUser {
      * @return список
      */
     public List<User> sortHash(List<User> list) {
-        list.sort((first, second) -> first.hashCode() == second.hashCode() ? 0 : first.hashCode() < second.hashCode() ? -1 : 1);
+        list.sort(return Integer.compare(this.hashCode(), o.hashCode());
         return list;
     }
 
@@ -36,8 +36,7 @@ public class SortUser {
      * @return список
      */
     public List<User> sortLength(List<User> list) {
-        list.sort((first, second) -> first.getName().length() == second.getName().length() ? 0
-                : first.getName().length() < second.getName().length() ? -1 : 1);
+        list.sort(return Integer.compare(this.getName().length(), o.getName().length());
         return list;
     }
 }
