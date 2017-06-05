@@ -123,4 +123,23 @@ public class BankTest {
 
     }
 
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenBadAccountForTransferMoneyThenNoOperation() {
+        Bank bank = fillBankUser();
+        User user1 = new User("Сидоров", 122678212);
+        User user2 = new User("Встанькин", 235678332);
+        Account account1 = new Account(100, "seller");
+        Account account2 = new Account(100, "bayer");
+        Account badAccount = new Account(1000, "bayer");
+        bank.addAccountToUser(user1, account1);
+        bank.addAccountToUser(user2, account2);
+        assertThat(bank.transferMoney(user2, badAccount, user1, account1, 200), is(false));
+        assertThat(account1.getValues(), closeTo(100, 0.01));
+        assertThat(account2.getValues(), closeTo(100, 0.01));
+
+    }
+
 }

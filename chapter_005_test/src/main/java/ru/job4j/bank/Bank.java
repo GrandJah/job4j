@@ -55,6 +55,16 @@ public class Bank {
         return this.accounts.get(user);
     }
 
+    /** возращает актуальную ссылку на счетах в БД банка.
+     * @param user Клиент банка
+     * @param account Счет клиента а нужны только реквизиты.
+     * @return Фактический счет клиента из БД
+     */
+    private Account getActualAccount(User user, Account account) {
+        List<Account> list = this.accounts.get(user);
+        return list.get(list.indexOf(account));
+    }
+
     /** перечисления денег с одного счёта на другой счёт.
      * @param srcUser Плательщик
      * @param srcAccount Счет оплаты
@@ -65,13 +75,11 @@ public class Bank {
      */
     public boolean transferMoney(User srcUser, Account srcAccount,
                                   User dstUser, Account dstAccount, double amount) {
-        if (this.accounts.get(srcUser).contains(srcAccount)
-                && this.accounts.get(dstUser).contains(dstAccount)) {
-            srcAccount.transfer(dstAccount, amount);
-        }
-        return false;
+        return this.accounts.get(srcUser).contains(srcAccount)
+                && this.accounts.get(dstUser).contains(dstAccount)
+                && getActualAccount(srcUser, srcAccount).transfer(
+                        getActualAccount(dstUser, dstAccount), amount);
     }
-
 
     @Override
     public String toString() {
