@@ -44,11 +44,8 @@ public class Tracker {
      * @param item Заявка
      */
     public void update(Item item) throws ErrorValue, NotFound {
-        if (item != null) {
-            iteratorFindId(item.getId()).set(item);
-        } else {
-            throw new ErrorValue();
-        }
+        validate(item);
+        iteratorFindId(item.getId()).set(item);
     }
 
     /** Добавление заявок.
