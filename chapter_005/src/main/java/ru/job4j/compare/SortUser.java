@@ -1,5 +1,6 @@
 package ru.job4j.compare;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,7 +28,7 @@ public class SortUser {
      * @return список
      */
     public List<User> sortHash(List<User> list) {
-        list.sort(return Integer.compare(this.hashCode(), o.hashCode());
+        list.sort(Comparator.comparingInt(User::hashCode));
         return list;
     }
 
@@ -36,7 +37,7 @@ public class SortUser {
      * @return список
      */
     public List<User> sortLength(List<User> list) {
-        list.sort(return Integer.compare(this.getName().length(), o.getName().length());
+        list.sort(Comparator.comparingInt(user -> user.getName().length()));
         return list;
     }
 }
