@@ -19,7 +19,7 @@ public class Tracker {
     /**
      * @param item item
      */
-    private void validate(Item item) throws ErrorValue {
+    private void validate(Item item) {
         if (item == null) {
             throw new ErrorValue();
         }
@@ -29,7 +29,7 @@ public class Tracker {
      * @param id ID заявки
      * @return итератор в установленном месте
      */
-    private ListIterator<Item> iteratorFindId(String id) throws NotFound {
+    private ListIterator<Item> iteratorFindId(String id) {
         ListIterator<Item> it = this.items.listIterator();
         while (it.hasNext()) {
             if (id.equals(it.next().getId())) {
@@ -43,7 +43,7 @@ public class Tracker {
     /** Обновление заявки.
      * @param item Заявка
      */
-    public void update(Item item) throws ErrorValue, NotFound {
+    public void update(Item item) {
         validate(item);
         iteratorFindId(item.getId()).set(item);
     }
@@ -52,7 +52,7 @@ public class Tracker {
      * @param item заявка
      * @return заявка
      */
-    public Item add(Item item) throws ErrorValue {
+    public Item add(Item item) {
         validate(item);
         this.items.add(item);
         return item;
