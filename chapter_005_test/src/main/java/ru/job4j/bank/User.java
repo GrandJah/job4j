@@ -7,7 +7,7 @@ package ru.job4j.bank;
  * @version 0.1
  * @since 04.06.2017
  */
-public class User {
+public class User implements Comparable<User> {
     /**
      * Имя клиента.
      */
@@ -45,5 +45,19 @@ public class User {
         int result = this.name.hashCode();
         result = 31 * result + this.passport;
         return result;
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return this.name.compareTo(o.name);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", passport=").append(passport);
+        sb.append('}');
+        return sb.toString();
     }
 }

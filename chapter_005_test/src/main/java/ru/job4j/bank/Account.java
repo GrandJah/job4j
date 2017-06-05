@@ -56,4 +56,32 @@ public class Account {
         }
         return success;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Account{");
+        sb.append("values=").append(values);
+        sb.append(", requisites='").append(requisites).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Account account = (Account) o;
+
+        return this.requisites.equals(account.requisites);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.requisites.hashCode();
+    }
 }

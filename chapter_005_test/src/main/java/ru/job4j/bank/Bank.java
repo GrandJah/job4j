@@ -72,4 +72,12 @@ public class Bank {
         return false;
     }
 
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Bank{");
+        sb.append("accounts=").append(accounts);
+        sb.append('}');
+        return sb.toString();
+    }
 }
