@@ -23,6 +23,7 @@
         <module>bank</module>
         <module>chapter_005</module>
         <module>chapter_005_test</module>
+        <module>unitsort</module>
     </modules>
 
 	<dependencies>
