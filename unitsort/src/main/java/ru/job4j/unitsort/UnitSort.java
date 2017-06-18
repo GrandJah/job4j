@@ -25,6 +25,11 @@ public class UnitSort implements Comparable<UnitSort> {
     private TreeSet<UnitSort> units;
 
     /**
+     * Напрвавление сортировки.
+     */
+    static final boolean  ASCENT = true, DESCENT = false;
+
+    /**
      * Default constructor.
      */
     public UnitSort() {
@@ -46,36 +51,24 @@ public class UnitSort implements Comparable<UnitSort> {
         this.units = new TreeSet<>();
     }
 
-    /** Сортировка по возрастанию.
-     * @param units список подразделений
-     * @return сортированный список
-     */
-    public String[] sortAscent(String[] units) {
-        return sortAction(true, units);
-    }
-
-    /** Сортировка по убыванию.
-     * @param units список подразделений
-     * @return сортированный список
-     */
-    public String[] sortDescent(String[] units) {
-        return sortAction(false, units);
-    }
-
     /** Сортировка по направлению.
      * @param direction напрвление сортировки
-     * @param units список подразделений
      * @return сортированный список
      */
-    private String[] sortAction(boolean direction, String[] units) {
-        for (String unit : units) {
-            add(unit);
-        }
+    public String[] sortAction(boolean direction) {
         List<String> list = new ArrayList<>();
         fromSet("", this.units, list, direction);
         return list.toArray(new String[list.size()]);
     }
 
+    /** Добавление подразделения в карту подразделений.
+     * @param units подразделения
+     */
+    public void addAll(String[] units) {
+        for (String unit : units) {
+            add(unit);
+        }
+    }
 
     /** Добавление подразделения в карту подразделений.
      * @param unit подразделение

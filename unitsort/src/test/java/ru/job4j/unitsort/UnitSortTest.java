@@ -33,7 +33,6 @@ public class UnitSortTest {
     @Test
     public void whenSortAscentThenOk() {
         UnitSort sort = new UnitSort();
-        String[] result = sort.sortAscent(STRING_UNITS);
         String[] expected = {
                 "K1",
                 "K1\\SK1",
@@ -45,6 +44,8 @@ public class UnitSortTest {
                 "K2\\SK1\\SSK1",
                 "K2\\SK1\\SSK2"
         };
+        sort.addAll(STRING_UNITS);
+        String[] result = sort.sortAction(UnitSort.ASCENT);
         assertThat(result, is(expected));
     }
 
@@ -54,7 +55,6 @@ public class UnitSortTest {
     @Test
     public void whenSortDescentThenOk() {
         UnitSort sort = new UnitSort();
-        String[] result = sort.sortDescent(STRING_UNITS);
         String[] expected = {
                 "K2",
                 "K2\\SK1",
@@ -66,6 +66,8 @@ public class UnitSortTest {
                 "K1\\SK1\\SSK2",
                 "K1\\SK1\\SSK1"
         };
+        sort.addAll(STRING_UNITS);
+        String[] result = sort.sortAction(UnitSort.DESCENT);
         assertThat(result, is(expected));
     }
 
