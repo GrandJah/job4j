@@ -2,9 +2,9 @@ package ru.job4j.unitsort;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * junior.
@@ -13,12 +13,38 @@ import java.util.TreeMap;
  * @version 0.1
  * @since 12.06.2017
  */
-public class UnitSort {
+public class UnitSort implements Comparable<UnitSort> {
+    /**
+     * Код подразделения.
+     */
+    private String name;
 
     /**
      * Карта подразделений.
      */
-    private TreeMap<String, TreeMap> map = new TreeMap<>();
+    private TreeSet<UnitSort> units;
+
+    /**
+     * Default constructor.
+     */
+    public UnitSort() {
+        init("");
+    }
+
+    /**
+     * @param name Код подразделения.
+     */
+    private UnitSort(String name) {
+        init(name);
+    }
+
+    /**
+     * @param name Код подразделения.
+     */
+    private void init(String name) {
+        this.name = name;
+        this.units = new TreeSet<>();
+    }
 
     /** Сортировка по возрастанию.
      * @param units список подразделений
@@ -46,8 +72,7 @@ public class UnitSort {
             add(unit);
         }
         List<String> list = new ArrayList<>();
-        fromMap("", this.map, list, direction);
-        this.map = new TreeMap<>();
+        fromSet("", this.units, list, direction);
         return list.toArray(new String[list.size()]);
     }
 
@@ -56,46 +81,47 @@ public class UnitSort {
      * @param unit подразделение
      */
     private void add(String unit) {
-        inToMap(unit.split("\\\\"), this.map);
+        inToMap(unit.split("\\\\"), this.units);
     }
 
     /** Добавление подразделения в карту подразделений.
      * рекурсивный поиск места для вставки
      * @param unit добавляемое подразделение
-     * @param paramMap карта текущего подразделения
+     * @param paramSet карта текущего подразделения
      */
-    private void inToMap(String[] unit, TreeMap<String, TreeMap> paramMap) {
+    private void inToMap(String[] unit, TreeSet<UnitSort> paramSet) {
         if (unit.length > 0 && !unit[0].equals("")) {
-            String key = unit[0];
+            String keyName = unit[0];
             String[] array = Arrays.copyOfRange(unit, 1, unit.length);
-            if (paramMap.containsKey(key)) {
-                inToMap(array, paramMap.get(key));
-            } else {
-                TreeMap<String, TreeMap> newMap = new TreeMap<>();
-                inToMap(array, newMap);
-                paramMap.put(key, newMap);
+            UnitSort newUnit = new UnitSort(keyName);
+            if (!paramSet.contains(newUnit)) {
+                paramSet.add(newUnit);
             }
+            inToMap(array, paramSet.floor(newUnit).units);
         }
     }
 
     /** Список подразделений сортированный по заданному направлению.
      * рекурсивный вызов
      * @param prefix префикс текущего подразделения
-     * @param deepMap карта текущего подразделения
+     * @param deepSet карта текущего подразделения
      * @param list заполняемый список подразделений
      * @param direction направление сортировки
      */
-    private void fromMap(String prefix, TreeMap deepMap, List<String> list, boolean direction) {
-        if (deepMap.size() != 0) {
-            Set<String> setKey = direction ? deepMap.keySet() : deepMap.descendingKeySet();
-            for (String key : setKey) {
-                String newPrefix = prefix.equals("") ? key : String.format("%s\\%s", prefix, key);
+    private void fromSet(String prefix, TreeSet deepSet, List<String> list, boolean direction) {
+        if (deepSet.size() != 0) {
+            Iterator setIt = direction ? deepSet.iterator() : deepSet.descendingIterator();
+            while (setIt.hasNext()) {
+                UnitSort deepUnit = (UnitSort) setIt.next();
+                String newPrefix = prefix.equals("") ? deepUnit.name : String.format("%s\\%s", prefix, deepUnit.name);
                 list.add(newPrefix);
-                fromMap(newPrefix, (TreeMap) deepMap.get(key), list, direction);
+                fromSet(newPrefix, deepUnit.units, list, direction);
             }
         }
     }
 
-
-
+    @Override
+    public int compareTo(UnitSort o) {
+        return this.name.compareTo(o.name);
+    }
 }

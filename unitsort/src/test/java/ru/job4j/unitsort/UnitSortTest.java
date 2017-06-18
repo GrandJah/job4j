@@ -17,7 +17,7 @@ public class UnitSortTest {
     /**
      * Массив строк подразделений.
      */
-    static final String[]  STRING_UNITS = new String[]{
+    private static final String[]  STRING_UNITS = new String[]{
             "K1\\SK1",
             "K1\\SK2",
             "K1\\SK1\\SSK1",
