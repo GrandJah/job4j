@@ -26,4 +26,23 @@ public class IteratorArrayTwoTest {
         }
         assertThat(result, is("124347"));
     }
+
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenHasNextThenCorrect() {
+        int[][] ar = {{1, 2, 4}, {3, 4, 7}};
+        IteratorArrayTwo it = new IteratorArrayTwo(ar);
+        String result = "";
+        while (it.hasNext()) {
+            boolean nextHas = it.hasNext();
+            int nextInt = (int) it.next();
+            boolean nextHas2 = it.hasNext();
+            result = String.format("%s%s%s%s", result, nextInt, nextHas ? "" : "|", nextHas2 ? "" : "|");
+
+        }
+
+        assertThat(result, is("124347|"));
+    }
 }
