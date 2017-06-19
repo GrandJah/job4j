@@ -7,9 +7,9 @@ import java.util.Iterator;
  *
  * @author Igor Kovalkov
  * @version 0.1
- * @since 18.06.2017
+ * @since 19.06.2017
  */
-public class IteratorEven implements Iterator {
+public class IteratorSimple implements Iterator {
 
     /**
      * Массив.
@@ -17,14 +17,14 @@ public class IteratorEven implements Iterator {
     private int[] value;
 
     /**
-     *  Индекс.
+     * Индекс.
      */
     private int index;
 
     /**
      * @param value Массив.
      */
-    public IteratorEven(int[] value) {
+    public IteratorSimple(int[] value) {
         this.value = value;
         this.index = -1;
         findNext();
@@ -35,10 +35,32 @@ public class IteratorEven implements Iterator {
      */
     private void findNext() {
         for (this.index++; this.index < this.value.length; this.index++) {
-            if (this.value[this.index] % 2 == 0) {
+            if (isPrime(this.value[this.index])) {
                 break;
             }
         }
+    }
+
+    /**
+     * Является ли число простым?
+     *
+     * @param n проверяемое число
+     * @return число простое
+     */
+    private boolean isPrime(int n) {
+        boolean prime = false;
+        if (n == 1 || n == 2) {
+            prime = true;
+        } else if (n > 2) {
+            prime = true;
+            for (int i = 2; i * i <= n; i++) {
+                if (n % i == 0) {
+                    prime = false;
+                    break;
+                }
+            }
+        }
+        return prime;
     }
 
 
@@ -54,3 +76,4 @@ public class IteratorEven implements Iterator {
         return ret;
     }
 }
+
