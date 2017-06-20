@@ -45,4 +45,18 @@ public class IteratorArrayTwoTest {
 
         assertThat(result, is("124347|"));
     }
+
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenEmptyThenOk() {
+        int[][] ar = {{}, {}};
+        IteratorArrayTwo it = new IteratorArrayTwo(ar);
+        String result = "";
+        while (it.hasNext()) {
+            result = String.format("%s%s", result, it.next());
+        }
+        assertThat(result, is(""));
+    }
 }

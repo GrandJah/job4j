@@ -26,6 +26,9 @@ public class IteratorArrayTwo implements Iterator {
         this.value = value;
         this.indexM = 0;
         this.indexN = 0;
+        if (value.length > 0 && value[0].length < 1) {
+            indexN = value.length;
+        }
     }
 
     @Override
