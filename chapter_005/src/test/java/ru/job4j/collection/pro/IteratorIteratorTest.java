@@ -53,11 +53,12 @@ public class IteratorIteratorTest {
      */
     @Test
     public void whenThenOk() {
+        IteratorIterator itIt = new IteratorIterator();
         Iterator it1 = new TestIterator(new Integer[]{4, 2, 0, 4, 6, 4, 9});
         Iterator it2 = new TestIterator(new Integer[]{0, 9, 8, 7, 5});
         Iterator it3 = new TestIterator(new Integer[]{1, 3, 5, 6, 7, 0, 9, 8, 4});
 
-        Iterator iterator = IteratorIterator.convert(new TestIterator(new Iterator[]{it1, it2, it3}));
+        Iterator iterator = itIt.convert(new TestIterator(new Iterator[]{it1, it2, it3}));
 
         String result = "";
 

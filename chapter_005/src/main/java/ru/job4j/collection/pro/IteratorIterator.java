@@ -14,7 +14,7 @@ public class IteratorIterator {
      * @param it Итератор итераторов
      * @return обычный итератор
      */
-    public static Iterator<Integer> convert(Iterator<Iterator<Integer>> it) {
+    public Iterator<Integer> convert(Iterator<Iterator<Integer>> it) {
 
         return new InnerIterator<>(it);
     }
@@ -22,7 +22,7 @@ public class IteratorIterator {
     /**  Итератор итераторов.
      * @param <E> внутренний тип итератора
      */
-    private static class InnerIterator<E> implements Iterator<E> {
+    private class InnerIterator<E> implements Iterator<E> {
         /**
          * Ссылка на итератор итераторов.
          */
