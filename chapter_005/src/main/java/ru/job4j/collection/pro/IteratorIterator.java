@@ -59,6 +59,7 @@ public class IteratorIterator {
 
         @Override
         public E next() {
+            hasNext();
             return this.current.next();
         }
     }

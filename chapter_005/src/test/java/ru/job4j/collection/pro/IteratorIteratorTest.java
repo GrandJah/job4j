@@ -68,4 +68,25 @@ public class IteratorIteratorTest {
 
         assertThat(result, is("420464909875135670984"));
     }
+
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenOnlyNextThenOk() {
+        IteratorIterator itIt = new IteratorIterator();
+        Iterator it1 = new TestIterator(new Integer[]{4, 2, 0, 4, 6, 4, 9});
+        Iterator it2 = new TestIterator(new Integer[]{0, 9, 8, 7, 5});
+        Iterator it3 = new TestIterator(new Integer[]{1, 3, 5, 6, 7, 0, 9, 8, 4});
+
+        Iterator iterator = itIt.convert(new TestIterator(new Iterator[]{it1, it2, it3}));
+
+        String result = "";
+
+        for (int i = 0; i < 21; i++) {
+            result = String.format("%s%s", result, iterator.next());
+        }
+
+        assertThat(result, is("420464909875135670984"));
+    }
 }
