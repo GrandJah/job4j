@@ -26,19 +26,23 @@ public class IteratorEven implements Iterator {
      */
     public IteratorEven(int[] value) {
         this.value = value;
-        this.index = -1;
-        findNext();
+        this.index = findNext(-1, value);
     }
 
     /**
      * Поиск следующего четного числа.
+     * @param startIndex начальный индекс поиска в массиве
+     * @param array массив в котором идет поиск
+     * @return индекс элемента.
      */
-    private void findNext() {
-        for (this.index++; this.index < this.value.length; this.index++) {
-            if (this.value[this.index] % 2 == 0) {
+
+    private int findNext(int startIndex, int[] array) {
+        for (startIndex++; startIndex < array.length; startIndex++) {
+            if (array[startIndex] % 2 == 0) {
                 break;
             }
         }
+        return startIndex;
     }
 
 
@@ -50,7 +54,7 @@ public class IteratorEven implements Iterator {
     @Override
     public Object next() {
         int ret = this.value[this.index];
-        findNext();
+        this.index = findNext(this.index, this.value);
         return ret;
     }
 }
