@@ -19,15 +19,18 @@ public class IteratorSimple implements Iterator {
     /**
      * Индекс.
      */
-    private int index;
+    private int index = -1;
+
+    /**
+     * Флаг нициализации.
+     */
+    private boolean init = false;
 
     /**
      * @param value Массив.
      */
     public IteratorSimple(int[] value) {
         this.value = value;
-        this.index = -1;
-        findNext();
     }
 
     /**
@@ -63,14 +66,26 @@ public class IteratorSimple implements Iterator {
         return prime;
     }
 
+    /**
+     * Проверка инициализации индекса.
+     */
+    private void checkInit() {
+        if (!this.init) {
+            this.init = true;
+            findNext();
+        }
+    }
+
 
     @Override
     public boolean hasNext() {
+        checkInit();
         return this.index < this.value.length;
     }
 
     @Override
     public Object next() {
+        checkInit();
         int ret = this.value[this.index];
         findNext();
         return ret;
