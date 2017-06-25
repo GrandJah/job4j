@@ -19,42 +19,53 @@ public class IteratorEven implements Iterator {
     /**
      *  Индекс.
      */
-    private int index;
+    private int index = -1;
+
+    /**
+     * Флаг нициализации.
+     */
+    private boolean init = false;
 
     /**
      * @param value Массив.
      */
     public IteratorEven(int[] value) {
         this.value = value;
-        this.index = findNext(-1, value);
     }
 
     /**
      * Поиск следующего четного числа.
-     * @param startIndex начальный индекс поиска в массиве
-     * @param array массив в котором идет поиск
-     * @return индекс элемента.
      */
-
-    private int findNext(int startIndex, int[] array) {
-        for (startIndex++; startIndex < array.length; startIndex++) {
-            if (array[startIndex] % 2 == 0) {
+    private void findNext() {
+        for (this.index++; this.index < this.value.length; this.index++) {
+            if (this.value[this.index] % 2 == 0) {
                 break;
             }
         }
-        return startIndex;
+    }
+
+    /**
+     * Проверка инициализации индекса.
+     */
+    private void checkInit() {
+        if (!this.init) {
+            this.init = true;
+            findNext();
+        }
     }
 
 
     @Override
     public boolean hasNext() {
+        checkInit();
         return this.index < this.value.length;
     }
 
     @Override
     public Object next() {
+        checkInit();
         int ret = this.value[this.index];
-        this.index = findNext(this.index, this.value);
+        findNext();
         return ret;
     }
 }
