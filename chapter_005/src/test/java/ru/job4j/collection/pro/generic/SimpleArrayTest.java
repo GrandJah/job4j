@@ -41,7 +41,7 @@ public class SimpleArrayTest {
     public void whenUpdateThenOk() {
         SimpleArray<String> simpleArray = new SimpleArray<>(15);
         simpleArray.add("string");
-        simpleArray.update("test", 0);
+        simpleArray.updateIndex("test", 0);
         assertThat(simpleArray.toString(), is("Array : {test}"));
 
     }
@@ -71,4 +71,16 @@ public class SimpleArrayTest {
         assertThat(simpleArray.get(2), is(78));
     }
 
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenUpdateTtoTthenOk() {
+        SimpleArray<Integer> simpleArray = new SimpleArray<>(15);
+        simpleArray.add(34);
+        simpleArray.add(45);
+        simpleArray.add(78);
+        simpleArray.update(34, 56);
+        assertThat(simpleArray.toString(), is("Array : {56, 45, 78}"));
+    }
 }

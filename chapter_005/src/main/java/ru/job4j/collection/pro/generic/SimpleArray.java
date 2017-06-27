@@ -42,9 +42,23 @@ public class SimpleArray<T> {
      * @param index индекс обновляемого элемента
      * @return обновленный элемент
      */
-    public T update(T t, int index) {
+    public T updateIndex(T t, int index) {
         this.array[index] = t;
         return t;
+    }
+
+    /**
+     * @param t обновляемый элемент
+     * @param upd обновленный элемент
+     * @return обновленный элемент
+     */
+    public T update(T t, T upd) {
+        T ret = null;
+        int index = getIndex(t);
+        if (index >= 0) {
+          ret = updateIndex(upd, index);
+        }
+        return ret;
     }
 
     /**
@@ -72,5 +86,18 @@ public class SimpleArray<T> {
         string = String.format("%s}", string);
 
         return string;
+    }
+
+    /**
+     * @param t искомый элемент
+     * @return индекс элемента
+     */
+    public int getIndex(T t) {
+        for (int i = 0; i < this.size; i++) {
+            if (t.equals(this.array[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
