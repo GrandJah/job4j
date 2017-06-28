@@ -20,7 +20,7 @@ public class LinkList<E> implements Iterable<E> {
     /**
      * @param value Добавляемое значение.
      */
-    public void add(E value)  {
+    public void add(E value) {
         Node<E> val = new Node<>(value);
         if (this.end != null) {
             val.setPrevious(this.end);
@@ -53,6 +53,49 @@ public class LinkList<E> implements Iterable<E> {
     }
 
     /**
+     * @return Последний элемент
+     */
+    public E removeEnd() {
+        E val = null;
+        if (this.end != null) {
+            val = (E) this.end.getValue();
+            Node previous = this.end.getPrevious();
+            if (previous == this.first) {
+                this.end = null;
+                this.first.setNext(null);
+            } else {
+                previous.setNext(null);
+                this.end = previous;
+            }
+        } else if (this.first != null) {
+            val = (E) this.first.getValue();
+            this.first = null;
+        }
+        return val;
+    }
+
+    /**
+     * @return первый элемент.
+     */
+    public E removeFirst() {
+        E val = null;
+        if (this.first != null) {
+            val = (E) first.getValue();
+            Node next = first.getNext();
+            if (next == null) {
+                this.first = null;
+            } else if (next == this.end) {
+                this.first = this.end;
+                this.first.setPrevious(null);
+            } else {
+                this.first = next;
+                this.first.setPrevious(null);
+            }
+        }
+        return val;
+    }
+
+    /**
      * @param <E> Тип итератора
      */
     class ListIt<E> implements Iterator<E> {
@@ -80,71 +123,70 @@ public class LinkList<E> implements Iterable<E> {
             return val;
         }
     }
+
+
+    /**
+     * @param <T> Тип значения
+     */
+    class Node<T> {
+        /**
+         * Переменная.
+         */
+        private T value;
+
+        /**
+         * NodeLine.
+         */
+        private Node<T> previous, next;
+
+        /**
+         * @param previous Предыдущий
+         */
+        public void setPrevious(Node<T> previous) {
+            this.previous = previous;
+        }
+
+        /**
+         * @param next Следующий
+         */
+        public void setNext(Node<T> next) {
+            this.next = next;
+        }
+
+        /**
+         * Getter.
+         *
+         * @return previous previous
+         */
+        public Node<T> getPrevious() {
+
+            return this.previous;
+        }
+
+        /**
+         * Getter.
+         *
+         * @return next next
+         */
+        public Node<T> getNext() {
+            return this.next;
+        }
+
+        /**
+         * Getter.
+         *
+         * @return value value
+         */
+        public T getValue() {
+            return this.value;
+        }
+
+        /**
+         * @param value переменная
+         */
+        Node(T value) {
+            this.value = value;
+        }
+    }
 }
-
-/**
- * @param <T> Тип значения
- */
-class Node<T> {
-    /**
-     * Переменная.
-     */
-    private T value;
-
-    /**
-     * NodeLine.
-
-     */
-    private Node<T> previous, next;
-
-    /**
-     * @param previous Предыдущий
-     */
-    public void setPrevious(Node<T> previous) {
-        this.previous = previous;
-    }
-
-    /**
-     * @param next Следующий
-     */
-    public void setNext(Node<T> next) {
-        this.next = next;
-    }
-
-    /**
-     * Getter.
-     *
-     * @return previous previous
-     */
-    public Node<T> getPrevious() {
-
-        return this.previous;
-    }
-
-    /**
-     * Getter.
-     *
-     * @return next next
-     */
-    public Node<T> getNext() {
-        return this.next;
-    }
-
-    /**
-     * Getter.
-     *
-     * @return value value
-     */
-    public T getValue() {
-        return this.value;
-    }
-
-    /**
-     * @param value переменная
-     */
-    Node(T value) {
-        this.value = value;
-    }
-}
-
 

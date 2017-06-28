@@ -12,6 +12,7 @@ import java.util.Iterator;
  *
  * @param <E> Тип контейнера
  */
+
 public class List<E> implements Iterable<E> {
     /**
      * контейнер списка.
