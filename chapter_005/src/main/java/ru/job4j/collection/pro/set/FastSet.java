@@ -33,10 +33,10 @@ public class FastSet<T> implements Iterable<T> {
     public void add(T element) {
 
         if (this.indexTree == null) {
-            this.indexTree = new NodeTreeIndex(element.hashCode());
+            this.indexTree = new NodeTreeIndex(element);
             insert(element);
         }
-        if (this.indexTree.insert(element.hashCode())) {
+        if (this.indexTree.insert(element)) {
             insert(element);
         }
     }
@@ -89,83 +89,57 @@ public class FastSet<T> implements Iterable<T> {
          * Ветка большего значения.
          */
         private NodeTreeIndex more = null;
+
         /**
          * Индекс узла.
          */
         private int hashIndex;
 
         /**
-         * @param hashIndex индекс узла
+         * Элемент узла.
          */
-        NodeTreeIndex(int hashIndex) {
-            this.hashIndex = hashIndex;
+        private T element;
+
+        /**
+         * ПодУзел для определения коллизий.
+         */
+        private NodeTreeIndex subNode = null;
+
+        /**
+         * @param element элемент узла
+         */
+        NodeTreeIndex(T element) {
+            this.hashIndex = element.hashCode();
+            this.element = element;
         }
 
         /**
-         * @param index вставляемый индекс
+         * @param element вставляемый элемент
          * @return успешность операции
          */
-        boolean insert(int index) {
+        boolean insert(T element) {
+            int index = element.hashCode();
             boolean free;
             if (this.hashIndex == index) {
-                free = false;
+                if (element.equals(this.element)) {
+                    free = false;
+                } else if (subNode == null) {
+                    subNode = new NodeTreeIndex(element);
+                    free = true;
+                } else {
+                    free = subNode.insert(element);
+                }
             } else if (this.hashIndex < index && this.less == null) {
-                less = new NodeTreeIndex(index);
+                less = new NodeTreeIndex(element);
                 free = true;
             } else if (this.hashIndex > index && this.more == null) {
-                more = new NodeTreeIndex(index);
+                more = new NodeTreeIndex(element);
                 free = true;
             } else {
-                free = this.hashIndex < index ? this.less.insert(index) : this.more.insert(index);
+                free = this.hashIndex < index ? this.less.insert(element) : this.more.insert(element);
             }
 
             return free;
         }
-    }
-
-    /**Сравнение времени вставки.
-     * @param args args
-     */
-    public static void mzain(String[] args) {
-        int amount = 10000;
-        String[] arr = new String[amount];
-        for (int i = 0; i < amount; i++) {
-            arr[i] = Double.toString(Math.random()).substring(0, 5);
-        }
-
-        FastSet<String> fastSet = new FastSet<>();
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < amount; i++) {
-            fastSet.add(arr[i]);
-        }
-        long timeFast =  System.currentTimeMillis() - start;
-
-        SimpleSet<String> simpleSet = new SimpleSet<>();
-        start = System.currentTimeMillis();
-        for (int i = 0; i < amount; i++) {
-            simpleSet.add(arr[i]);
-        }
-        long timeSimple =  System.currentTimeMillis() - start;
-
-        LinkedSet<String> linkedSet = new LinkedSet<>();
-        start = System.currentTimeMillis();
-        for (int i = 0; i < amount; i++) {
-            linkedSet.add(arr[i]);
-        }
-        long timeLinked =  System.currentTimeMillis() - start;
-
-        StringBuilder out = new StringBuilder();
-        out.append("FastSet - ");
-        out.append(timeFast);
-        out.append(System.lineSeparator());
-        out.append("SimpleSet - ");
-        out.append(timeSimple);
-        out.append(System.lineSeparator());
-        out.append("LinkedSet - ");
-        out.append(timeLinked);
-        out.append(System.lineSeparator());
-
-
-        System.out.println(out);
     }
 }
