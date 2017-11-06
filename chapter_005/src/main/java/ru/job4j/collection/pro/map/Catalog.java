@@ -1,6 +1,7 @@
 package ru.job4j.collection.pro.map;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * junior.
@@ -68,7 +69,7 @@ public class Catalog<T, V> implements Iterable<Entry<T, V>> {
      * @return позиция в массиве для данного ключа.
      */
     private int findIndex(T key) {
-        return key.hashCode() % this.catalog.length;
+        return key.hashCode() & 0x7fffffff % this.catalog.length;
     }
 
     @Override
@@ -102,6 +103,9 @@ public class Catalog<T, V> implements Iterable<Entry<T, V>> {
         @Override
         public Entry<T, V> next() {
             Entry<T, V> next;
+            if (this.index >= catalog.length) {
+                throw new NoSuchElementException();
+            }
             next = catalog[this.index];
             searchNext();
             return next;

@@ -3,6 +3,7 @@ package ru.job4j.collection.pro.map;
 import org.junit.Test;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -110,7 +111,38 @@ public class CatalogTest {
         assertThat(result, is(true));
     }
 
+    /**
+     * Test method.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void whenIteratorNextThenException() {
+        Catalog<Integer, String> phoneBook = new Catalog<>(100);
+        phoneBook.insert(135213, "Mama");
+        phoneBook.insert(135218, "Papa");
+        phoneBook.insert(135225, "Sister");
+        phoneBook.insert(135228, "Brother");
+        Iterator it = phoneBook.iterator();
+        while (true) {
+            it.next();
+        }
+    }
 
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenHashCodeNegativeThenOk() {
+        Catalog<NegativeHash, String> phoneBook = new Catalog<>(100);
+        assertThat(phoneBook.insert(new NegativeHash(), "Papa"), is(true));
+    }
 
-
+    /**
+     * Help test class.
+     */
+    private class NegativeHash {
+        @Override
+        public int hashCode() {
+            return -17;
+        }
+    }
 }
