@@ -1,14 +1,8 @@
 package ru.job4j.orderbook;
 
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * junior.
@@ -18,30 +12,23 @@ import java.util.TreeMap;
  * @since 12.11.2017
  */
 public class OrderBook {
-
     /** main method.
      * @param args аргументы
-     * @throws IOException исключения файловых операций
      */
-    public static void main(String[] args) throws IOException {
-        String fileName = "orders.xml";
-
-        long start = System.currentTimeMillis();
-        OrderBook orderBook = new OrderBook();
-        System.out.println(orderBook.createOrderBook(orderBook.parse(fileName)));
-        System.out.println(System.currentTimeMillis() - start);
+    public static void main(String[] args) {
+        System.out.println(new OrderBook().createOrderBook(new ParserOperation().parse("orders.xml")));
     }
 
-    /** парсер книги операций.
+    /** создание книги операций.
      * @param orderMap книга операций.
      * @return отчет
      */
-    String createOrderBook(Map<String, Map<Integer, Attribute>> orderMap) {
+    String createOrderBook(Map<String, List<Attribute>> orderMap) {
         StringBuilder sb = new StringBuilder();
         for (String book : orderMap.keySet()) {
             sb.append("order book : \"").append(book).append("\"").append(System.lineSeparator());
             IMap bid = new IMap(), ask = new IMap(true);
-            separateOrderEntries(bid, ask, new ArrayList<>(orderMap.get(book).values()));
+            separateOrderEntries(bid, ask, orderMap.get(book));
             toOrderBook(bid, ask);
             sb.append(format(bid, ask));
         }
@@ -143,34 +130,6 @@ public class OrderBook {
      */
     private String formatInfo(int price, int volume) {
         return String.format("%6.2f @ %6d", 0.01 * price, volume);
-    }
-
-    /** Парсер исходного файла.
-     * @param file имя файла.
-     * @return Книга операций.
-     * @throws IOException исключения файловых операций.
-     */
-    Map<String, Map<Integer, Attribute>> parse(String file) throws IOException {
-
-        Map<String, Map<Integer, Attribute>> orders = new TreeMap<>();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        while (reader.ready()) {
-            String readString = reader.readLine();
-            Operation operation = new Operation(readString);
-            if (operation.isEntryExist()) {
-                String book = operation.getEntry().getBook();
-                int id = operation.getEntry().getId();
-                if (operation.isAttributeExist()) {
-                    if (!orders.containsKey(book)) {
-                        orders.put(book, new TreeMap<>());
-                    }
-                    orders.get(book).put(id, operation.getAttribute());
-                } else {
-                    orders.get(book).remove(id);
-                }
-            }
-        }
-        return orders;
     }
 }
 

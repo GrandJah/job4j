@@ -39,8 +39,7 @@ public class OrderBookTest {
      */
     @Test
     public void whenFileOriginalThenAnswerEquals() throws IOException {
-        OrderBook orderBook = new OrderBook();
-        assertThat(orderBook.createOrderBook(orderBook.parse("C:\\Users\\Atlant\\IdeaProjects\\junior\\orders.xml")),
+        assertThat(new OrderBook().createOrderBook(new ParserOperation().parse("C:\\Users\\Atlant\\IdeaProjects\\junior\\orders.xml")),
                 is("order book : \"book-1\"" + System.lineSeparator()
                         + "       BID       |       ASK" + System.lineSeparator()
                         + " 97,50 @     92  |  102,30 @     67" + System.lineSeparator()
