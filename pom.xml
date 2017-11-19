@@ -24,6 +24,7 @@
         <module>chapter_005</module>
         <module>chapter_005_test</module>
         <module>unitsort</module>
+        <module>chapter_007</module>
     </modules>
 
 	<dependencies>
