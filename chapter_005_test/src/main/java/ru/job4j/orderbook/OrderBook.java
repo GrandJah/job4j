@@ -43,15 +43,8 @@ public class OrderBook {
     private void separateOrderEntries(IMap bid, IMap ask, List<Attribute> orders) {
 
         for (Attribute order : orders) {
-
-            int price = order.getPrice(), volume = order.getVolume();
             IMap map  = order.isBuy() ? ask : bid;
-
-            if (!map.containsKey(price)) {
-                map.put(price, volume);
-            } else {
-                map.addValue(price, volume);
-            }
+            map.addValue(order.getPrice(), order.getVolume());
         }
     }
 

@@ -59,11 +59,9 @@ class IMap {
      * @param adding добавляемое значение
      */
     void addValue(Integer key, int adding) {
-        int amount = get(key) + adding;
-        if (amount == 0) {
+        this.map.merge(key, adding, (a, b) -> a + b);
+        if (this.map.get(key) == 0) {
             this.map.remove(key);
-        } else {
-            this.map.replace(key, amount);
         }
     }
 
@@ -80,15 +78,6 @@ class IMap {
      */
     int get(Integer key) {
         return this.map.get(key);
-    }
-
-
-    /** Проверка наличия ключа.
-     * @param key ключ
-     * @return true если существует
-     */
-    boolean containsKey(int key) {
-        return this.map.containsKey(key);
     }
 
     /** внесение записи.

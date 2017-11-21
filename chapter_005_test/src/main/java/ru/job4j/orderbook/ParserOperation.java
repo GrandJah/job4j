@@ -58,15 +58,8 @@ class ParserOperation {
 
         Map<String, List<Attribute>> retMap = new TreeMap<>();
         for (OrderEntry order : this.operationBook.values()) {
-            String book = order.book;
-
-            if (retMap.containsKey(book)) {
-                retMap.get(book).add(order.attribute);
-            } else {
-                List<Attribute> list = new LinkedList<>();
-                list.add(order.attribute);
-                retMap.put(book, list);
-            }
+            retMap.putIfAbsent(order.book, new LinkedList<>());
+            retMap.get(order.book).add(order.attribute);
         }
         return retMap;
     }
