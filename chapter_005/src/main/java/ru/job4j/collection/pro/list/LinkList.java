@@ -18,12 +18,12 @@ public class LinkList<E> implements Iterable<E> {
     private final Object lock = new Object();
 
     /** Начальный и конечный узлы. */
+    @GuardedBy("this")
     private Node<E> first, end;
 
     /**
      * @param value Добавляемое значение.
      */
-    @GuardedBy("this.lock")
     public void add(E value) {
         synchronized (this.lock) {
             Node<E> val = new Node<>(value);
@@ -45,7 +45,6 @@ public class LinkList<E> implements Iterable<E> {
      * @param index индекс в списке
      * @return значение ячейки
      */
-    @GuardedBy("this.lock")
     E get(int index) {
         synchronized (this.lock) {
             Node<E> current = this.first;
@@ -63,7 +62,6 @@ public class LinkList<E> implements Iterable<E> {
 
     /** Получение первого элемента с последующим удалением.
      * @return Последний элемент */
-    @GuardedBy("this.lock")
     E removeEnd() {
         E val = null;
         if (this.end != null) {
@@ -85,7 +83,6 @@ public class LinkList<E> implements Iterable<E> {
 
     /** Получение первого элемента с последующим удалением.
      * @return первый элемент. */
-    @GuardedBy("this.lock")
     E removeFirst() {
         synchronized (this.lock) {
             E val = null;

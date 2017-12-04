@@ -19,9 +19,11 @@ public class ArrList<E> implements Iterable<E> {
     private final Object lock = new Object();
 
     /** контейнер списка. */
+    @GuardedBy("this")
     private E[] container;
 
     /** Размер списка. */
+    @GuardedBy("this")
     private int size = 0;
 
     /** Default constructor. */
@@ -30,7 +32,6 @@ public class ArrList<E> implements Iterable<E> {
     }
 
     /** @param value Добавляемое значение */
-    @GuardedBy("this.lock")
     public void add(E value) {
         synchronized (this.lock) {
             if (this.container.length == this.size) {

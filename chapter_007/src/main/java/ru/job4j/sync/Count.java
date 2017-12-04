@@ -13,10 +13,10 @@ import net.jcip.annotations.ThreadSafe;
 @ThreadSafe
 class Count {
     /** Переменная счетчика. */
+    @GuardedBy("this")
     private int counter = 0;
 
     /** @return текущее состояние счетчика.*/
-    @GuardedBy("this")
     Integer get() {
         synchronized (this) {
             return this.counter;
@@ -25,7 +25,6 @@ class Count {
 
     /** Счетчик вызовов.
      * @return новоее состояние счетчика */
-    @GuardedBy("this")
     int increment() {
         synchronized (this) {
             return ++this.counter;

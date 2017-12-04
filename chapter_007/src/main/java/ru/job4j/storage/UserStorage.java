@@ -15,10 +15,10 @@ import java.util.HashMap;
 @ThreadSafe
 public class UserStorage implements Storage<User> {
     /** хранилище. */
+    @GuardedBy("this")
     private final HashMap<Integer, User> storage = new HashMap<>();
 
     @Override
-    @GuardedBy("this.storage")
     public boolean add(User element) {
         boolean success = false;
         if (element != null) {
@@ -34,7 +34,6 @@ public class UserStorage implements Storage<User> {
     }
 
     @Override
-    @GuardedBy("this.storage")
     public boolean update(User element) {
         boolean success = false;
         if (element != null) {
@@ -50,7 +49,6 @@ public class UserStorage implements Storage<User> {
     }
 
     @Override
-    @GuardedBy("this.storage")
     public boolean delete(User element) {
         boolean success = false;
         if (element != null) {
@@ -70,7 +68,6 @@ public class UserStorage implements Storage<User> {
      * @param amount сколько
      * @return true если перевод успешен.
      */
-    @GuardedBy("this.storage")
     boolean transfer(int fromId, int toId, int amount) {
         boolean success = false;
         if (fromId != toId && amount > 0) {
