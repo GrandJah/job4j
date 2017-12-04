@@ -12,16 +12,16 @@ import static org.junit.Assert.assertThat;
  * @version 0.1
  * @since 30.06.2017
  */
-public class NodeTest {
+public class CycleNodeTest {
     /**
      * Test method.
      */
     @Test
     public void whenHasLoopThenReturnTrue() {
-        Node first = new Node(1);
-        Node two = new Node(2);
-        Node third = new Node(3);
-        Node four = new Node(4);
+        CycleNode<Integer> first = new CycleNode<>(1);
+        CycleNode<Integer> two = new CycleNode<>(2);
+        CycleNode<Integer> third = new CycleNode<>(3);
+        CycleNode<Integer> four = new CycleNode<>(4);
 
         first.setNext(two);
         two.setNext(third);
@@ -36,10 +36,10 @@ public class NodeTest {
      */
     @Test
     public void whenNotLoopThenReturnFalse() {
-        Node first = new Node(1);
-        Node two = new Node(2);
-        Node third = new Node(3);
-        Node four = new Node(4);
+        CycleNode<Integer> first = new CycleNode<>(1);
+        CycleNode<Integer> two = new CycleNode<>(2);
+        CycleNode<Integer> third = new CycleNode<>(3);
+        CycleNode<Integer> four = new CycleNode<>(4);
 
         first.setNext(two);
         two.setNext(third);

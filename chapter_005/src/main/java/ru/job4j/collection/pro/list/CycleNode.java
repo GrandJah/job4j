@@ -9,7 +9,7 @@ package ru.job4j.collection.pro.list;
  *
  * @param <T> Тип
  */
-public class Node<T> {
+public class CycleNode<T> {
     /**
      * Значение.
      */
@@ -17,12 +17,12 @@ public class Node<T> {
     /**
      * Следующий элемент списка.
      */
-    private Node<T> next;
+    private CycleNode<T> next;
 
     /**
      * @param value Значение
      */
-    public Node(T value) {
+    CycleNode(T value) {
         this.value = value;
     }
 
@@ -31,7 +31,7 @@ public class Node<T> {
      *
      * @return next next
      */
-    public Node<T> getNext() {
+    public CycleNode<T> getNext() {
         return this.next;
     }
 
@@ -40,7 +40,7 @@ public class Node<T> {
      *
      * @param next next
      */
-    public void setNext(Node<T> next) {
+    public void setNext(CycleNode<T> next) {
         this.next = next;
     }
 
@@ -48,11 +48,11 @@ public class Node<T> {
      * @param first Первая нода проверяемой цепи
      * @return наличие замыканий
      */
-    boolean hasCycle(Node first) {
+    boolean hasCycle(CycleNode first) {
         boolean has = false;
-        Node check = first;
+        CycleNode check = first;
         while (check != null) {
-            Node next = check.next;
+            CycleNode next = check.next;
             while (next != null) {
                 if (next == check) {
                     has = true;
