@@ -1,37 +1,43 @@
 package ru.job4j.collection.pro.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Iterator;
 
-/**
- * junior.
- *
+/** Динамический список на базе связного списка.
  * @author Igor Kovalkov
  * @version 0.1
  * @since 27.06.2017
  *
  * @param <E> Тип контейнера
  */
+@ThreadSafe
 public class LinkList<E> implements Iterable<E> {
-    /**
-     * Начальный и конечный узлы.
-     */
-    private Node first, end;
+    /** блокировка. */
+    private final Object lock = new Object();
+
+    /** Начальный и конечный узлы. */
+    private Node<E> first, end;
 
     /**
      * @param value Добавляемое значение.
      */
+    @GuardedBy("this.lock")
     public void add(E value) {
-        Node<E> val = new Node<>(value);
-        if (this.end != null) {
-            val.setPrevious(this.end);
-            this.end.setNext(val);
-            this.end = val;
-        } else if (this.first != null) {
-            val.setPrevious(this.first);
-            this.first.setNext(val);
-            this.end = val;
-        } else {
-            this.first = val;
+        synchronized (this.lock) {
+            Node<E> val = new Node<>(value);
+            if (this.end != null) {
+                val.setPrevious(this.end);
+                this.end.setNext(val);
+                this.end = val;
+            } else if (this.first != null) {
+                val.setPrevious(this.first);
+                this.first.setNext(val);
+                this.end = val;
+            } else {
+                this.first = val;
+            }
         }
     }
 
@@ -39,27 +45,30 @@ public class LinkList<E> implements Iterable<E> {
      * @param index индекс в списке
      * @return значение ячейки
      */
-    public E get(int index) {
-        Node current = this.first;
-        for (int i = 0; i < index; i++) {
-            current = current.getNext();
+    @GuardedBy("this.lock")
+    E get(int index) {
+        synchronized (this.lock) {
+            Node<E> current = this.first;
+            for (int i = 0; i < index; i++) {
+                current = current.getNext();
+            }
+            return current.getValue();
         }
-        return (E) current.getValue();
     }
 
     @Override
     public Iterator<E> iterator() {
-        return new ListIt<>();
+        return new ListIt();
     }
 
-    /**
-     * @return Последний элемент
-     */
-    public E removeEnd() {
+    /** Получение первого элемента с последующим удалением.
+     * @return Последний элемент */
+    @GuardedBy("this.lock")
+    E removeEnd() {
         E val = null;
         if (this.end != null) {
-            val = (E) this.end.getValue();
-            Node previous = this.end.getPrevious();
+            val = this.end.getValue();
+            Node<E> previous = this.end.getPrevious();
             if (previous == this.first) {
                 this.end = null;
                 this.first.setNext(null);
@@ -68,58 +77,54 @@ public class LinkList<E> implements Iterable<E> {
                 this.end = previous;
             }
         } else if (this.first != null) {
-            val = (E) this.first.getValue();
+            val = this.first.getValue();
             this.first = null;
         }
         return val;
     }
 
-    /**
-     * @return первый элемент.
-     */
-    public E removeFirst() {
-        E val = null;
-        if (this.first != null) {
-            val = (E) first.getValue();
-            Node next = first.getNext();
-            if (next == null) {
-                this.first = null;
-            } else if (next == this.end) {
-                this.first = this.end;
-                this.first.setPrevious(null);
-            } else {
-                this.first = next;
-                this.first.setPrevious(null);
+    /** Получение первого элемента с последующим удалением.
+     * @return первый элемент. */
+    @GuardedBy("this.lock")
+    E removeFirst() {
+        synchronized (this.lock) {
+            E val = null;
+            if (this.first != null) {
+                val = first.getValue();
+                Node<E> next = first.getNext();
+                if (next == null) {
+                    this.first = null;
+                } else if (next == this.end) {
+                    this.first = this.end;
+                    this.first.setPrevious(null);
+                } else {
+                    this.first = next;
+                    this.first.setPrevious(null);
+                }
             }
+            return val;
         }
-        return val;
     }
 
-    /**
-     * @param <E> Тип итератора
-     */
-    class ListIt<E> implements Iterator<E> {
-        /**
-         * Текущий узел.
-         */
-        private Node current;
+    /** Итератор. */
+    class ListIt implements Iterator<E> {
+        /** Текущий узел. */
+        private Node<E> current;
 
-        /**
-         * Default constructor.
-         */
+        /** Default constructor. */
         ListIt() {
             this.current = first;
         }
 
         @Override
         public boolean hasNext() {
-            return current != null;
+            return this.current != null;
         }
 
         @Override
         public E next() {
-            E val = (E) current.getValue();
-            current = current.getNext();
+            E val = this.current.getValue();
+            this.current = this.current.getNext();
             return val;
         }
     }
@@ -142,7 +147,7 @@ public class LinkList<E> implements Iterable<E> {
         /**
          * @param previous Предыдущий
          */
-        public void setPrevious(Node<T> previous) {
+        void setPrevious(Node<T> previous) {
             this.previous = previous;
         }
 
@@ -158,7 +163,7 @@ public class LinkList<E> implements Iterable<E> {
          *
          * @return previous previous
          */
-        public Node<T> getPrevious() {
+        Node<T> getPrevious() {
 
             return this.previous;
         }
@@ -168,7 +173,7 @@ public class LinkList<E> implements Iterable<E> {
          *
          * @return next next
          */
-        public Node<T> getNext() {
+        Node<T> getNext() {
             return this.next;
         }
 

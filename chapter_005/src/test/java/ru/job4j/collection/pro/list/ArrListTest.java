@@ -14,13 +14,13 @@ import static org.junit.Assert.assertThat;
  * @version 0.1
  * @since 27.06.2017
  */
-public class ListTest {
+public class ArrListTest {
     /**
      * Test method.
      */
     @Test
     public void whenManyAddThenNoErrors() {
-        List<Integer> list = new List<>();
+        ArrList<Integer> list = new ArrList<>();
         for (int i = 0; i < 10000; i++) {
                 list.add(i);
         }
@@ -31,7 +31,7 @@ public class ListTest {
      */
     @Test
     public void whenGetIndexThenReturnValue() {
-        List<String> list = new List<>();
+        ArrList<String> list = new ArrList<>();
         for (int i = 0; i < 10000; i++) {
             list.add(String.valueOf(i));
         }
@@ -43,7 +43,7 @@ public class ListTest {
      */
     @Test
     public void whenReturnIteratorThenIterableList() {
-        List<Integer> list = new List<>();
+        ArrList<Integer> list = new ArrList<>();
         for (int i = 0; i < 10000; i++) {
             list.add(i);
         }
