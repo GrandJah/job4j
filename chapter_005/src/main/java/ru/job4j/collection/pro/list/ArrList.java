@@ -19,11 +19,11 @@ public class ArrList<E> implements Iterable<E> {
     private final Object lock = new Object();
 
     /** контейнер списка. */
-    @GuardedBy("this")
+    @GuardedBy("this.lock")
     private E[] container;
 
     /** Размер списка. */
-    @GuardedBy("this")
+    @GuardedBy("this.lock")
     private int size = 0;
 
     /** Default constructor. */
@@ -45,7 +45,9 @@ public class ArrList<E> implements Iterable<E> {
     /** @param index Индекс
      * @return Значение элемента. */
     E get(int index) {
-        return this.container[index];
+        synchronized (this.lock) {
+            return this.container[index];
+        }
     }
 
     @Override

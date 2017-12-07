@@ -18,7 +18,7 @@ public class LinkList<E> implements Iterable<E> {
     private final Object lock = new Object();
 
     /** Начальный и конечный узлы. */
-    @GuardedBy("this")
+    @GuardedBy("this.lock")
     private Node<E> first, end;
 
     /**
@@ -45,7 +45,7 @@ public class LinkList<E> implements Iterable<E> {
      * @param index индекс в списке
      * @return значение ячейки
      */
-    E get(int index) {
+    public E get(int index) {
         synchronized (this.lock) {
             Node<E> current = this.first;
             for (int i = 0; i < index; i++) {
@@ -64,19 +64,21 @@ public class LinkList<E> implements Iterable<E> {
      * @return Последний элемент */
     E removeEnd() {
         E val = null;
-        if (this.end != null) {
-            val = this.end.getValue();
-            Node<E> previous = this.end.getPrevious();
-            if (previous == this.first) {
-                this.end = null;
-                this.first.setNext(null);
-            } else {
-                previous.setNext(null);
-                this.end = previous;
+        synchronized (this.lock) {
+            if (this.end != null) {
+                val = this.end.getValue();
+                Node<E> previous = this.end.getPrevious();
+                if (previous == this.first) {
+                    this.end = null;
+                    this.first.setNext(null);
+                } else {
+                    previous.setNext(null);
+                    this.end = previous;
+                }
+            } else if (this.first != null) {
+                val = this.first.getValue();
+                this.first = null;
             }
-        } else if (this.first != null) {
-            val = this.first.getValue();
-            this.first = null;
         }
         return val;
     }
@@ -84,8 +86,8 @@ public class LinkList<E> implements Iterable<E> {
     /** Получение первого элемента с последующим удалением.
      * @return первый элемент. */
     E removeFirst() {
+        E val = null;
         synchronized (this.lock) {
-            E val = null;
             if (this.first != null) {
                 val = first.getValue();
                 Node<E> next = first.getNext();
@@ -99,8 +101,8 @@ public class LinkList<E> implements Iterable<E> {
                     this.first.setPrevious(null);
                 }
             }
-            return val;
         }
+        return val;
     }
 
     /** Итератор. */
