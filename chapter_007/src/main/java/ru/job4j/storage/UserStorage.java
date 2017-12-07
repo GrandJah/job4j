@@ -3,6 +3,7 @@ package ru.job4j.storage;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -15,7 +16,7 @@ import java.util.HashMap;
 @ThreadSafe
 public class UserStorage implements Storage<User> {
     /** хранилище. */
-    @GuardedBy("this")
+    @GuardedBy("this.storage")
     private final HashMap<Integer, User> storage = new HashMap<>();
 
     @Override
@@ -92,7 +93,11 @@ public class UserStorage implements Storage<User> {
     /** @return кол-во бабла в хранилище*/
     long getCapacity() {
         long capacity = 0;
-        for (User user : this.storage.values()) {
+        Collection<User> users;
+        synchronized (this.storage) {
+            users = this.storage.values();
+        }
+        for (User user : users) {
             capacity += user.getAmount();
         }
         return capacity;
@@ -101,6 +106,8 @@ public class UserStorage implements Storage<User> {
     /** @param id идентификатор
      * @return пользователь */
     User getUser(int id) {
-        return this.storage.get(id);
+        synchronized (this.storage) {
+            return this.storage.get(id);
+        }
     }
 }
