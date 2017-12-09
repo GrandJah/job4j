@@ -93,12 +93,10 @@ public class UserStorage implements Storage<User> {
     /** @return кол-во бабла в хранилище*/
     long getCapacity() {
         long capacity = 0;
-        Collection<User> users;
         synchronized (this.storage) {
-            users = this.storage.values();
-        }
-        for (User user : users) {
-            capacity += user.getAmount();
+            for (User user : this.storage.values()){
+                capacity += user.getAmount();
+            }
         }
         return capacity;
     }
