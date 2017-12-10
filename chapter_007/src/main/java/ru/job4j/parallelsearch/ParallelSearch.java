@@ -53,23 +53,28 @@ public class ParallelSearch {
     private void searchRecursion(File filesearch) {
         if (filesearch.isDirectory()) {
             ArrayList<Thread> threads = new ArrayList<>();
-            for (File file : filesearch.listFiles()) {
-                threads.add(new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        searchRecursion(file);
+            File[] files = filesearch.listFiles();
+            if (files == null) { // Папка есть а файлов нет.
+                System.out.println(filesearch + " - ошибка доступа к директории.");
+            } else {
+                for (File file : files) {
+                    threads.add(new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            searchRecursion(file);
+                        }
+                    });
+                }
+                for (Thread thread : threads) {
+                    thread.start();
+                }
+                for (Thread thread : threads) {
+                    try {
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                });
-            }
-            for (Thread thread:threads) {
-                thread.start();
-            }
-            for (Thread thread:threads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -94,7 +99,7 @@ public class ParallelSearch {
         String extCheck = sp[sp.length - 1];
         boolean check = false;
         for (String ext:exts) {
-            if (ext.equals(extCheck)) {
+            if (sp.length == 1 && ext.equals("") || ext.equals(extCheck)) {
                 check = true;
                 break;
             }
@@ -111,7 +116,7 @@ public class ParallelSearch {
         try {
             reader = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         try {
             if (reader != null) {
@@ -141,13 +146,11 @@ public class ParallelSearch {
     /** @param args */
     public static void main(String[] args) {
         List<String> exts = new ArrayList<>();
-        Collections.addAll(exts, "txt", "java");
-        ParallelSearch search = new ParallelSearch(".\\",
-                "e408e3646b9296204a328fbf56d86071",
-                exts);
+        Collections.addAll(exts, "txt", "java", "");
+        ParallelSearch search = new ParallelSearch("c:\\windows", "127.0.0.1", exts);
         search.search();
-        List<String> result = search.result();
-        for (String string:result) {
+        System.out.println("файлы в которых содержится искомый текст:");
+        for (String string:search.result()) {
             System.out.println(string);
         }
     }

@@ -3,7 +3,6 @@ package ru.job4j.storage;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -94,7 +93,7 @@ public class UserStorage implements Storage<User> {
     long getCapacity() {
         long capacity = 0;
         synchronized (this.storage) {
-            for (User user : this.storage.values()){
+            for (User user : this.storage.values()) {
                 capacity += user.getAmount();
             }
         }
