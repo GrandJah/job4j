@@ -19,18 +19,28 @@ public class ThreadPool {
      * Очередь задач на выполнение.
      */
     @GuardedBy("this.works")
-    private final LinkedList<Work> works;
+    private final LinkedList<Work> works = new LinkedList<>();
 
-    /**
-     * Default.
-     */
-    public ThreadPool() {
-        this.works = new LinkedList<>();
+    /** Список потоков. */
+    private LinkedList<Thread> threads = new LinkedList<>();
 
+    /** активность пула. */
+    private boolean active = false;
+
+    /** @return active активность пула. */
+    public boolean isActive() {
+        return this.active;
+    }
+
+    /** Инициализация пула. */
+    private void init() {
         for (int i = Runtime.getRuntime().availableProcessors(); i > 0; i--) {
-            new Thread(() -> {
+            threads.add(new Thread(() -> {
                 Work work;
                 while (true) {
+                    if (!this.active) {
+                        break;
+                    }
                     synchronized (works) {
                         while (works.size() == 0) {
                             try {
@@ -43,7 +53,7 @@ public class ThreadPool {
                     }
                     work.doWork();
                 }
-            }).start();
+            }));
         }
     }
 
@@ -56,6 +66,35 @@ public class ThreadPool {
         synchronized (this.works) {
             this.works.add(work);
             this.works.notify();
+        }
+    }
+
+    /** Остановка пула. */
+    public void stop() {
+        this.active = false;
+        synchronized (this.works) {
+            this.works.notify();
+        }
+        this.threads.clear();
+    }
+
+    /** Прерывание работы пула. */
+    public void stopNow() {
+        this.active = false;
+        for (Thread thread: this.threads) {
+            thread.interrupt();
+        }
+        this.threads.clear();
+    }
+
+    /** Пуск пула. */
+    public void start() {
+        if (!this.active) {
+            this.active = true;
+            init();
+            for (Thread thread : this.threads) {
+                thread.start();
+            }
         }
     }
 }
