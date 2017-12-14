@@ -28,7 +28,6 @@ public class ParallelSearchTest {
         ParallelSearch search = new ParallelSearch(".\\",
                 "e408e3646b9296204a328fbf56d86071",
                 exts);
-        search.search();
 
         String result = new File(search.result().get(0)).getName().split("\\.")[0];
         String expected = this.getClass().getSimpleName();

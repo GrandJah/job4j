@@ -31,37 +31,36 @@ public class BlockQueue<T> {
     /**Вставить в очередь.
      * @param task элемент в очередь
      */
-    public void put(T task) {
+    public void put(T task) throws InterruptedException {
         synchronized (this.queue) {
-            while (queue.size() >= this.sizeQueue) {
-                try {
+                while (queue.size() >= this.sizeQueue) {
                     this.queue.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-            }
-            this.queue.add(task);
-            this.queue.notify();
+                this.queue.add(task);
+                this.queue.notify();
         }
     }
 
     /** Вытащить из очереди.
      * @return элемент из очереди
      */
-    public T take() {
+    public T take() throws InterruptedException {
         T task;
         synchronized (this.queue) {
-            while (queue.size() == 0) {
-                try {
+                while (queue.size() == 0) {
                     this.queue.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-            }
-            task = this.queue.removeFirst();
-            this.queue.notify();
+                task = this.queue.removeFirst();
+                this.queue.notify();
         }
         return task;
+    }
+
+    /** @return размер очереди*/
+    public int size() {
+        synchronized (this.queue) {
+            return this.queue.size();
+        }
     }
 
     /**@param args args*/
@@ -76,10 +75,10 @@ public class BlockQueue<T> {
                     while (true) {
                         try {
                             Thread.sleep((long) (2100 + Math.random() * 700));
+                            queue.put(getName());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        queue.put(getName());
                     }
                 }
             };
@@ -92,10 +91,10 @@ public class BlockQueue<T> {
                     while (true) {
                         try {
                             Thread.sleep((long) (1500 + Math.random() * 500));
+                            System.out.println(this.getName() + " - " + queue.take());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        System.out.println(this.getName() + " - " + queue.take());
                     }
                 }
             };
