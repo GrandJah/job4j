@@ -30,6 +30,7 @@ public class BlockQueue<T> {
 
     /**Вставить в очередь.
      * @param task элемент в очередь
+     * @throws InterruptedException прерваный поток
      */
     public void put(T task) throws InterruptedException {
         synchronized (this.queue) {
@@ -43,6 +44,7 @@ public class BlockQueue<T> {
 
     /** Вытащить из очереди.
      * @return элемент из очереди
+     * @throws InterruptedException прерваный поток
      */
     public T take() throws InterruptedException {
         T task;
