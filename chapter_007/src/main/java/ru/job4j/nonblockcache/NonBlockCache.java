@@ -10,48 +10,58 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Igor Kovalkov
  * @version 0.1
  * @since 12.12.2017
- * @param <K> key
- * @param <T> type extend Model
  */
 @ThreadSafe
-public class NonBlockCache<K, T extends NonBlockCache.Model> {
-    /** Неблокирующая коллекция. */
-    private ConcurrentHashMap<K, Model> map;
+public class NonBlockCache {
+    /**
+     * Неблокирующая коллекция.
+     */
+    private ConcurrentHashMap<Integer, Model> map;
 
-    /** Default. */
+    /**
+     * Default.
+     */
     public NonBlockCache() {
         this(100);
     }
 
-    /** @param initCapacity начальная емкость .*/
+    /**
+     * @param initCapacity начальная емкость .
+     */
     public NonBlockCache(int initCapacity) {
         this.map = new ConcurrentHashMap<>(initCapacity);
     }
 
-    /** Добавление модели.
-     * @param key ключ
+    /**
+     * Добавление модели.
+     *
+     * @param key   ключ
      * @param model модель
      * @return true если добавлено, false в противном случае
      */
-    public boolean add(K key, T model) {
+    public boolean add(Integer key, Model model) {
         return this.map.putIfAbsent(key, model) == null;
     }
 
-    /** Удаление модели.
-     * @param key ключ
+    /**
+     * Удаление модели.
+     *
+     * @param key   ключ
      * @param model модель
      * @return true если удалено, false в противном случае
      */
-    public boolean delete(K key, T model) {
+    public boolean delete(Integer key, Model model) {
         return this.map.remove(key, model);
     }
 
-    /** Обновление модели.
-     * @param key ключ
+    /**
+     * Обновление модели.
+     *
+     * @param key   ключ
      * @param model модель
      * @throws OptimisticException если обнаружено несинхронизированное обновление.
      */
-    public void update(K key, Model model) throws OptimisticException {
+    public void update(Integer key, Model model) throws OptimisticException {
         if (this.map.computeIfPresent(key, (k, oldModel) -> {
             Model ret;
             if (oldModel.version == model.version) {
@@ -66,16 +76,22 @@ public class NonBlockCache<K, T extends NonBlockCache.Model> {
         }
     }
 
-    /** Модель. */
-    abstract class Model {
-        /** Версия модели. */
-        private int version = 0;
+    /**
+     * Взять модель.
+     *
+     * @param key ключ.
+     * @return модель.
+     */
+    public Model get(Integer key) {
+        return this.map.get(key);
     }
 
 
-}
-
-/** Исключение обнаруженой ошибки синхронизации. */
-class OptimisticException extends Exception {
-
+    /**
+     * Абстрактный класс модели.
+     */
+    abstract static class Model {
+        /** Версия модели. */
+        private int version = 0;
+    }
 }
