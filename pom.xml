@@ -25,6 +25,7 @@
         <module>chapter_005_test</module>
         <module>unitsort</module>
         <module>chapter_007</module>
+        <module>bomberman</module>
     </modules>
 
 	<dependencies>
