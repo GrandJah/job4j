@@ -47,44 +47,37 @@ public class NonBlockCacheTest {
         AtomicBoolean check = new AtomicBoolean(false);
 
         new Thread(() -> {
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 5; i++) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 try {
-                    System.out.println(cache.get(0) + " thread2 - update");
                     cache.update(0, cache.get(0));
-                    System.out.println(" thread2 - update");
                     System.out.println();
                 } catch (OptimisticException e) {
-                    System.out.println("thread2 - opl");
                     check.set(true);
                 }
             }
         }).start();
         new Thread(() -> {
             TestModel model = (TestModel) cache.get(0);
-            System.out.println(model + " thread1");
             try {
-                Thread.sleep(500);
+                Thread.sleep(5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             try {
-                System.out.println(model + " thread1 - update");
                 cache.update(0, model);
-                System.out.println(model + " thread1 - update");
             } catch (OptimisticException e) {
-                System.out.println("thread1 - opl");
                 check.set(true);
             }
         }).start();
 
-        Thread.sleep(1200);
+        Thread.sleep(10);
 
-        assertThat(true, is(check));
+        assertThat(check.get(), is(true));
     }
 }
 

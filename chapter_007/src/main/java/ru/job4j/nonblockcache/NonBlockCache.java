@@ -68,10 +68,10 @@ public class NonBlockCache {
                 model.version++;
                 ret = model;
             } else {
-                ret = null;
+                ret = oldModel;
             }
             return ret;
-        }) == null) {
+        }) != model) {
             throw new OptimisticException();
         }
     }
@@ -83,15 +83,25 @@ public class NonBlockCache {
      * @return модель.
      */
     public Model get(Integer key) {
-        return this.map.get(key);
+        return this.map.get(key).clone();
     }
-
 
     /**
      * Абстрактный класс модели.
      */
-    abstract static class Model {
+    abstract static class Model implements Cloneable {
         /** Версия модели. */
         private int version = 0;
+
+        @Override
+        protected Model clone() {
+            Model model = null;
+            try {
+                model = (Model) super.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+            return model;
+        }
     }
 }
