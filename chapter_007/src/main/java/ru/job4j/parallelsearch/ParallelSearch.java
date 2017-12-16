@@ -89,6 +89,8 @@ public class ParallelSearch {
         new Thread(() -> {
             try {
                 creator.join();
+                //Некрасиво прерываем поток заблокированный
+                // на запросе результата которого не будет
                 while (this.queue.size() > 0) {
                     Thread.sleep(10);
                 }
@@ -97,13 +99,12 @@ public class ParallelSearch {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            this.executorService.shutdown();
 
             this.isReady = true;
             synchronized (this.result) {
                 this.result.notify();
             }
-
-            this.executorService.shutdown();
         }).start();
     }
 
