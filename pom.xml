@@ -26,6 +26,7 @@
         <module>unitsort</module>
         <module>chapter_007</module>
         <module>bomberman</module>
+        <module>sgl</module>
     </modules>
 
 	<dependencies>
