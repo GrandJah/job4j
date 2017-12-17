@@ -14,11 +14,6 @@ public class BomberMan {
      * Игровое поле.
      */
     private final ReentrantLock[][] board;
-    /**
-     * Сигнал для тайсмера.
-     */
-    private final Object signal = new Object();
-
 
     /**
      * @param sizeX размер по Х
@@ -31,48 +26,6 @@ public class BomberMan {
         }
         new AutoStepHero(0, 0, this.board);
         new AutoStepHero(this.board[0].length - 1, this.board.length - 1, this.board);
-
-        initTimeSignal();
-    }
-
-
-    /**
-     * Таймер.
-     */
-    private void initTimeSignal() {
-        new Thread(()-> {
-            while (true) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    break;
-                }
-                synchronized (this.signal) {
-                    this.signal.notify();
-                }
-            }
-        }).start();
-    }
-
-    /** Возвращает доску, блокирутся в ожидании сигнала таймера.
-     * @return Отображение блокировок доски.
-     */
-    private String getNextStep() {
-        StringBuilder boardString = new StringBuilder();
-        synchronized (this.signal) {
-            try {
-                this.signal.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for (ReentrantLock[] row : this.board) {
-                for (ReentrantLock cell : row) {
-                    boardString.append(cell.isLocked() ? "1" : "0");
-                }
-                boardString.append(System.lineSeparator());
-            }
-        }
-        return boardString.toString();
     }
 
     /**
@@ -80,9 +33,10 @@ public class BomberMan {
      */
     public static void main(String[] args) {
         BomberMan game = new BomberMan(24, 8);
+        SysOut sysOut = new SysOut();
         int stepCount = 0;
         while (true) {
-            String step = game.getNextStep();
+            String step = sysOut.getNextStep(game.board);
             if (step.equals("Game Over!")) {
                 break;
             } else {
