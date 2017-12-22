@@ -62,12 +62,16 @@ public class ArrList<E> implements Iterable<E> {
 
         @Override
         public boolean hasNext() {
-            return this.index < size;
+            synchronized (lock) {
+                return this.index < size;
+            }
         }
 
         @Override
         public E next() {
-            return container[this.index++];
+            synchronized (lock) {
+                return container[this.index++];
+            }
         }
     }
 }
