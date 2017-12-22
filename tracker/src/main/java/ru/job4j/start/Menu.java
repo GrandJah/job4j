@@ -40,7 +40,7 @@ class Menu {
         });
         addAction(new BaseAction("Edit item") {
             @Override
-            public void execute(Input input, Tracker tracker) {
+            public void execute(Input input, Tracker tracker) throws Tracker.ErrorValue {
                 try {
                     Item item = tracker.findById(input.ask("Введите идентификатор:"));
                     String answer = input.ask("Введите новое имя:");
@@ -59,19 +59,19 @@ class Menu {
         });
         addAction(new BaseAction("Delete item") {
             @Override
-            public void execute(Input input, Tracker tracker) {
+            public void execute(Input input, Tracker tracker) throws Tracker.NotFound, Tracker.ErrorValue {
                 tracker.delete(tracker.findById(input.ask("Введите идентификатор:")));
             }
         });
         addAction(new BaseAction("Find item by Id") {
             @Override
-            public void execute(Input input, Tracker tracker) {
+            public void execute(Input input, Tracker tracker) throws Tracker.NotFound {
                 input.println(tracker.findById(input.ask("Введите идентификатор:")).toString());
             }
         });
         addAction(new BaseAction("Find items by name") {
             @Override
-            public void execute(Input input, Tracker tracker) {
+            public void execute(Input input, Tracker tracker) throws Tracker.NotFound {
                 input.println(tracker.findByName(input.ask("Введите имя:")).toString());
             }
         });

@@ -1,6 +1,6 @@
 package ru.job4j.start;
 
-        import ru.job4j.tracker.Tracker;
+import ru.job4j.tracker.Tracker;
 
 /**
  * junior.
@@ -33,14 +33,6 @@ public class StartUI {
         this.input = input;
         this.tracker = tracker;
         this.menu = new Menu();
-    }
-
-    /**
-     * @param args аргументы
-     */
-    public static void main(String[] args) {
-        StartUI startUI = new StartUI(new Tracker(), new ValidateInput());
-        startUI.run();
     }
 
     /**

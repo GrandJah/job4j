@@ -3,6 +3,7 @@ package ru.job4j.start;
 import org.junit.Test;
 import ru.job4j.tracker.Item;
 import ru.job4j.tracker.Tracker;
+import ru.job4j.tracker.TrackerArray;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -15,32 +16,53 @@ import static org.junit.Assert.assertThat;
  * @since 27.05.2017
  */
 public class StubInputTest {
-    /** Заполняем трекер.
-     * @param tracker трэкер
-     * @return средний элемент
-     * @throws Tracker.ErrorValue Ошибка в воде данных
+    /**
+     * Тестовый трекер.
      */
-    private Item fillTracker(Tracker tracker) throws Tracker.ErrorValue {
-        tracker.add(new Item("Один"));
-        tracker.add(new Item("Два"));
-        Item itemReturn = new Item("Три");
-        tracker.add(itemReturn);
-        tracker.add(new Item("Четыре"));
-        tracker.add(new Item("Пять"));
-        return itemReturn;
+    private Tracker tracker;
+    /**
+     * Тестовая заявка №3.
+     */
+    private Item itemTest;
+
+    /**
+     * Создаем трекер и заполняем поля.
+     */
+    public StubInputTest() {
+        setTracker(new TrackerArray());
+    }
+
+    /** Установка тестируемого трекера.
+     * @param tracker tracker
+     */
+    void setTracker(Tracker tracker) {
+        this.tracker = tracker;
+        fillTracker();
+    }
+
+    /** Заполняем трекер.
+     */
+    private void fillTracker() {
+        try {
+            this.tracker.add(new Item("Один"));
+            this.tracker.add(new Item("Два"));
+            this.itemTest = new Item("Три");
+            this.tracker.add(itemTest);
+            this.tracker.add(new Item("Четыре"));
+            this.tracker.add(new Item("Пять"));
+        } catch (Tracker.ErrorValue errorValue) {
+            errorValue.printStackTrace();
+        }
     }
 
     /**
      * Test exit.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenExitThenExit() throws Tracker.NotFound, Tracker.ErrorValue {
-        Tracker tracker = new Tracker();
+    public void whenExitThenExit() {
         String[] answer = {"6"};
         StubInput input = new StubInput(answer, 3);
-        new StartUI(tracker, input).run();
+        new StartUI(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
         for (String string : input.getOut()) {
             builder.append(string);
@@ -51,32 +73,25 @@ public class StubInputTest {
 
     /**
      * Test add.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenAddThenAdd() throws Tracker.NotFound, Tracker.ErrorValue {
-        Tracker tracker = new Tracker();
+    public void whenAddThenAdd() {
         String[] answer = {"0", "name", "desc", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(tracker, input).run();
-        assertThat(tracker.getAll().get(0).getName(), is("name"));
+        new StartUI(this.tracker, input).run();
+        assertThat(this.tracker.getAll().get(5).getName(), is("name"));
     }
 
     /**
      * Test getAll.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenGetAllThenReturnAll() throws Tracker.NotFound, Tracker.ErrorValue {
-        Tracker tracker = new Tracker();
-        fillTracker(tracker);
+    public void whenGetAllThenReturnAll() {
         String[] answer = {"1", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(tracker, input).run();
+        new StartUI(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
-        for (Item item : tracker.getAll()) {
+        for (Item item : this.tracker.getAll()) {
             builder.append(item.getName());
         }
         assertThat(builder.toString(), is("ОдинДваТриЧетыреПять"));
@@ -84,18 +99,14 @@ public class StubInputTest {
 
     /**
      * Test delete.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenDeleteItemThenSaveOrder() throws Tracker.NotFound, Tracker.ErrorValue {
-        Tracker tracker = new Tracker();
-        Item itemDelete = fillTracker(tracker);
-        String[] answer = {"3", itemDelete.getId(), "6"};
+    public void whenDeleteItemThenSaveOrder() {
+        String[] answer = {"3", this.itemTest.getId(), "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(tracker, input).run();
+        new StartUI(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
-        for (Item item : tracker.getAll()) {
+        for (Item item : this.tracker.getAll()) {
             builder.append(item.getName());
         }
         assertThat(builder.toString(), is("ОдинДваЧетыреПять"));
@@ -103,61 +114,46 @@ public class StubInputTest {
 
     /**
      * Test find by ID.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenFindByIdThenReturnCorrect() throws Tracker.ErrorValue, Tracker.NotFound {
-        Tracker tracker = new Tracker();
-        Item itemReturn = fillTracker(tracker);
-        String[] answer = {"4", itemReturn.getId(), "6"};
+    public void whenFindByIdThenReturnCorrect() {
+        String[] answer = {"4", this.itemTest.getId(), "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(tracker, input).run();
-        assertThat(input.getOut()[3], is(String.format("%s%s", itemReturn.toString(), System.lineSeparator())));
+        new StartUI(this.tracker, input).run();
+        assertThat(input.getOut()[3], is(String.format("%s%s", this.itemTest.toString(), System.lineSeparator())));
     }
 
     /**
      * Test find by Name.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenFindByNameThenReturnCorrect() throws Tracker.NotFound, Tracker.ErrorValue {
-        Tracker tracker = new Tracker();
-        Item itemReturn = fillTracker(tracker);
+    public void whenFindByNameThenReturnCorrect() {
         String[] answer = {"5", "Три", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(tracker, input).run();
-        assertThat(input.getOut()[3], is(String.format("%s%s", itemReturn.toString(), System.lineSeparator())));
+        new StartUI(this.tracker, input).run();
+        assertThat(input.getOut()[3], is(String.format("%s%s", this.itemTest.toString(), System.lineSeparator())));
     }
 
     /**
      * Test edit.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
+     * @throws Tracker.NotFound Не найден
      */
     @Test
-    public void whenEditThenEditCorrect() throws Tracker.NotFound, Tracker.ErrorValue {
-        Tracker tracker = new Tracker();
-        Item itemEdit = fillTracker(tracker);
-        String[] answer = {"2", itemEdit.getId(), "НольТриПятнадцать", "Новое описание", "6"};
+    public void whenEditThenEditCorrect() throws Tracker.NotFound {
+        String[] answer = {"2", this.itemTest.getId(), "НольТриПятнадцать", "Новое описание", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(tracker, input).run();
-        assertThat(itemEdit.getName(), is("НольТриПятнадцать"));
+        new StartUI(this.tracker, input).run();
+        assertThat(this.tracker.findById(this.itemTest.getId()).getName(), is("НольТриПятнадцать"));
     }
 
     /**
      * Test.
-     * @throws Tracker.ErrorValue Ошибка в воде данных
-     * @throws Tracker.NotFound Объект не найден
      */
     @Test
-    public void whenIdFoundNotResultThenCorrectMessage() throws Tracker.NotFound, Tracker.ErrorValue {
-        Tracker tracker = new Tracker();
-        Item itemEdit = fillTracker(tracker);
+    public void whenIdFoundNotResultThenCorrectMessage() {
         String[] answer = {"2", "123", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(tracker, input).run();
+        new StartUI(this.tracker, input).run();
         assertThat(input.getOut()[3], is(String.format("Заявка не найдена.%s", System.lineSeparator())));
     }
 }
