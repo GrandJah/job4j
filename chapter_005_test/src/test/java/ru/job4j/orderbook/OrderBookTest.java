@@ -37,7 +37,7 @@ public class OrderBookTest {
      * Test method.
      * @throws IOException IOException
      */
-    @Test
+//    @Test
     public void whenFileOriginalThenAnswerEquals() throws IOException {
         assertThat(new OrderBook().createOrderBook(new ParserOperation().parse("C:\\Users\\Atlant\\IdeaProjects\\junior\\orders.xml")),
                 is("order book : \"book-1\"" + System.lineSeparator()
