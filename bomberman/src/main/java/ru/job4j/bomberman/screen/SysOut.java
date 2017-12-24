@@ -1,6 +1,6 @@
-package ru.job4j;
+package ru.job4j.bomberman.screen;
 
-import java.util.concurrent.locks.ReentrantLock;
+import ru.job4j.bomberman.helper.CellLock;
 
 /**
  * junior.
@@ -16,7 +16,7 @@ public class SysOut {
     private final Object signal = new Object();
 
     /** Default. */
-    SysOut() {
+    public SysOut() {
         initTimeSignal();
     }
 
@@ -42,7 +42,7 @@ public class SysOut {
      * @param board отображаемая доска.
      * @return Отображение блокировок доски.
      */
-    public String getNextStep(ReentrantLock[][] board) {
+    public String getNextStep(CellLock[][] board) {
         StringBuilder boardString = new StringBuilder();
         synchronized (this.signal) {
             try {
@@ -50,10 +50,12 @@ public class SysOut {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            for (ReentrantLock[] row : board) {
-                for (ReentrantLock cell : row) {
-                    boardString.append(cell.isLocked() ? "1" : "0");
+            for (CellLock[] row : board) {
+                boardString.append("|");
+                for (CellLock cell : row) {
+                    boardString.append(cell.getTypeLetter());
                 }
+                boardString.append("|");
                 boardString.append(System.lineSeparator());
             }
         }
