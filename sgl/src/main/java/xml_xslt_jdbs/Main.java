@@ -1,14 +1,10 @@
 package xml_xslt_jdbs;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * junior.
@@ -27,7 +23,7 @@ public class Main implements Serializable {
     /**
      * Имя Базы.
      */
-    private String dbName;
+    private DB db;
 
     /**
      * @return number_n number_n
@@ -44,17 +40,17 @@ public class Main implements Serializable {
     }
 
     /**
-     * @return dbName dbName
+     * @return db db
      */
-    public String getDbName() {
-        return this.dbName;
+    public DB getDB() {
+        return this.db;
     }
 
     /**
-     * @param dbName dbName
+     * @param db db
      */
-    public void setDbName(String dbName) {
-        this.dbName = dbName;
+    public void setDb(DB db) {
+        this.db = db;
     }
 
 
@@ -74,11 +70,11 @@ public class Main implements Serializable {
         XML xml = new XML();
         Main main = new Main();
 
-        main.setDbName("test");
+        main.setDb(new DB("sqlite:test.db"));
         main.setNumberN(console.ask("Введите число: "));
 
         main.createAndFill();
-        xml.createXML(main.getDB());
+        xml.createXML(main.getListFromDB());
         xml.convertXML();
 
         console.print("Sum : ");
@@ -89,7 +85,7 @@ public class Main implements Serializable {
      * Функция создания и заполнения БД.
      */
     public void createAndFill() {
-        goDB(db -> {
+        getDB().goDB(db -> {
             try {
                 db.execute("DROP TABLE IF EXISTS TEST");
                 db.execute("CREATE TABLE TEST(N INTEGER)");
@@ -105,9 +101,9 @@ public class Main implements Serializable {
      * функция запроса из БД.
      * @return Список полей
      */
-    public List<String> getDB() {
+    public List<String> getListFromDB() {
         List<String> list = new LinkedList<>();
-        goDB(db -> {
+        getDB().goDB(db -> {
             try {
                 ResultSet rs = db.executeQuery("SELECT N FROM TEST");
                 if (rs != null) {
@@ -121,27 +117,6 @@ public class Main implements Serializable {
             }
         });
         return list;
-    }
-
-    /**
-     * Работа с БД.
-     * @param function функция для работы с БД.
-     */
-    public void goDB(Function<Statement, SQLException> function) {
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + getDbName() + ".db")) {
-            if (conn == null) {
-                throw new SQLException("Нет соединения с БД!");
-            } else {
-                try (Statement db = conn.createStatement()) {
-                    SQLException e = function.apply(db);
-                    if (e != null) {
-                        throw e;
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

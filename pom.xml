@@ -27,6 +27,7 @@
         <module>chapter_007</module>
         <module>bomberman</module>
         <module>sgl</module>
+        <module>sql_test</module>
     </modules>
 
 	<dependencies>
