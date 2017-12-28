@@ -28,6 +28,7 @@
         <module>bomberman</module>
         <module>sgl</module>
         <module>sql_test</module>
+        <module>webapp</module>
     </modules>
 
 	<dependencies>

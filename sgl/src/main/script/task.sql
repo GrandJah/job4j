@@ -28,3 +28,21 @@ SELECT p.name, c.name FROM person p LEFT JOIN company c ON c.id = p.company_id W
 
 SELECT c.name, count(p.id) as persons FROM company c JOIN  person p ON c.id = p.company_id
 GROUP BY (c.id) ORDER BY count(p.id) DESC LIMIT 1;
+
+SELECT name, count_of_person
+FROM (SELECT company.name, count(*)as count_of_person
+      FROM person LEFT JOIN company
+          ON person.company_id = company.id
+      GROUP BY company.name
+     ) tab_1
+  JOIN (
+         SELECT max(my_count) AS max_count
+         FROM
+           (SELECT
+              company.name, count(*) AS my_count
+            FROM person LEFT JOIN company
+                ON person.company_id = company.id
+            GROUP BY company.name
+           ) tab_0
+       ) tab_2
+    ON tab_1.count_of_person = tab_2.max_count;
