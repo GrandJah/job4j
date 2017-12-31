@@ -14,7 +14,6 @@ public class Main {
     public static void main(String[] args) {
         final Main main = new Main();
         main.start("src/test/config/test.config");
-
     }
 
     /**

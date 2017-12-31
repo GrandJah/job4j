@@ -66,6 +66,7 @@ public class Main implements Serializable {
      */
     public static void main(String[] args) throws ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
+        long start = System.currentTimeMillis();
         Console console = new Console();
         XML xml = new XML();
         Main main = new Main();
@@ -79,6 +80,7 @@ public class Main implements Serializable {
 
         console.print("Sum : ");
         console.println(xml.parse());
+        System.out.println((System.currentTimeMillis() - start) / 1000);
     }
 
     /**

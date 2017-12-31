@@ -5,14 +5,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import ru.job4j.res.Configure;
 import ru.job4j.res.DB;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -54,7 +52,6 @@ public class StartSystem {
         this.lastStart = this.db.checkLastStart();
         try {
             if (System.currentTimeMillis() - lastStart > getInterval()) {
-
                 while (parseActive) {
                     Document doc = Jsoup.connect(this.conf.get("url") + ++page).get();
                     for (Element element : doc.getElementsByClass("postslisttopic")) {
@@ -64,7 +61,6 @@ public class StartSystem {
                         }
                     }
                 }
-
             }
             this.db.setLastStart(start);
             this.conf.log("Все ок! ждем следующего запуска.");
@@ -110,20 +106,27 @@ public class StartSystem {
         return flag;
     }
 
+    /**
+     * Локаль.
+     */
+    private final Locale locale = new Locale("ru", "RU");
+    /**
+     * Форматы даты.
+     */
+    private final SimpleDateFormat
+            dateFormat = new SimpleDateFormat("dd MMM yy", this.locale),
+            timeFormat = new SimpleDateFormat("dd MMM yy, HH:mm", this.locale);
+
     /** Проверка строки даты, на необходимость дальнейшей проверки.
      * @param stringTime Дата - время
      * @return true если обработка необходима.
      * @throws ParseException ошибки парсера
      */
     private Date parseDate(String stringTime) throws ParseException {
-        Locale locale = new Locale("ru", "RU");
-        SimpleDateFormat f = new SimpleDateFormat("dd MMM yy", locale);
-        stringTime = stringTime.replace("сегодня",
-                f.format(System.currentTimeMillis()));
-        stringTime = stringTime.replace("вчера",
-                f.format(new Date(System.currentTimeMillis()
+        stringTime = stringTime.replace("сегодня", this.dateFormat.format(System.currentTimeMillis()));
+        stringTime = stringTime.replace("вчера", this.dateFormat.format(new Date(System.currentTimeMillis()
                         - TimeUnit.DAYS.toMillis(1))));
-        return new SimpleDateFormat("dd MMM yy, HH:mm", locale).parse(stringTime);
+        return this.timeFormat.parse(stringTime);
     }
 
     /** парсер страницы вакансии.
@@ -139,13 +142,16 @@ public class StartSystem {
         }
     }
 
+    /**
+     * Ввыражение для поиска объявлений.
+     */
+    private final Pattern pJava = Pattern.compile("java(?!\\s*script)", Pattern.CASE_INSENSITIVE);
+
     /** Ищем Java но JavaScript.
      * @param text строка для поиска
      * @return true если удачен
      */
     private boolean searchJava(String text) {
-        Matcher java = Pattern.compile("java", Pattern.CASE_INSENSITIVE).matcher(text);
-        Matcher javascript = Pattern.compile("java\\s*script", Pattern.CASE_INSENSITIVE).matcher(text);
-        return java.find() && !javascript.find();
+        return this.pJava.matcher(text).find();
     }
 }
