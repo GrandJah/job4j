@@ -2,10 +2,10 @@ package ru.job4j.crud_server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 
 /**
@@ -33,17 +33,13 @@ public class UserStore {
     private UserStore() {
         try {
             Class.forName("org.postgresql.Driver");
-            this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5423/job4j",
-                    "postgres", "12345678");
+            this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/job4j",
+                    "postgres", "postgres");
             this.connection.setAutoCommit(false);
-            Statement db = connection.createStatement();
-            db.executeUpdate("CREATE TABLE if not exists Users_store ("
-                    + "login VARCHAR(30) PRIMARY KEY UNIQUE, name VARCHAR(50), email VARCHAR(30), created TIMESTAMP)");
-            this.connection.commit();
-            db.close();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
+        goDB("CREATE TABLE if not exists Users_store (login VARCHAR(30) PRIMARY KEY UNIQUE, name VARCHAR(50), email VARCHAR(30), created TIMESTAMP)");
     }
 
     /**
@@ -59,9 +55,10 @@ public class UserStore {
      */
     public User getUser(String login) {
         User user = User.UNKNOWN;
-        try (Statement db = this.connection.createStatement()) {
-            System.out.println("SELECT from Users_store WHERE login = '" + login + "'");
-            ResultSet rs = db.executeQuery("SELECT * from Users_store WHERE login = '" + login + "'");
+        try (PreparedStatement db = this.connection.prepareStatement("SELECT * from Users_store WHERE login = ?")) {
+
+            db.setString(1, login);
+            ResultSet rs = db.executeQuery();
             if (rs.next()) {
                 Timestamp created = rs.getTimestamp("created");
                 user = new User(rs.getString("login"), rs.getString("name"),
@@ -80,16 +77,40 @@ public class UserStore {
      * @return true if added new User
      */
     public boolean addUser(String login, String name, String email) {
+        return goDB("INSERT  INTO  users_store VALUES (?, ?, ?, ?)", login, name, email, new Timestamp(System.currentTimeMillis()));
+    }
+
+    /** Delete user if exist.
+     * @param login login
+     */
+    public void deleteUser(String login) {
+        goDB("DELETE FROM users_store WHERE login = ?", login);
+    }
+
+    /** Update user if exist.
+     * @param login login
+     * @param name name
+     * @param email email
+     */
+    public void updateUser(String login, String name, String email) {
+        goDB("UPDATE users_store SET name = ?, email =  ? WHERE login = ?", login, name, email);
+
+    }
+
+    /**
+     * @param sql prepared sql string
+     * @param params params
+     * @return true if success
+     */
+    private boolean goDB(String sql, Object... params) {
         boolean success = false;
-        try (PreparedStatement db = this.connection.prepareStatement(
-                "INSERT  INTO  users_store VALUES (?, ?, ?, ?)")) {
-            db.setString(1, login);
-            db.setString(2, name);
-            db.setString(3, email);
-            db.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
-            db.addBatch();
+        try (PreparedStatement st = this.connection.prepareStatement(sql)) {
+            ParameterMetaData meta = st.getParameterMetaData();
+            for (int i = 1; i <= params.length; i++) {
+                 st.setObject(i, params[i - 1], meta.getParameterType(i));
+            }
             try {
-                db.execute();
+                st.execute();
                 this.connection.commit();
                 success = true;
             } catch (SQLException e) {
@@ -99,39 +120,5 @@ public class UserStore {
             e.printStackTrace();
         }
         return success;
-    }
-
-    /** Delete user if exist.
-     * @param login login
-     */
-    public void deleteUser(String login) {
-        try (PreparedStatement db = this.connection.prepareStatement("DELETE FROM users_store WHERE login = ?")) {
-            db.setString(1, login);
-            db.addBatch();
-            db.execute();
-            this.connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /** Update user if exist.
-     * @param login login
-     * @param name name
-     * @param email email
-     */
-    public void updateUser(String login, String name, String email) {
-        System.out.println(login + name + email);
-        try (PreparedStatement db = this.connection.prepareStatement(
-                "UPDATE users_store SET name = ?, email =  ? WHERE login = ?")) {
-            db.setString(1, name);
-            db.setString(2, email);
-            db.setString(3, login);
-            db.addBatch();
-            db.execute();
-            this.connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
