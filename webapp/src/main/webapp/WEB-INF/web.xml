@@ -24,11 +24,15 @@
         <servlet-name>InterfaceDelete</servlet-name>
         <servlet-class>ru.job4j.interface_servlet.action_servlets.Delete</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>InterfaceUpdate</servlet-name>
         <servlet-class>ru.job4j.interface_servlet.action_servlets.Update</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MVCServlet</servlet-name>
+        <servlet-class>ru.job4j.mvc_servlets.Controller</servlet-class>
+    </servlet>
+
 
     <servlet-mapping>
         <servlet-name>EchoServlet</servlet-name>
@@ -53,5 +57,9 @@
     <servlet-mapping>
         <servlet-name>InterfaceUpdate</servlet-name>
         <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MVCServlet</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 </web-app>
