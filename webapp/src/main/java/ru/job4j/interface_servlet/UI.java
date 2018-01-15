@@ -37,20 +37,18 @@ public class UI {
         String del = String.format("<input type=\"submit\" formaction = \"%s/delete\" value=\"%s\">", url, delete);
         String upd = String.format("<input type=\"submit\" formaction = \"%s/update\" value=\"%s\">", url, update);
         StringBuffer table = new StringBuffer("<table border = 1px>");
-        for (int i = 0; i <= list.size(); i++) {
+        table.append("<tr><th></th><th>login</th><th>name</th><th>email</th><th></th><th></th></tr>");
+        for (int i = 0; i < list.size(); i++) {
             table.append("<tr><form method = \"POST\">");
-            if (i == 0) {
-                table.append("<td></td><td>login</td><td>name</td><td>email</td><td></td><td></td>");
-            } else {
-                User user = list.get(i - 1);
-                table.append(String.format("<td>%s</td>"
-                                + "<td>%s</td>"
-                                + "<input type=\"hidden\" name=\"login\" value=\"%s\">"
-                                + "<td><input type=\"text\" name=\"name\" value=\"%s\"></td>"
-                                + "<td><input type=\"text\" name=\"email\" value=\"%s\"></td>"
-                                + "<td>%s</td><td>%s</td>",
-                        String.valueOf(i), user.getLogin(), user.getLogin(), user.getName(), user.getEmail(), upd, del));
-            }
+            User user = list.get(i);
+            table.append(String.format("<td>%d</td>"
+                            + "<td>%s</td>"
+                            + "<input type=\"hidden\" name=\"login\" value=\"%s\">"
+                            + "<td><input type=\"text\" name=\"name\" value=\"%s\"></td>"
+                            + "<td><input type=\"text\" name=\"email\" value=\"%s\"></td>"
+                            + "<td>%s</td><td>%s</td>",
+                   i + 1 , user.getLogin(), user.getLogin(), user.getName(), user.getEmail(), upd,
+                    del));
             table.append("</form></tr>");
 
         }
