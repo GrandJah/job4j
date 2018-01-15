@@ -47,7 +47,7 @@ public class UI {
                             + "<td><input type=\"text\" name=\"name\" value=\"%s\"></td>"
                             + "<td><input type=\"text\" name=\"email\" value=\"%s\"></td>"
                             + "<td>%s</td><td>%s</td>",
-                   i + 1 , user.getLogin(), user.getLogin(), user.getName(), user.getEmail(), upd,
+                   i + 1, user.getLogin(), user.getLogin(), user.getName(), user.getEmail(), upd,
                     del));
             table.append("</form></tr>");
 

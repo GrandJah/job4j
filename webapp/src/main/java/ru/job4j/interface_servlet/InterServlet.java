@@ -21,15 +21,10 @@ public class InterServlet extends HttpServlet {
         resp.setContentType("text/html");
         resp.setCharacterEncoding("UTF-8");
         PrintWriter printWriter = resp.getWriter();
-        String title = "Hello!!!";
+        String title = "Interface Servlets";
         String body = ui.getUserTable("Создать", "Удалить", "Обновить", req.getContextPath());
         String html = ui.getHTML(title, body);
         printWriter.write(html);
         printWriter.flush();
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect(req.getContextPath() + "/get");
     }
 }
