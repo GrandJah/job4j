@@ -2,8 +2,6 @@ package ru.job4j.interface_servlet;
 
 import ru.job4j.crud_server.User;
 
-import java.util.List;
-
 /**
  * junior.
  *
@@ -33,22 +31,19 @@ public class UI {
      * @return table
      */
     public String getUserTable(String create, String delete, String update, String url) {
-        List<User> list = UserStore.getInstance().getUsers();
-        String del = String.format("<input type=\"submit\" formaction = \"%s/delete\" value=\"%s\">", url, delete);
-        String upd = String.format("<input type=\"submit\" formaction = \"%s/update\" value=\"%s\">", url, update);
         StringBuffer table = new StringBuffer("<table border = 1px>");
         table.append("<tr><th></th><th>login</th><th>name</th><th>email</th><th></th><th></th></tr>");
-        for (int i = 0; i < list.size(); i++) {
+        int i = 0;
+        for (User user : UserStore.getInstance().getUsers()) {
             table.append("<tr><form method = \"POST\">");
-            User user = list.get(i);
-            table.append(String.format("<td>%d</td>"
-                            + "<td>%s</td>"
+            table.append(String.format("<td>%d</td><td>%s</td>"
                             + "<input type=\"hidden\" name=\"login\" value=\"%s\">"
                             + "<td><input type=\"text\" name=\"name\" value=\"%s\"></td>"
                             + "<td><input type=\"text\" name=\"email\" value=\"%s\"></td>"
                             + "<td>%s</td><td>%s</td>",
-                   i + 1, user.getLogin(), user.getLogin(), user.getName(), user.getEmail(), upd,
-                    del));
+                    ++i, user.getLogin(), user.getLogin(), user.getName(), user.getEmail(),
+                    String.format("<input type=\"submit\" formaction = \"%s/update\" value=\"%s\">", url, update),
+                    String.format("<input type=\"submit\" formaction = \"%s/delete\" value=\"%s\">", url, delete)));
             table.append("</form></tr>");
 
         }
