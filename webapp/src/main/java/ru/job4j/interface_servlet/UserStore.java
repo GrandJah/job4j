@@ -2,13 +2,14 @@ package ru.job4j.interface_servlet;
 
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.dbcp.PoolingDriver;
+//import org.apache.commons.dbcp.PoolingDriver;
+import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
 import ru.job4j.crud_server.User;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+//import java.sql.DriverManager;
 import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,6 +34,11 @@ public class UserStore {
     private static UserStore instance = new UserStore();
 
     /**
+     * Connection pool.
+     */
+    private static PoolingDataSource pool;
+
+    /**
      * @return instance
      */
     public static UserStore getInstance() {
@@ -46,10 +52,11 @@ public class UserStore {
 //        Class.forName("org.postgresql.Driver");
         new PoolableConnectionFactory(
                 new DriverManagerConnectionFactory(
-                        "jdbc:postgresql://localhost:5423/job4j",
-                        "postgres", "12345678"),
+                        "jdbc:postgresql://localhost:5432/job4j",
+                        "postgres", "postgres"),
                 new GenericObjectPool() { {
-                    new PoolingDriver().registerPool("user_store", this);
+//                    new PoolingDriver().registerPool("user_store", this);
+                    UserStore.pool = new PoolingDataSource(this);
                 } }, null,
                 "CREATE TABLE if not exists Users_store "
                         + "(login VARCHAR(30) PRIMARY KEY UNIQUE,"
@@ -71,15 +78,17 @@ public class UserStore {
      */
     public List<User> getUsers(String ... logins) {
         final List<User> users = new ArrayList<>();
-        String query = "SELECT * from Users_store";
+        StringBuilder builder = new StringBuilder("SELECT * from Users_store");
         if (logins != null && logins.length > 0) {
-            query += " WHERE login = ?";
+            builder.append(" WHERE login in (");
             if (logins.length > 1) {
                 for (int i = 0; i < logins.length - 1; i++) {
-                    query += " OR login = ?";
+                    builder.append("?,");
                 }
             }
+            builder.append("?)");
         }
+        String query = builder.toString();
         goDB(query, rs -> {
             try {
                 while (rs.next()) {
@@ -144,7 +153,9 @@ public class UserStore {
      */
     private boolean goDB(String query, Function<ResultSet, Void> function, Object ... params) {
         boolean success = false;
-        try (Connection connection = DriverManager.getConnection("jdbc:apache:commons:dbcp:user_store")) {
+//        try (Connection connection = DriverManager.getConnection("jdbc:apache:commons:dbcp:user_store")) {
+        try (Connection connection = UserStore.pool.getConnection()) {
+
             try (PreparedStatement db = connection.prepareStatement(query)) {
                 ParameterMetaData meta = db.getParameterMetaData();
                 for (int i = 1; i <= params.length; i++) {
