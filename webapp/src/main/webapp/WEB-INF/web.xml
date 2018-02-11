@@ -14,12 +14,18 @@
         <servlet-name>Interface</servlet-name>
         <servlet-class>ru.job4j.interface_servlet.InterServlet</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>InterfaceCreate</servlet-name>
         <servlet-class>ru.job4j.interface_servlet.action_servlets.Create</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>ru.job4j.authentication.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>ru.job4j.authentication.Logout</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>InterfaceDelete</servlet-name>
         <servlet-class>ru.job4j.interface_servlet.action_servlets.Delete</servlet-class>
@@ -32,7 +38,6 @@
         <servlet-name>MVCServlet</servlet-name>
         <servlet-class>ru.job4j.mvc_servlets.Controller</servlet-class>
     </servlet>
-
 
     <servlet-mapping>
         <servlet-name>EchoServlet</servlet-name>
@@ -59,7 +64,27 @@
         <url-pattern>/update</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>MVCServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+
+
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>ru.job4j.authentication.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
 </web-app>
