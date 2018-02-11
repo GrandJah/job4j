@@ -6,7 +6,7 @@ import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
-import ru.job4j.crud_server.User;
+import ru.job4j.user_store.User;
 
 import java.sql.Connection;
 //import java.sql.DriverManager;

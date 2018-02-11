@@ -1,5 +1,7 @@
 package ru.job4j.crud_server;
 
+import ru.job4j.user_store.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ParameterMetaData;
@@ -107,7 +109,7 @@ public class UserStore {
         try (PreparedStatement st = this.connection.prepareStatement(sql)) {
             ParameterMetaData meta = st.getParameterMetaData();
             for (int i = 1; i <= params.length; i++) {
-                 st.setObject(i, params[i - 1], meta.getParameterType(i));
+                st.setObject(i, params[i - 1], meta.getParameterType(i));
             }
             try {
                 st.execute();

@@ -1,6 +1,7 @@
 package ru.job4j.interface_servlet.action_servlets;
 
-import ru.job4j.interface_servlet.UserStore;
+import ru.job4j.user_store.Role;
+import ru.job4j.user_store.UserStore;
 
 /**
  * junior.
@@ -11,7 +12,7 @@ import ru.job4j.interface_servlet.UserStore;
  */
 public class Delete extends AbstractActionServlets {
     @Override
-    void doAction(String login, String name, String email) {
-        UserStore.getInstance().deleteUser(login);
+    void doAction(String login, String name, String email, Role role) {
+        UserStore.getStore().deleteUser(login);
     }
 }

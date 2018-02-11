@@ -1,5 +1,7 @@
 package ru.job4j.interface_servlet.action_servlets;
 
+import ru.job4j.user_store.Role;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +18,11 @@ public abstract class AbstractActionServlets extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
-        doAction(req.getParameter("login"), req.getParameter("name"), req.getParameter("email"));
+        doAction(
+                req.getParameter("login"),
+                req.getParameter("name"),
+                req.getParameter("email"),
+                Role.valueOf(req.getParameter("role")));
         resp.sendRedirect(req.getHeader("Referer"));
     }
 
@@ -24,6 +30,7 @@ public abstract class AbstractActionServlets extends HttpServlet {
      * @param login login
      * @param name name
      * @param email email
+     * @param role role
      */
-    abstract void doAction(String login, String name, String email);
+    abstract void doAction(String login, String name, String email, Role role);
 }

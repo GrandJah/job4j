@@ -1,5 +1,5 @@
-<%@ page import="ru.job4j.interface_servlet.UserStore" %>
-<%@ page import="ru.job4j.crud_server.User" %>
+<%@ page import="ru.job4j.user_store.UserStore" %>
+<%@ page import="ru.job4j.user_store.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -9,7 +9,7 @@
 <table border = 1px>
     <tr><th></th><th>login</th><th>name</th><th>email</th><th></th><th></th></tr>
 
-    <%int i = 0; for(User user : UserStore.getInstance().getUsers()) {%>
+    <%int i = 0; for(User user : new UserStore().getUsers()) {%>
 
     <tr><form method = "POST">
         <td><%=++i%></td>

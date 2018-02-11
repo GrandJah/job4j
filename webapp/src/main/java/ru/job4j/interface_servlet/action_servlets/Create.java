@@ -1,6 +1,7 @@
 package ru.job4j.interface_servlet.action_servlets;
 
-import ru.job4j.interface_servlet.UserStore;
+import ru.job4j.user_store.Role;
+import ru.job4j.user_store.UserStore;
 
 /**
  * junior.
@@ -11,7 +12,8 @@ import ru.job4j.interface_servlet.UserStore;
  */
 public class Create extends AbstractActionServlets {
     @Override
-    void doAction(String login, String name, String email) {
-        UserStore.getInstance().addUser(login, name, email);
+    void doAction(String login, String name, String email, Role role) {
+        UserStore.getStore().addUser(login, name, email);
+        Role.setRole(login, role);
     }
 }

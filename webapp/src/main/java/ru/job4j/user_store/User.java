@@ -1,4 +1,4 @@
-package ru.job4j.crud_server;
+package ru.job4j.user_store;
 
 /**
  * junior.
@@ -7,7 +7,7 @@ package ru.job4j.crud_server;
  * @version 0.1
  * @since 02.01.2018
  */
-public class User {
+public class User implements Comparable<User> {
     /**
      * name, login, email.
      */
@@ -80,5 +80,10 @@ public class User {
         sb.append(", createDate=").append(createDate);
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return this.login.compareTo(o.login);
     }
 }

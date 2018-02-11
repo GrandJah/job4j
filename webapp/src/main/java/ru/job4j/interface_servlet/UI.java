@@ -1,6 +1,7 @@
 package ru.job4j.interface_servlet;
 
-import ru.job4j.crud_server.User;
+import ru.job4j.user_store.User;
+import ru.job4j.user_store.UserStore;
 
 /**
  * junior.
@@ -34,7 +35,7 @@ public class UI {
         StringBuffer table = new StringBuffer("<table border = 1px>");
         table.append("<tr><th></th><th>login</th><th>name</th><th>email</th><th></th><th></th></tr>");
         int i = 0;
-        for (User user : UserStore.getInstance().getUsers()) {
+        for (User user : UserStore.getStore().getUsers()) {
             table.append("<tr><form method = \"POST\">");
             table.append(String.format("<td>%d</td><td>%s</td>"
                             + "<input type=\"hidden\" name=\"login\" value=\"%s\">"
