@@ -31,7 +31,7 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User user = UserStore.getStore().getUser(req.getParameter("login"));
-        if (user == null) {
+        if (user == User.UNKNOWN) {
             req.setAttribute("error", "Ошибочка!");
             doGet(req, resp);
         } else if (session.getAttribute("user") == null) {
