@@ -1,4 +1,4 @@
-package ru.job4j.interface_servlet.action_servlets;
+package ru.job4j.user_store.action_servlets;
 
 import ru.job4j.user_store.Role;
 
@@ -15,8 +15,9 @@ import java.io.IOException;
  * @since 15.01.2018
  */
 public abstract class AbstractActionServlets extends HttpServlet {
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
         doAction(
                 req.getParameter("login"),

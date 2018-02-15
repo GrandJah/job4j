@@ -3,6 +3,7 @@ package ru.job4j.user_store;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -12,41 +13,35 @@ import java.util.List;
  * @version 0.1
  * @since 03.01.2018
  */
-public class UserStore {
+public class UserStore implements IUserStore {
     /**
      * db.
      */
     private DB db = DB.getInstance();
 
     /**
-     * UserStore - singleton.
+     * UserStoreDB - singleton.
      */
     private UserStore() { }
 
     /**
-     *  store - singleton.
+     *  USER_STORE - singleton.
      */
-    private static UserStore store = new UserStore();
+    private static final IUserStore USER_STORE = new UserStore();
 
     /**
-     *  @return store store
+     *  @return USER_STORE USER_STORE
      */
-    public static UserStore getStore() {
-        return store;
+    public static IUserStore getUserStore() {
+        return USER_STORE;
     }
 
-    /** Get User.
-     * @param login login
-     * @return User
-     */
+    @Override
     public User getUser(String login) {
         return login == null ? User.UNKNOWN : getUsers(login).get(0);
     }
 
-    /** Get Users.
-     * @param logins logins
-     * @return List Users
-     */
+    @Override
     public List<User> getUsers(String ... logins) {
         final List<User> users = new ArrayList<>();
         StringBuilder builder = new StringBuilder("SELECT * from Users_store");
@@ -78,40 +73,25 @@ public class UserStore {
         return users;
     }
 
-
-    /** Add User.
-     * @param login login
-     * @param name name
-     * @param email email
-     * @return true if added new User
-     */
+    @Override
     public boolean addUser(String login, String name, String email) {
         return db.goDB("INSERT  INTO  users_store VALUES (?, ?, ?, ?)",
                 login, name, email, new Timestamp(System.currentTimeMillis()));
     }
 
-    /** Delete user if exist.
-     * @param login login
-     */
+    @Override
     public void deleteUser(String login) {
         db.goDB("DELETE FROM users_store WHERE login = ?", login);
     }
 
-    /** Update user if exist.
-     * @param login login
-     * @param name name
-     * @param email email
-     */
+    @Override
     public void updateUser(String login, String name, String email) {
         db.goDB("UPDATE users_store SET name = ?, email =  ? WHERE login = ?",
                 name, email, login);
     }
 
-    /** Выборка роли пользователя.
-     * @param login login
-     * @return role
-     */
-    public Role getRole(String login) {
+    @Override
+    public Role getUserRole(String login) {
         final Role[] role = {Role.DefaultUser};
         db.goDB("SELECT role from UseRole WHERE user_login = ?", rs -> {
             try {
@@ -126,15 +106,17 @@ public class UserStore {
         return role[0];
     }
 
-    /** Установка роли для пользователя.
-     * @param login login
-     * @param role role
-     */
-    public void setUser(String login, Role role) {
+    @Override
+    public void setUserRole(String login, Role role) {
         db.goDB("DELETE from UseRole WHERE user_login = ?", login);
         if (role != Role.DefaultUser) {
             db.goDB("INSERT INTO UseRole VALUES(? , ?)", login, role.name());
         }
+    }
+
+    @Override
+    public Iterator<User> iterator() {
+        return getUsers().iterator();
     }
 }
 

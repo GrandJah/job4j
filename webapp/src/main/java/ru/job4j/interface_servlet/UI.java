@@ -1,7 +1,7 @@
 package ru.job4j.interface_servlet;
 
+import ru.job4j.user_store.IUserStore;
 import ru.job4j.user_store.User;
-import ru.job4j.user_store.UserStore;
 
 /**
  * junior.
@@ -11,6 +11,7 @@ import ru.job4j.user_store.UserStore;
  * @since 03.01.2018
  */
 public class UI {
+
     /**
      * @param title title
      * @param body html - body
@@ -25,17 +26,18 @@ public class UI {
     }
 
     /**
+     * @param  users User store
      * @param create create
      * @param delete delete
      * @param update update
      * @param url url
      * @return table
      */
-    public String getUserTable(String create, String delete, String update, String url) {
+    public String getUserTable(IUserStore users, String create, String delete, String update, String url) {
         StringBuffer table = new StringBuffer("<table border = 1px>");
         table.append("<tr><th></th><th>login</th><th>name</th><th>email</th><th></th><th></th></tr>");
         int i = 0;
-        for (User user : UserStore.getStore().getUsers()) {
+        for (User user : users) {
             table.append("<tr><form method = \"POST\">");
             table.append(String.format("<td>%d</td><td>%s</td>"
                             + "<input type=\"hidden\" name=\"login\" value=\"%s\">"

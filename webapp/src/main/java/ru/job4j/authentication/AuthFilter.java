@@ -1,7 +1,5 @@
 package ru.job4j.authentication;
 
-import ru.job4j.user_store.User;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -23,27 +21,20 @@ import java.io.IOException;
 public class AuthFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
+    public void init(FilterConfig filterConfig) { }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession();
-        if (!request.getRequestURI().endsWith("/login")) {
-            if (session.getAttribute("user") == null) {
-                ((HttpServletResponse) servletResponse).sendRedirect(String.format("%s/login", request.getContextPath()));
-                return;
-            } else {
-                User user = (User) session.getAttribute("user");
-            }
+        if (!request.getRequestURI().endsWith("/login") && session.getAttribute("user") == null) {
+            String urlRedirect = String.format("%s/login", request.getContextPath());
+            ((HttpServletResponse) servletResponse).sendRedirect(urlRedirect);
+            return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
-    public void destroy() {
-
-    }
+    public void destroy() { }
 }

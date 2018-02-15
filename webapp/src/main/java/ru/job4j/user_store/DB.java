@@ -2,12 +2,14 @@ package ru.job4j.user_store;
 
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
+//import org.apache.commons.dbcp.PoolingDriver;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+//import java.sql.DriverManager;
 import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,7 +44,11 @@ public class DB {
      * Create connection's pool.
      */
     private DB() {
-//        Class.forName("org.postgresql.Driver");
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         new PoolableConnectionFactory(
                 new DriverManagerConnectionFactory(
                         "jdbc:postgresql://localhost:5432/job4j",

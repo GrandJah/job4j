@@ -1,4 +1,4 @@
-package ru.job4j.interface_servlet.action_servlets;
+package ru.job4j.user_store.action_servlets;
 
 import ru.job4j.user_store.Role;
 import ru.job4j.user_store.UserStore;
@@ -10,12 +10,10 @@ import ru.job4j.user_store.UserStore;
  * @version 0.1
  * @since 14.01.2018
  */
-public class Update extends AbstractActionServlets {
+public class Delete extends AbstractActionServlets {
+
     @Override
     void doAction(String login, String name, String email, Role role) {
-        UserStore.getStore().updateUser(login, name, email);
-        if (role != null) {
-            Role.setRole(login, role);
-        }
+        UserStore.getUserStore().deleteUser(login);
     }
 }
