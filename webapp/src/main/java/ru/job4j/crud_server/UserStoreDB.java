@@ -1,5 +1,7 @@
 package ru.job4j.crud_server;
 
+import ru.job4j.user_store.IUserStore;
+import ru.job4j.user_store.Role;
 import ru.job4j.user_store.User;
 
 import java.sql.Connection;
@@ -9,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * junior.
@@ -17,12 +20,12 @@ import java.sql.Timestamp;
  * @version 0.1
  * @since 02.01.2018
  */
-public class UserStore {
+public class UserStoreDB implements IUserStore {
 
     /**
      * Singleton Object.
      */
-    private static final UserStore USER_STORE = new UserStore();
+    private static final UserStoreDB USER_STORE = new UserStoreDB();
 
     /**
      * DataBase connection.
@@ -32,7 +35,7 @@ public class UserStore {
     /**
      * Default Constructor.
      */
-    private UserStore() {
+    private UserStoreDB() {
         try {
             Class.forName("org.postgresql.Driver");
             this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/job4j",
@@ -45,16 +48,13 @@ public class UserStore {
     }
 
     /**
-     * @return UserStore
+     * @return UserStoreDB
      */
-    public static UserStore getUserStore() {
+    public static UserStoreDB getUserStore() {
         return USER_STORE;
     }
 
-    /** Get User.
-     * @param login login
-     * @return User
-     */
+    @Override
     public User getUser(String login) {
         User user = User.UNKNOWN;
         try (PreparedStatement db = this.connection.prepareStatement("SELECT * from Users_store WHERE login = ?")) {
@@ -72,31 +72,35 @@ public class UserStore {
         return user;
     }
 
-    /** Add User.
-     * @param login login
-     * @param name name
-     * @param email email
-     * @return true if added new User
-     */
+    @Override
+    public List<User> getUsers(String... logins) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean addUser(String login, String name, String email) {
         return goDB("INSERT  INTO  users_store VALUES (?, ?, ?, ?)", login, name, email, new Timestamp(System.currentTimeMillis()));
     }
 
-    /** Delete user if exist.
-     * @param login login
-     */
+    @Override
     public void deleteUser(String login) {
         goDB("DELETE FROM users_store WHERE login = ?", login);
     }
 
-    /** Update user if exist.
-     * @param login login
-     * @param name name
-     * @param email email
-     */
+    @Override
     public void updateUser(String login, String name, String email) {
         goDB("UPDATE users_store SET name = ?, email =  ? WHERE login = ?", login, name, email);
 
+    }
+
+    @Override
+    public Role getRole(String login) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setUser(String login, Role role) {
+        throw new UnsupportedOperationException();
     }
 
     /**

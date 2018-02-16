@@ -2,7 +2,8 @@ package ru.job4j.authentication;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.user_store.UserStore;
+import ru.job4j.test.StubStore;
+import ru.job4j.user_store.IUserStore;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -45,9 +46,14 @@ public class LoginTest {
     private RequestDispatcher dispatcher = mock(RequestDispatcher.class);
 
     /**
+     * stub UserStore.
+     */
+    private IUserStore stubStore = new StubStore();
+
+    /**
      * Login test class object.
      */
-    private Login login = new Login();
+    private Login login = new Login(this.stubStore);
 
     /**
      * login user stub.
@@ -86,7 +92,7 @@ public class LoginTest {
      */
     @Test
     public void whenLoginIsCorrect() throws ServletException, IOException {
-        UserStore.getStore().addUser("UserLogin", "nameLogin", "email");
+        this.stubStore.addUser("UserLogin", "nameLogin", "email");
 
         login.doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(anyString());
@@ -102,7 +108,7 @@ public class LoginTest {
      */
     @Test
     public void whenLoginIsNotCorrect() throws ServletException, IOException {
-        UserStore.getStore().deleteUser("UserLogin");
+        this.stubStore.deleteUser("UserLogin");
 
         login.doPost(this.req, this.resp);
         verify(dispatcher).forward(this.req, this.resp);
@@ -110,11 +116,10 @@ public class LoginTest {
 
 
     /**
-     * @throws ServletException ServletException
      * @throws IOException IOException
      */
     @Test
-    public void whenLogoutThenRemoveSessionUser() throws ServletException, IOException {
+    public void whenLogoutThenRemoveSessionUser() throws IOException {
         Logout logout = new Logout();
         logout.doGet(this.req, this.resp);
 
