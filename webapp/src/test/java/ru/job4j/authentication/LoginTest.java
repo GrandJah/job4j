@@ -36,6 +36,10 @@ public class LoginTest {
     private HttpServletResponse resp  = mock(HttpServletResponse.class);
 
     /**
+     * HttpSession mock.
+     */
+    private HttpSession session = mock(HttpSession.class);
+    /**
      * RequestDispatcher mock.
      */
     private RequestDispatcher dispatcher = mock(RequestDispatcher.class);
@@ -60,11 +64,10 @@ public class LoginTest {
         when(this.req.getParameter(eq("login"))).thenReturn("UserLogin");
 
         //session test reaction
-        HttpSession session = mock(HttpSession.class);
         doAnswer(i -> this.user = i.getArgumentAt(1, Object.class))
-                .when(session).setAttribute(eq("user"), anyObject());
-        when(session.getAttribute(eq("user"))).thenAnswer(i -> this.user);
-        when(this.req.getSession()).thenReturn(session);
+                .when(this.session).setAttribute(eq("user"), anyObject());
+        when(this.session.getAttribute(eq("user"))).thenAnswer(i -> this.user);
+        when(this.req.getSession()).thenReturn(this.session);
     }
 
     /**
@@ -106,4 +109,16 @@ public class LoginTest {
     }
 
 
+    /**
+     * @throws ServletException ServletException
+     * @throws IOException IOException
+     */
+    @Test
+    public void whenLogoutThenRemoveSessionUser() throws ServletException, IOException {
+        Logout logout = new Logout();
+        logout.doGet(this.req, this.resp);
+
+        verify(this.session).removeAttribute(eq("user"));
+        verify(this.resp).sendRedirect(anyString());
+    }
 }
