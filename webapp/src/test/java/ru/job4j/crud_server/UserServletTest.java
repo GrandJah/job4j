@@ -84,12 +84,9 @@ public class UserServletTest {
      */
     @Test
     public void whenDeleteThenDeleteUser() throws IOException {
+        this.store.addUser("Login", "Name", "e-mail");
         this.servlet.doDelete(this.req, this.resp);
         verify(this.resp).sendError(eq(200));
         assertEquals(this.store.getUser("Login"), User.UNKNOWN);
     }
-
-
-
-
 }
