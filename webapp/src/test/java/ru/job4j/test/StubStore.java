@@ -41,7 +41,11 @@ public class StubStore implements IUserStore {
 
     @Override
     public void updateUser(String login, String name, String email) {
-        throw new UnsupportedOperationException();
+        if (this.users.get(login) != null) {
+            this.users.replace("Login", new User(login, name, email, 0));
+        } else {
+            throw new RuntimeException("not element User with login:" + login);
+        }
     }
 
     @Override

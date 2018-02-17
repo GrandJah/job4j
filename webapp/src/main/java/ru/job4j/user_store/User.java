@@ -1,5 +1,7 @@
 package ru.job4j.user_store;
 
+import java.util.Objects;
+
 /**
  * junior.
  *
@@ -73,7 +75,7 @@ public class User implements Comparable<User> {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("User{");
+        final StringBuilder sb = new StringBuilder("User{");
         sb.append("name='").append(name).append('\'');
         sb.append(", login='").append(login).append('\'');
         sb.append(", email='").append(email).append('\'');
@@ -85,5 +87,24 @@ public class User implements Comparable<User> {
     @Override
     public int compareTo(User o) {
         return this.login.compareTo(o.login);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(name, user.name)
+                && Objects.equals(login, user.login)
+                && Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, login, email);
     }
 }
