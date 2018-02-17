@@ -3,6 +3,7 @@ package ru.job4j.user_store;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -111,6 +112,11 @@ public class UserStore implements IUserStore {
         if (role != Role.DefaultUser) {
             db.goDB("INSERT INTO UseRole VALUES(? , ?)", login, role.name());
         }
+    }
+
+    @Override
+    public Iterator<User> iterator() {
+        return getUsers().iterator();
     }
 }
 

@@ -5,6 +5,7 @@ import ru.job4j.user_store.Role;
 import ru.job4j.user_store.User;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -56,5 +57,10 @@ public class StubStore implements IUserStore {
     @Override
     public void setUser(String login, Role role) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Iterator<User> iterator() {
+        return getUsers().iterator();
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Interface User Store.
  */
-public interface IUserStore {
+public interface IUserStore extends Iterable<User> {
     /** Get User.
      * @param login login
      * @return User (User.UNKNOWN if empty)

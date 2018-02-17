@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -101,6 +102,11 @@ public class UserStoreDB implements IUserStore {
     @Override
     public void setUser(String login, Role role) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Iterator<User> iterator() {
+        return getUsers().iterator();
     }
 
     /**
