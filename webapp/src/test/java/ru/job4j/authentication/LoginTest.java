@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.test.StubStore;
 import ru.job4j.user_store.IUserStore;
+import ru.job4j.user_store.UserStore;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -48,12 +49,12 @@ public class LoginTest {
     /**
      * stub UserStore.
      */
-    private IUserStore stubStore = new StubStore();
+    private IUserStore stubStore = StubStore.stub(UserStore.class, "USER_STORE");
 
     /**
      * Login test class object.
      */
-    private Login login = new Login(this.stubStore);
+    private Login login = new Login();
 
     /**
      * login user stub.

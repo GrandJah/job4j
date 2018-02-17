@@ -3,7 +3,6 @@ package ru.job4j.crud_server;
 import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.test.StubStore;
-import ru.job4j.user_store.IUserStore;
 import ru.job4j.user_store.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,21 +33,14 @@ public class UserServletTest {
     /**
      * test servlet.
      */
-    private UserServlet servlet;
-
-    /**
-     * stub User store.
-     */
-    private IUserStore store;
-
+    private UserServlet servlet = new UserServlet();
 
     /**
      * before test.
      */
     @Before
     public void init() {
-        this.store = new StubStore();
-        this.servlet = new UserServlet(this.store);
+        StubStore.stub(UserStoreDB.class, "USER_STORE");
         when(this.req.getParameter(eq("login"))).thenReturn("Login");
         when(this.req.getParameter(eq("name"))).thenReturn("Name User");
         when(this.req.getParameter(eq("email"))).thenReturn("E-mail");
@@ -61,7 +53,7 @@ public class UserServletTest {
     public void whenPutThenAddUser() throws IOException {
         this.servlet.doPut(this.req, this.resp);
         verify(this.resp).sendError(eq(201));
-        Object actual = this.store.getUser("Login");
+        Object actual = UserStoreDB.getUserStore().getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
     }
@@ -71,10 +63,10 @@ public class UserServletTest {
      */
     @Test
     public void whenPostThenUpdateUser() throws IOException {
-        this.store.addUser("Login", "Name", "old e-mail");
+        UserStoreDB.getUserStore().addUser("Login", "Name", "old e-mail");
         this.servlet.doPost(this.req, this.resp);
         verify(this.resp).sendError(eq(200));
-        Object actual = this.store.getUser("Login");
+        Object actual = UserStoreDB.getUserStore().getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
     }
@@ -84,9 +76,9 @@ public class UserServletTest {
      */
     @Test
     public void whenDeleteThenDeleteUser() throws IOException {
-        this.store.addUser("Login", "Name", "e-mail");
+        UserStoreDB.getUserStore().addUser("Login", "Name", "e-mail");
         this.servlet.doDelete(this.req, this.resp);
         verify(this.resp).sendError(eq(200));
-        assertEquals(this.store.getUser("Login"), User.UNKNOWN);
+        assertEquals(UserStoreDB.getUserStore().getUser("Login"), User.UNKNOWN);
     }
 }

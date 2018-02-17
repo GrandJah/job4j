@@ -1,7 +1,9 @@
 package ru.job4j.authentication;
 
 import org.junit.Test;
+import ru.job4j.test.StubStore;
 import ru.job4j.user_store.User;
+import ru.job4j.user_store.UserStore;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -43,6 +45,7 @@ public class AuthFilterTest {
      * @throws ServletException ServletException
      */
     private void test(String url, User user) throws IOException, ServletException {
+        StubStore.stub(UserStore.class, "USER_STORE");
         HttpSession session = mock(HttpSession.class);
         when(session.getAttribute(eq("user"))).thenReturn(user);
         when(this.req.getSession()).thenReturn(session);

@@ -25,7 +25,7 @@ public class Controller extends HttpServlet {
         User useUser = (User) req.getSession().getAttribute("user");
         Map<User, Role> users = new TreeMap<>();
 
-        for (User user: UserStore.getStore().getUsers()) {
+        for (User user: UserStore.getUserStore().getUsers()) {
             users.put(user, Role.useRole(user.getLogin()));
         }
 

@@ -25,15 +25,15 @@ public class UserStore implements IUserStore {
     private UserStore() { }
 
     /**
-     *  store - singleton.
+     *  USER_STORE - singleton.
      */
-    private static IUserStore store = new UserStore();
+    private static final IUserStore USER_STORE = new UserStore();
 
     /**
-     *  @return store store
+     *  @return USER_STORE USER_STORE
      */
-    public static IUserStore getStore() {
-        return store;
+    public static IUserStore getUserStore() {
+        return USER_STORE;
     }
 
     @Override

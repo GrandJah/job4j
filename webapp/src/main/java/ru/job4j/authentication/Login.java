@@ -1,6 +1,5 @@
 package ru.job4j.authentication;
 
-import ru.job4j.user_store.IUserStore;
 import ru.job4j.user_store.User;
 import ru.job4j.user_store.UserStore;
 
@@ -19,24 +18,6 @@ import java.io.IOException;
  * @since 15.01.2018
  */
 public class Login extends HttpServlet {
-    /**
-     * User Store.
-     */
-    private final IUserStore users;
-
-    /**
-     * Default constructor.
-     */
-    public Login() {
-        this(UserStore.getStore());
-    }
-
-    /** Main Constructor.
-     * @param users User store
-     */
-    public Login(IUserStore users) {
-        this.users = users;
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -50,7 +31,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        User user = this.users.getUser(req.getParameter("login"));
+        User user = UserStore.getUserStore().getUser(req.getParameter("login"));
         if (user == User.UNKNOWN) {
             req.setAttribute("error", "Ошибочка!");
             doGet(req, resp);

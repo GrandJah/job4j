@@ -22,7 +22,6 @@ public class AuthFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-
     }
 
     @Override
@@ -30,14 +29,14 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession();
         if (!request.getRequestURI().endsWith("/login") && session.getAttribute("user") == null) {
-            ((HttpServletResponse) servletResponse).sendRedirect(String.format("%s/login", request.getContextPath()));
-
+            String urlRedirect = String.format("%s/login", request.getContextPath());
+            ((HttpServletResponse) servletResponse).sendRedirect(urlRedirect);
         }
         filterChain.doFilter(servletRequest, servletResponse);
+
     }
 
     @Override
     public void destroy() {
-
     }
 }

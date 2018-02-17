@@ -23,7 +23,7 @@ public class InterServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         PrintWriter printWriter = resp.getWriter();
         String title = "Interface Servlets";
-        String body = ui.getUserTable(UserStore.getStore(), "Создать", "Удалить", "Обновить", req.getContextPath());
+        String body = ui.getUserTable(UserStore.getUserStore(), "Создать", "Удалить", "Обновить", req.getContextPath());
         String html = ui.getHTML(title, body);
         printWriter.write(html);
         printWriter.flush();

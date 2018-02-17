@@ -26,7 +26,7 @@ public class UserStoreDB implements IUserStore {
     /**
      * Singleton Object.
      */
-    private static final UserStoreDB USER_STORE = new UserStoreDB();
+    private static final IUserStore USER_STORE = new UserStoreDB();
 
     /**
      * DataBase connection.
@@ -42,16 +42,16 @@ public class UserStoreDB implements IUserStore {
             this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/job4j",
                     "postgres", "postgres");
             this.connection.setAutoCommit(false);
+            goDB("CREATE TABLE if not exists Users_store (login VARCHAR(30) PRIMARY KEY UNIQUE, name VARCHAR(50), email VARCHAR(30), created TIMESTAMP)");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        goDB("CREATE TABLE if not exists Users_store (login VARCHAR(30) PRIMARY KEY UNIQUE, name VARCHAR(50), email VARCHAR(30), created TIMESTAMP)");
     }
 
     /**
      * @return UserStoreDB
      */
-    public static UserStoreDB getUserStore() {
+    public static IUserStore getUserStore() {
         return USER_STORE;
     }
 

@@ -14,8 +14,6 @@ import ru.job4j.user_store.UserStore;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Field;
-
 
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Matchers.eq;
@@ -44,21 +42,13 @@ public class InterServletTest {
     /**
      * stub User store.
      */
-    private IUserStore store;
+    private IUserStore stubStore = StubStore.stub(UserStore.class, "USER_STORE");;
 
     /**
      * before test.
-     * @throws NoSuchFieldException NoSuchFieldException
-     * @throws IllegalAccessException IllegalAccessException
      */
     @Before
-    public void init() throws NoSuchFieldException, IllegalAccessException {
-
-        this.store = new StubStore();
-        Field storeField = UserStore.class.getDeclaredField("store");
-        storeField.setAccessible(true);
-        storeField.set(null, this.store);
-
+    public void init() {
         when(this.req.getParameter(eq("login"))).thenReturn("Login");
         when(this.req.getParameter(eq("name"))).thenReturn("Name User");
         when(this.req.getParameter(eq("email"))).thenReturn("E-mail");
@@ -71,9 +61,9 @@ public class InterServletTest {
      */
     @Test
     public void whenCreateAddUser() throws IOException {
-        new Create(this.store).doPost(this.req, this.resp);
+        new Create().doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
-        Object actual = this.store.getUser("Login");
+        Object actual = this.stubStore.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
     }
@@ -83,10 +73,10 @@ public class InterServletTest {
      */
     @Test
     public void whenPostThenUpdateUser() throws IOException {
-        this.store.addUser("Login", "Name", "old e-mail");
-        new Update(this.store).doPost(this.req, this.resp);
+        this.stubStore.addUser("Login", "Name", "old e-mail");
+        new Update().doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
-        Object actual = this.store.getUser("Login");
+        Object actual = this.stubStore.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
     }
@@ -96,10 +86,10 @@ public class InterServletTest {
      */
     @Test
     public void whenDeleteThenDeleteUser() throws IOException {
-        this.store.addUser("Login", "Name", "e-mail");
-        new Delete(this.store).doPost(this.req, this.resp);
+        this.stubStore.addUser("Login", "Name", "e-mail");
+        new Delete().doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
-        assertEquals(this.store.getUser("Login"), User.UNKNOWN);
+        assertEquals(this.stubStore.getUser("Login"), User.UNKNOWN);
     }
 
 }

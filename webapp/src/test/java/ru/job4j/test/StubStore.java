@@ -4,6 +4,8 @@ import ru.job4j.user_store.IUserStore;
 import ru.job4j.user_store.Role;
 import ru.job4j.user_store.User;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +24,28 @@ public class StubStore implements IUserStore {
      * RoleStore.
      */
     private Map<String, Role> roles = new HashMap<>();
+
+    /**
+     * @param store singleton class store on stub
+     * @param field field private store
+     * @return stubStore
+     */
+    public static IUserStore stub(Class store, String field) {
+        IUserStore stubStore = new StubStore();
+        try {
+            Field storeField = store.getDeclaredField(field);
+            storeField.setAccessible(true);
+
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(storeField, storeField.getModifiers() & ~Modifier.FINAL);
+
+            storeField.set(null, stubStore);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return stubStore;
+    }
 
     @Override
     public User getUser(String login) {
