@@ -18,6 +18,11 @@ public class StubStore implements IUserStore {
      */
     private Map<String, User> users = new HashMap<>();
 
+    /**
+     * RoleStore.
+     */
+    private Map<String, Role> roles = new HashMap<>();
+
     @Override
     public User getUser(String login) {
         User user = this.users.get(login);
@@ -50,13 +55,18 @@ public class StubStore implements IUserStore {
     }
 
     @Override
-    public Role getRole(String login) {
-        throw new UnsupportedOperationException();
+    public Role getUserRole(String login) {
+        Role role = this.roles.get(login);
+        return role != null ? role : Role.DefaultUser;
     }
 
     @Override
-    public void setUser(String login, Role role) {
-        throw new UnsupportedOperationException();
+    public void setUserRole(String login, Role role) {
+        if (role != null && role != Role.DefaultUser) {
+            this.roles.put(login, role);
+        } else {
+            this.roles.remove(login);
+        }
     }
 
     @Override

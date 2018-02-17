@@ -18,7 +18,7 @@ public enum Role {
      * @return role
      */
     public static Role useRole(String login) {
-        return UserStore.getStore().getRole(login);
+        return UserStore.getStore().getUserRole(login);
     }
 
     /** Установка роли пользователю по логину.
@@ -26,7 +26,7 @@ public enum Role {
      * @param role role
      */
     public static void setRole(String login, Role role) {
-        UserStore.getStore().setUser(login, role);
+        UserStore.getStore().setUserRole(login, role);
     }
 }
 

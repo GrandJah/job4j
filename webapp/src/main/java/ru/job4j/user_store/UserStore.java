@@ -27,12 +27,12 @@ public class UserStore implements IUserStore {
     /**
      *  store - singleton.
      */
-    private static UserStore store = new UserStore();
+    private static IUserStore store = new UserStore();
 
     /**
      *  @return store store
      */
-    public static UserStore getStore() {
+    public static IUserStore getStore() {
         return store;
     }
 
@@ -91,7 +91,7 @@ public class UserStore implements IUserStore {
     }
 
     @Override
-    public Role getRole(String login) {
+    public Role getUserRole(String login) {
         final Role[] role = {Role.DefaultUser};
         db.goDB("SELECT role from UseRole WHERE user_login = ?", rs -> {
             try {
@@ -107,7 +107,7 @@ public class UserStore implements IUserStore {
     }
 
     @Override
-    public void setUser(String login, Role role) {
+    public void setUserRole(String login, Role role) {
         db.goDB("DELETE from UseRole WHERE user_login = ?", login);
         if (role != Role.DefaultUser) {
             db.goDB("INSERT INTO UseRole VALUES(? , ?)", login, role.name());

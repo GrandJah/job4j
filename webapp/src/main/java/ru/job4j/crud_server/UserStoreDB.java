@@ -95,12 +95,12 @@ public class UserStoreDB implements IUserStore {
     }
 
     @Override
-    public Role getRole(String login) {
+    public Role getUserRole(String login) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setUser(String login, Role role) {
+    public void setUserRole(String login, Role role) {
         throw new UnsupportedOperationException();
     }
 

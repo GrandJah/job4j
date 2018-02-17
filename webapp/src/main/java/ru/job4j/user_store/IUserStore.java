@@ -42,11 +42,11 @@ public interface IUserStore extends Iterable<User> {
      * @param login login
      * @return role
      */
-    Role getRole(String login);
+    Role getUserRole(String login);
 
     /** Установка роли для пользователя.
      * @param login login
      * @param role role
      */
-    void setUser(String login, Role role);
+    void setUserRole(String login, Role role);
 }

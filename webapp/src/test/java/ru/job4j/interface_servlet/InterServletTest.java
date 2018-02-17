@@ -9,10 +9,12 @@ import ru.job4j.test.StubStore;
 import ru.job4j.user_store.IUserStore;
 import ru.job4j.user_store.Role;
 import ru.job4j.user_store.User;
+import ru.job4j.user_store.UserStore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 
 import static junit.framework.TestCase.assertEquals;
@@ -46,11 +48,17 @@ public class InterServletTest {
 
     /**
      * before test.
+     * @throws NoSuchFieldException NoSuchFieldException
+     * @throws IllegalAccessException IllegalAccessException
      */
     @Before
-    public void init() {
+    public void init() throws NoSuchFieldException, IllegalAccessException {
 
         this.store = new StubStore();
+        Field storeField = UserStore.class.getDeclaredField("store");
+        storeField.setAccessible(true);
+        storeField.set(null, this.store);
+
         when(this.req.getParameter(eq("login"))).thenReturn("Login");
         when(this.req.getParameter(eq("name"))).thenReturn("Name User");
         when(this.req.getParameter(eq("email"))).thenReturn("E-mail");
