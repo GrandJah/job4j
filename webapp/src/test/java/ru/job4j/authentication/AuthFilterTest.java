@@ -6,6 +6,7 @@ import ru.job4j.user_store.User;
 import ru.job4j.user_store.UserStore;
 
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,4 +93,13 @@ public class AuthFilterTest {
         test("htpp://url/login", null);
         verify(this.filter).doFilter(this.req, this.resp);
     }
+
+    /** stub test.
+     */
+    @Test
+    public void stub() {
+        new AuthFilter().init(mock(FilterConfig.class));
+        new AuthFilter().destroy();
+    }
+
 }
