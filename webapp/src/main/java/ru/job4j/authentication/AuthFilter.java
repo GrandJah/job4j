@@ -30,9 +30,9 @@ public class AuthFilter implements Filter {
         if (!request.getRequestURI().endsWith("/login") && session.getAttribute("user") == null) {
             String urlRedirect = String.format("%s/login", request.getContextPath());
             ((HttpServletResponse) servletResponse).sendRedirect(urlRedirect);
+            return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
-
     }
 
     @Override

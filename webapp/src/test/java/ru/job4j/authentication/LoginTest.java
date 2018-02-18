@@ -143,4 +143,15 @@ public class LoginTest {
         verify(this.session).removeAttribute(eq("user"));
         verify(this.resp).sendRedirect(anyString());
     }
+
+    /**
+     * @throws ServletException ServletException
+     * @throws IOException IOException
+     */
+    @Test
+    public void whenErrorLoginPage() throws ServletException, IOException {
+        when(this.req.getAttribute(eq("error"))).thenReturn("Ошибочка!");
+        this.login.doGet(this.req, this.resp);
+        verify(this.dispatcher).forward(this.req, this.resp);
+    }
 }

@@ -44,7 +44,11 @@ public class DB {
      * Create connection's pool.
      */
     private DB() {
-//        Class.forName("org.postgresql.Driver");
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         new PoolableConnectionFactory(
                 new DriverManagerConnectionFactory(
                         "jdbc:postgresql://localhost:5432/job4j",

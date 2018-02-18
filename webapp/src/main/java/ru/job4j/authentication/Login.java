@@ -22,10 +22,13 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        if (session.getAttribute("user") == null) {
+        if (req.getAttribute("error") != null) {
+            req.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(req, resp);
+        } else if (session.getAttribute("user") == null) {
             req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+        } else {
+            resp.sendRedirect(String.format("%s/", req.getContextPath()));
         }
-        resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 
     @Override
