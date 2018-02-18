@@ -92,7 +92,23 @@ public class LoginTest {
      * @throws IOException IOException
      */
     @Test
-    public void whenLoginIsCorrect() throws ServletException, IOException {
+    public void whenLoginIsCorrectPost() throws ServletException, IOException {
+        this.stubStore.addUser("UserLogin", "nameLogin", "email");
+
+        login.doPost(this.req, this.resp);
+        verify(this.resp).sendRedirect(anyString());
+        reset(this.resp);
+
+        login.doPost(this.req, this.resp);
+        verify(this.resp).sendRedirect(anyString());
+    }
+
+    /**
+     * @throws ServletException ServletException
+     * @throws IOException IOException
+     */
+    @Test
+    public void whenLoginIsCorrectGet() throws ServletException, IOException {
         this.stubStore.addUser("UserLogin", "nameLogin", "email");
 
         login.doPost(this.req, this.resp);
