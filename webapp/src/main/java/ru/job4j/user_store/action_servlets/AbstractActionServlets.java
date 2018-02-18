@@ -1,4 +1,4 @@
-package ru.job4j.interface_servlet.action_servlets;
+package ru.job4j.user_store.action_servlets;
 
 import ru.job4j.user_store.Role;
 

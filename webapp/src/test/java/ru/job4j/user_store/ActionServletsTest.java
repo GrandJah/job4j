@@ -1,15 +1,11 @@
-package ru.job4j.interface_servlet;
+package ru.job4j.user_store;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.interface_servlet.action_servlets.Create;
-import ru.job4j.interface_servlet.action_servlets.Delete;
-import ru.job4j.interface_servlet.action_servlets.Update;
 import ru.job4j.test.StubStore;
-import ru.job4j.user_store.IUserStore;
-import ru.job4j.user_store.Role;
-import ru.job4j.user_store.User;
-import ru.job4j.user_store.UserStore;
+import ru.job4j.user_store.action_servlets.Create;
+import ru.job4j.user_store.action_servlets.Delete;
+import ru.job4j.user_store.action_servlets.Update;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +24,7 @@ import static org.mockito.Mockito.when;
  * @version 0.1
  * @since 17.02.2018
  */
-public class InterServletTest {
+public class ActionServletsTest {
     /**
      * HttpServletRequest mock.
      */
