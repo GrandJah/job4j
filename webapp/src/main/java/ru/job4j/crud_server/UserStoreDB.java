@@ -105,7 +105,7 @@ public class UserStoreDB implements IUserStore {
 
     @Override
     public Iterator<User> iterator() {
-        return getUsers().iterator();
+        throw new UnsupportedOperationException();
     }
 
     /**
