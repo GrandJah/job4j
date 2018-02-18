@@ -6,6 +6,7 @@ import ru.job4j.user_store.User;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -55,7 +56,13 @@ public class StubStore implements IUserStore {
 
     @Override
     public List<User> getUsers(String... logins) {
-        throw new UnsupportedOperationException();
+        List<User> users = new ArrayList<>();
+        if (logins == null || logins.length == 0) {
+            users.addAll(this.users.values());
+        } else {
+            throw new RuntimeException("Unsupport logins... args");
+        }
+        return users;
     }
 
     @Override
