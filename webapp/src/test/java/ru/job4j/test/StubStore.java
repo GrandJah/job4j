@@ -60,8 +60,7 @@ public class StubStore implements IUserStore {
 
     @Override
     public boolean addUser(String login, String name, String email) {
-        this.users.put(login, new User(login, name, email, 0));
-        return true;
+        return this.users.putIfAbsent(login, new User(login, name, email, 0)) == null;
     }
 
     @Override

@@ -91,7 +91,6 @@ public class UserStoreDB implements IUserStore {
     @Override
     public void updateUser(String login, String name, String email) {
         goDB("UPDATE users_store SET name = ?, email =  ? WHERE login = ?", login, name, email);
-
     }
 
     @Override
