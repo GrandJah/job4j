@@ -3,8 +3,10 @@ package ru.job4j.crud_server;
 import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.test.StubStore;
+import ru.job4j.user_store.IUserStore;
 import ru.job4j.user_store.User;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,11 +38,15 @@ public class UserServletTest {
     private UserServlet servlet = new UserServlet();
 
     /**
+     * stub User store.
+     */
+    private IUserStore stubStore = StubStore.stub(UserStoreDB.class, "USER_STORE");
+
+    /**
      * before test.
      */
     @Before
     public void init() {
-        StubStore.stub(UserStoreDB.class, "USER_STORE");
         when(this.req.getParameter(eq("login"))).thenReturn("Login");
         when(this.req.getParameter(eq("name"))).thenReturn("Name User");
         when(this.req.getParameter(eq("email"))).thenReturn("E-mail");
@@ -53,7 +59,7 @@ public class UserServletTest {
     public void whenPutThenAddUser() throws IOException {
         this.servlet.doPut(this.req, this.resp);
         verify(this.resp).sendError(eq(201));
-        Object actual = UserStoreDB.getUserStore().getUser("Login");
+        Object actual = this.stubStore.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
     }
@@ -62,11 +68,23 @@ public class UserServletTest {
      * @throws IOException IOException
      */
     @Test
+    public void whenPutPresentUserThenAddUserFailed() throws IOException {
+        User added = new User("Login", "Name", "E-mail", 0);
+        this.stubStore.addUser("Login", "Name", "E-mail");
+        this.servlet.doPut(this.req, this.resp);
+        verify(this.resp).sendError(eq(501));
+        assertEquals(this.stubStore.getUser("Login"), added);
+    }
+
+    /** test.
+     * @throws IOException IOException
+     */
+    @Test
     public void whenPostThenUpdateUser() throws IOException {
-        UserStoreDB.getUserStore().addUser("Login", "Name", "old e-mail");
+        this.stubStore.addUser("Login", "Name", "old e-mail");
         this.servlet.doPost(this.req, this.resp);
         verify(this.resp).sendError(eq(200));
-        Object actual = UserStoreDB.getUserStore().getUser("Login");
+        Object actual = this.stubStore.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
     }
@@ -76,9 +94,22 @@ public class UserServletTest {
      */
     @Test
     public void whenDeleteThenDeleteUser() throws IOException {
-        UserStoreDB.getUserStore().addUser("Login", "Name", "e-mail");
+        this.stubStore.addUser("Login", "Name", "e-mail");
         this.servlet.doDelete(this.req, this.resp);
         verify(this.resp).sendError(eq(200));
-        assertEquals(UserStoreDB.getUserStore().getUser("Login"), User.UNKNOWN);
+        assertEquals(this.stubStore.getUser("Login"), User.UNKNOWN);
     }
+
+    /** test.
+     * @throws IOException IOException
+     */
+    @Test
+    public void whenGetThenPrintStreamFlush() throws IOException {
+        ServletOutputStream outputStream = mock(ServletOutputStream.class);
+        when(this.resp.getOutputStream()).thenReturn(outputStream);
+        this.servlet.doGet(this.req, this.resp);
+        verify(outputStream).flush();
+    }
+
+
 }
