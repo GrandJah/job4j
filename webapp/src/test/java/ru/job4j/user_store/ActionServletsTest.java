@@ -68,13 +68,29 @@ public class ActionServletsTest {
      * @throws IOException IOException
      */
     @Test
-    public void whenPostThenUpdateUser() throws IOException {
+    public void whenPostThenUpdateDefaultUser() throws IOException {
         this.stubStore.addUser("Login", "Name", "old e-mail");
         new Update().doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
         Object actual = this.stubStore.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
+        assertEquals(this.stubStore.getUserRole("Login"), Role.DefaultUser);
+    }
+
+    /** test.
+     * @throws IOException IOException
+     */
+    @Test
+    public void whenPostThenUpdateAdministrator() throws IOException {
+        this.stubStore.addUser("Login", "Name", "old e-mail");
+        when(this.req.getParameter(eq("role"))).thenReturn(Role.Administrator.toString());
+        new Update().doPost(this.req, this.resp);
+        verify(this.resp).sendRedirect(eq("RedirectUrl"));
+        Object actual = this.stubStore.getUser("Login");
+        User expect = new User("Login", "Name User", "E-mail", 0);
+        assertEquals(actual, expect);
+        assertEquals(this.stubStore.getUserRole("Login"), Role.Administrator);
     }
 
     /** test.
