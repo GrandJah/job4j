@@ -38,16 +38,16 @@ public class AuthFilterTest {
     private FilterChain filter = mock(FilterChain.class);
 
     /** Base test method.
-     * @param url url request
+     * @param path path request
      * @param user user session
      * @throws IOException IOException
      * @throws ServletException ServletException
      */
-    private void test(String url, User user) throws IOException, ServletException {
+    private void test(String path, User user) throws IOException, ServletException {
         HttpSession session = mock(HttpSession.class);
         when(session.getAttribute(eq("user"))).thenReturn(user);
         when(this.req.getSession()).thenReturn(session);
-        when(this.req.getRequestURI()).thenReturn(url);
+        when(this.req.getServletPath()).thenReturn(path);
         new AuthFilter().doFilter(this.req, this.resp, this.filter);
     }
 
@@ -57,7 +57,7 @@ public class AuthFilterTest {
      */
     @Test
     public void whenNotLogin() throws IOException, ServletException {
-        test("htpp://url", null);
+        test("/hb/k", null);
         verify(this.resp).sendRedirect(anyString());
     }
 
@@ -67,7 +67,7 @@ public class AuthFilterTest {
      */
     @Test
     public void whenNotLoginUserDefined() throws IOException, ServletException {
-        test("htpp://url", User.UNKNOWN);
+        test("/url", User.UNKNOWN);
         verify(this.filter).doFilter(this.req, this.resp);
     }
 
@@ -77,7 +77,7 @@ public class AuthFilterTest {
      */
     @Test
     public void whenLoginUrl() throws IOException, ServletException {
-        test("htpp://url/login", User.UNKNOWN);
+        test("/login", User.UNKNOWN);
         verify(this.filter).doFilter(this.req, this.resp);
     }
 
@@ -87,7 +87,7 @@ public class AuthFilterTest {
      */
     @Test
     public void whenLoginUrlnotUser() throws IOException, ServletException {
-        test("htpp://url/login", null);
+        test("/login", null);
         verify(this.filter).doFilter(this.req, this.resp);
     }
 

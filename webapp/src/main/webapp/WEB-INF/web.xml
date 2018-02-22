@@ -36,23 +36,24 @@
         <url-pattern>/create</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>InterfaceDelete</servlet-name>
-        <url-pattern>/delete</url-pattern>
-    </servlet-mapping>
+
     <servlet>
         <servlet-name>InterfaceDelete</servlet-name>
         <servlet-class>ru.job4j.store.action_servlets.Delete</servlet-class>
     </servlet>
-
     <servlet-mapping>
-        <servlet-name>InterfaceUpdate</servlet-name>
-        <url-pattern>/update</url-pattern>
+        <servlet-name>InterfaceDelete</servlet-name>
+        <url-pattern>/delete</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>InterfaceUpdate</servlet-name>
         <servlet-class>ru.job4j.store.action_servlets.Update</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>InterfaceUpdate</servlet-name>
+        <url-pattern>/update</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>MVCServlet</servlet-name>
@@ -60,7 +61,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>MVCServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/^(resources)*</url-pattern>
     </servlet-mapping>
 
 
