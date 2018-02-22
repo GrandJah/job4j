@@ -40,14 +40,14 @@ public class Main implements Serializable {
     }
 
     /**
-     * @return db db
+     * @return db_interface db_interface
      */
     public DB getDB() {
         return this.db;
     }
 
     /**
-     * @param db db
+     * @param db db_interface
      */
     public void setDb(DB db) {
         this.db = db;
@@ -71,7 +71,7 @@ public class Main implements Serializable {
         XML xml = new XML();
         Main main = new Main();
 
-        main.setDb(new DB("sqlite:test.db"));
+        main.setDb(new DB("sqlite:test.db_interface"));
         main.setNumberN(console.ask("Введите число: "));
 
         main.createAndFill();

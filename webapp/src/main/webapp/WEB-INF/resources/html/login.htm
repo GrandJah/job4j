@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <form id="form_login" class="row" method="post">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text glyphicon glyphicon-user"></span></div>
+                <input type="text" pattern="[A-Za-z]{5,15}" min="5" max="15" name="login" value="login" title="login">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text glyphicon glyphicon-comment" aria-hidden="true"></span></div>
+                <input type="password" name="password" value="password" title="password">
+            </div>
+        </form>
+        <button class="btn btn-primary" onclick="login_action()">Войти</button>
+
+    </div>
+    <div class="col-sm-4"></div>
+    <script src="../js/login_action.js"></script>
+</div>

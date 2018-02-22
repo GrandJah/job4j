@@ -8,7 +8,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -26,10 +25,9 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpSession session = request.getSession();
-        if (!request.getRequestURI().endsWith("/login") && session.getAttribute("user") == null) {
-            String urlRedirect = String.format("%s/login", request.getContextPath());
-            ((HttpServletResponse) servletResponse).sendRedirect(urlRedirect);
+        String[] path = request.getServletPath().split("/");
+        if (path.length < 2 || !("src".equals(path[1]) || ("ajax".equals(path[1]) && path.length == 2))) {
+            ((HttpServletResponse) servletResponse).sendRedirect(String.format("%s/src/html/index.html", request.getContextPath()));
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
