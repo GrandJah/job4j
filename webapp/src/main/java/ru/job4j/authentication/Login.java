@@ -1,7 +1,8 @@
 package ru.job4j.authentication;
 
-import ru.job4j.user_store.User;
-import ru.job4j.user_store.UserStore;
+import ru.job4j.store.IUserStore;
+import ru.job4j.store.UserStore;
+import ru.job4j.store.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +19,10 @@ import java.io.IOException;
  * @since 15.01.2018
  */
 public class Login extends HttpServlet {
+    /**
+     * User store.
+     */
+    private IUserStore users = new UserStore();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,7 +39,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        User user = UserStore.getUserStore().getUser(req.getParameter("login"));
+        User user = this.users.getUser(req.getParameter("login"));
         if (user == User.UNKNOWN) {
             req.setAttribute("error", "Ошибочка!");
             doGet(req, resp);

@@ -1,4 +1,8 @@
-package ru.job4j.user_store;
+package ru.job4j.store;
+
+import ru.job4j.store.db.DBInterface;
+import ru.job4j.store.db.DataBasePool;
+import ru.job4j.store.model.User;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -15,25 +19,15 @@ import java.util.List;
  */
 public class UserStore implements IUserStore {
     /**
-     * db.
+     * db connection.
      */
-    private DB db = DB.getInstance();
+    private static DBInterface db = new DataBasePool();
 
-    /**
-     * UserStoreDB - singleton.
+    /** Setter.
+     * @param db db
      */
-    private UserStore() { }
-
-    /**
-     *  USER_STORE - singleton.
-     */
-    private static final IUserStore USER_STORE = new UserStore();
-
-    /**
-     *  @return USER_STORE USER_STORE
-     */
-    public static IUserStore getUserStore() {
-        return USER_STORE;
+    public static void setDb(DBInterface db) {
+        UserStore.db = db;
     }
 
     @Override
@@ -66,7 +60,7 @@ public class UserStore implements IUserStore {
                 e.printStackTrace();
             }
             return null;
-        }, logins);
+        }, (Object) logins);
         if (users.size() == 0) {
             users.add(User.UNKNOWN);
         }
@@ -88,30 +82,6 @@ public class UserStore implements IUserStore {
     public void updateUser(String login, String name, String email) {
         db.goDB("UPDATE users_store SET name = ?, email =  ? WHERE login = ?",
                 name, email, login);
-    }
-
-    @Override
-    public Role getUserRole(String login) {
-        final Role[] role = {Role.DefaultUser};
-        db.goDB("SELECT role from UseRole WHERE user_login = ?", rs -> {
-            try {
-                while (rs.next()) {
-                    role[0] = Role.valueOf(rs.getString("role"));
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }, login);
-        return role[0];
-    }
-
-    @Override
-    public void setUserRole(String login, Role role) {
-        db.goDB("DELETE from UseRole WHERE user_login = ?", login);
-        if (role != Role.DefaultUser) {
-            db.goDB("INSERT INTO UseRole VALUES(? , ?)", login, role.name());
-        }
     }
 
     @Override

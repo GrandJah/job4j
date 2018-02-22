@@ -2,9 +2,8 @@ package ru.job4j.authentication;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.test.StubStore;
-import ru.job4j.user_store.IUserStore;
-import ru.job4j.user_store.UserStore;
+import ru.job4j.store.IUserStore;
+import ru.job4j.store.StubStore;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +21,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
+import static ru.job4j.store.StubStore.stub;
 
 /**
  * Login test class.
@@ -47,14 +47,14 @@ public class LoginTest {
     private RequestDispatcher dispatcher = mock(RequestDispatcher.class);
 
     /**
-     * stub UserStore.
-     */
-    private IUserStore stubStore = StubStore.stub(UserStore.class, "USER_STORE");
-
-    /**
      * Login test class object.
      */
-    private Login login = new Login();
+    private Login login = stub(new Login());
+
+    /**
+     * stub UserStore.
+     */
+    private IUserStore stubStore = new StubStore();
 
     /**
      * login user stub.

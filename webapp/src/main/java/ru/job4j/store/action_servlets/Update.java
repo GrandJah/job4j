@@ -1,7 +1,6 @@
-package ru.job4j.user_store.action_servlets;
+package ru.job4j.store.action_servlets;
 
-import ru.job4j.user_store.Role;
-import ru.job4j.user_store.UserStore;
+import ru.job4j.store.model.Role;
 
 /**
  * junior.
@@ -14,9 +13,9 @@ public class Update extends AbstractActionServlets {
 
     @Override
     void doAction(String login, String name, String email, Role role) {
-        UserStore.getUserStore().updateUser(login, name, email);
+        USERS.updateUser(login, name, email);
         if (role != null) {
-            Role.setRole(login, role);
+            ROLES.setUserRole(login, role);
         }
     }
 }

@@ -1,7 +1,7 @@
 package ru.job4j.interface_servlet;
 
-import ru.job4j.user_store.IUserStore;
-import ru.job4j.user_store.User;
+import ru.job4j.store.IUserStore;
+import ru.job4j.store.model.User;
 
 /**
  * junior.

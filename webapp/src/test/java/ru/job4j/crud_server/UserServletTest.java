@@ -2,9 +2,9 @@ package ru.job4j.crud_server;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.test.StubStore;
-import ru.job4j.user_store.IUserStore;
-import ru.job4j.user_store.User;
+import ru.job4j.store.IUserStore;
+import ru.job4j.store.StubStore;
+import ru.job4j.store.model.User;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +40,7 @@ public class UserServletTest {
     /**
      * stub User store.
      */
-    private IUserStore stubStore = StubStore.stub(UserStoreDB.class, "USER_STORE");
+    private IUserStore stubStore = new StubStore() { { stub(UserServletTest.this.servlet); } };
 
     /**
      * before test.
@@ -70,10 +70,11 @@ public class UserServletTest {
     @Test
     public void whenPutPresentUserThenAddUserFailed() throws IOException {
         User added = new User("Login", "Name", "E-mail", 0);
+        this.stubStore.deleteUser("Login");
         this.stubStore.addUser("Login", "Name", "E-mail");
         this.servlet.doPut(this.req, this.resp);
         verify(this.resp).sendError(eq(501));
-        assertEquals(this.stubStore.getUser("Login"), added);
+        assertEquals(added, this.stubStore.getUser("Login"));
     }
 
     /** test.
@@ -86,7 +87,7 @@ public class UserServletTest {
         verify(this.resp).sendError(eq(200));
         Object actual = this.stubStore.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
-        assertEquals(actual, expect);
+        assertEquals(expect, actual);
     }
 
     /** test.

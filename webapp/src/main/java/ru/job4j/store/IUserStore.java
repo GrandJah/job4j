@@ -1,5 +1,6 @@
-package ru.job4j.user_store;
+package ru.job4j.store;
 
+import ru.job4j.store.model.User;
 import java.util.List;
 
 /**
@@ -37,16 +38,4 @@ public interface IUserStore extends Iterable<User> {
      * @param email email
      */
     void updateUser(String login, String name, String email);
-
-    /** Выборка роли пользователя.
-     * @param login login
-     * @return role
-     */
-    Role getUserRole(String login);
-
-    /** Установка роли для пользователя.
-     * @param login login
-     * @param role role
-     */
-    void setUserRole(String login, Role role);
 }

@@ -1,4 +1,4 @@
-package ru.job4j.user_store;
+package ru.job4j.store.model;
 
 import java.util.Objects;
 

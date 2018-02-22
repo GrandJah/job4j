@@ -1,11 +1,12 @@
-package ru.job4j.user_store;
+package ru.job4j.store;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.test.StubStore;
-import ru.job4j.user_store.action_servlets.Create;
-import ru.job4j.user_store.action_servlets.Delete;
-import ru.job4j.user_store.action_servlets.Update;
+import ru.job4j.store.action_servlets.Create;
+import ru.job4j.store.action_servlets.Delete;
+import ru.job4j.store.action_servlets.Update;
+import ru.job4j.store.model.User;
+import ru.job4j.store.model.Role;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.job4j.store.StubStore.stub;
 
 /**
  * junior.
@@ -38,7 +40,11 @@ public class ActionServletsTest {
     /**
      * stub User store.
      */
-    private IUserStore stubStore = StubStore.stub(UserStore.class, "USER_STORE");;
+    private IUserStore stubUsers = new StubStore();
+    /**
+     * stub Role store.
+     */
+    private IRoleStore stubRoles = new StubStore();
 
     /**
      * before test.
@@ -48,7 +54,7 @@ public class ActionServletsTest {
         when(this.req.getParameter(eq("login"))).thenReturn("Login");
         when(this.req.getParameter(eq("name"))).thenReturn("Name User");
         when(this.req.getParameter(eq("email"))).thenReturn("E-mail");
-        when(this.req.getParameter(eq("role"))).thenReturn(Role.DefaultUser.toString());
+        when(this.req.getParameter(eq("role"))).thenReturn(Role.DEFAULT_USER.name());
         when(this.req.getHeader(eq("Referer"))).thenReturn("RedirectUrl");
     }
 
@@ -57,11 +63,11 @@ public class ActionServletsTest {
      */
     @Test
     public void whenCreateAddUser() throws IOException {
-        new Create().doPost(this.req, this.resp);
+        stub(new Create()).doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
-        Object actual = this.stubStore.getUser("Login");
+        Object actual = this.stubUsers.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
-        assertEquals(actual, expect);
+        assertEquals(expect, actual);
     }
 
     /** test.
@@ -69,13 +75,13 @@ public class ActionServletsTest {
      */
     @Test
     public void whenPostThenUpdateDefaultUser() throws IOException {
-        this.stubStore.addUser("Login", "Name", "old e-mail");
-        new Update().doPost(this.req, this.resp);
+        this.stubUsers.addUser("Login", "Name", "old e-mail");
+        stub(new Update()).doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
-        Object actual = this.stubStore.getUser("Login");
+        Object actual = this.stubUsers.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
-        assertEquals(this.stubStore.getUserRole("Login"), Role.DefaultUser);
+        assertEquals(Role.DEFAULT_USER.name(), this.stubRoles.getUserRole("Login").name());
     }
 
     /** test.
@@ -83,14 +89,14 @@ public class ActionServletsTest {
      */
     @Test
     public void whenPostThenUpdateAdministrator() throws IOException {
-        this.stubStore.addUser("Login", "Name", "old e-mail");
-        when(this.req.getParameter(eq("role"))).thenReturn(Role.Administrator.toString());
-        new Update().doPost(this.req, this.resp);
+        this.stubUsers.addUser("Login", "Name", "old e-mail");
+        when(this.req.getParameter(eq("role"))).thenReturn(Role.ADMINISTRATOR.name());
+        stub(new Update()).doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
-        Object actual = this.stubStore.getUser("Login");
+        Object actual = this.stubUsers.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
         assertEquals(actual, expect);
-        assertEquals(this.stubStore.getUserRole("Login"), Role.Administrator);
+        assertEquals(Role.ADMINISTRATOR, this.stubRoles.getUserRole("Login"));
     }
 
     /** test.
@@ -98,10 +104,10 @@ public class ActionServletsTest {
      */
     @Test
     public void whenDeleteThenDeleteUser() throws IOException {
-        this.stubStore.addUser("Login", "Name", "e-mail");
-        new Delete().doPost(this.req, this.resp);
+        this.stubUsers.addUser("Login", "Name", "e-mail");
+        stub(new Delete()).doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
-        assertEquals(this.stubStore.getUser("Login"), User.UNKNOWN);
+        assertEquals(User.UNKNOWN, this.stubUsers.getUser("Login"));
     }
 
 }

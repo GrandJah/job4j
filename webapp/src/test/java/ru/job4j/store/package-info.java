@@ -5,4 +5,4 @@
  * @version 0.1
  * @since 17.02.2018
  */
-package ru.job4j.user_store;
+package ru.job4j.store;

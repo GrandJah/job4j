@@ -1,6 +1,10 @@
-package ru.job4j.user_store.action_servlets;
+package ru.job4j.store.action_servlets;
 
-import ru.job4j.user_store.Role;
+import ru.job4j.store.IRoleStore;
+import ru.job4j.store.IUserStore;
+import ru.job4j.store.RoleStore;
+import ru.job4j.store.UserStore;
+import ru.job4j.store.model.Role;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +19,15 @@ import java.io.IOException;
  * @since 15.01.2018
  */
 public abstract class AbstractActionServlets extends HttpServlet {
+    /**
+     * User Store.
+     */
+    static final IUserStore USERS = new UserStore();
+
+    /**
+     * User Store.
+     */
+    static final IRoleStore ROLES = new RoleStore();
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

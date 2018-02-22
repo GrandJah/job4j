@@ -29,7 +29,7 @@
 
     <servlet>
         <servlet-name>InterfaceCreate</servlet-name>
-        <servlet-class>ru.job4j.user_store.action_servlets.Create</servlet-class>
+        <servlet-class>ru.job4j.store.action_servlets.Create</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>InterfaceCreate</servlet-name>
@@ -42,7 +42,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>InterfaceDelete</servlet-name>
-        <servlet-class>ru.job4j.user_store.action_servlets.Delete</servlet-class>
+        <servlet-class>ru.job4j.store.action_servlets.Delete</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -51,7 +51,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>InterfaceUpdate</servlet-name>
-        <servlet-class>ru.job4j.user_store.action_servlets.Update</servlet-class>
+        <servlet-class>ru.job4j.store.action_servlets.Update</servlet-class>
     </servlet>
 
     <servlet>

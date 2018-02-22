@@ -3,10 +3,10 @@ package ru.job4j.mvc_servlets;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.test.StubStore;
-import ru.job4j.user_store.IUserStore;
-import ru.job4j.user_store.Role;
-import ru.job4j.user_store.UserStore;
+import ru.job4j.store.IRoleStore;
+import ru.job4j.store.IUserStore;
+import ru.job4j.store.StubStore;
+import ru.job4j.store.model.Role;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +22,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.job4j.store.StubStore.stub;
 
 /**
  * junior.
@@ -42,33 +43,42 @@ public class ControllerTest {
     private HttpServletResponse resp = mock(HttpServletResponse.class);
 
     /**
+     * test servlet.
+     */
+    private Controller controller = stub(new Controller());
+
+    /**
      * stub User store.
      */
-    private IUserStore stubStore = StubStore.stub(UserStore.class, "USER_STORE");
+    private IUserStore stubUsers = new StubStore();
+
+    /**
+     * stub User store.
+     */
+    private IRoleStore stubRoles = new StubStore();
 
     /**
      * before test.
      */
     @Before
     public void init() {
-        this.stubStore.addUser("1", "", "");
-        this.stubStore.addUser("2", "", "");
-        this.stubStore.addUser("3", "", "");
+        this.stubUsers.addUser("1", "", "");
+        this.stubUsers.addUser("2", "", "");
+        this.stubUsers.addUser("3", "", "");
         HttpSession session = mock(HttpSession.class);
-        when(session.getAttribute(eq("user"))).thenReturn(this.stubStore.getUser("1"));
+        when(session.getAttribute(eq("user"))).thenReturn(this.stubUsers.getUser("1"));
         when(this.req.getSession()).thenReturn(session);
         when(this.req.getRequestDispatcher(anyString())).thenReturn(mock(RequestDispatcher.class));
     }
 
-
-    /** test Administrator.
+    /** test ADMINISTRATOR.
      * @throws ServletException ServletException
      * @throws IOException IOException
      */
     @Test
     public void whenUserAdminThenAdminPage() throws ServletException, IOException {
-        this.stubStore.setUserRole("1", Role.Administrator);
-        new Controller().doGet(this.req, this.resp);
+        this.stubRoles.setUserRole("1", Role.ADMINISTRATOR);
+        this.controller.doGet(this.req, this.resp);
         verify(this.req).getRequestDispatcher(contains("forAdmins"));
     }
 
@@ -78,7 +88,8 @@ public class ControllerTest {
      */
     @Test
     public void whenDefaultUserThenDefaultPage() throws ServletException, IOException {
-        new Controller().doGet(this.req, this.resp);
+        this.stubRoles.setUserRole("1", Role.DEFAULT_USER);
+        this.controller.doGet(this.req, this.resp);
         verify(this.req).getRequestDispatcher(contains("forDefaultUsers"));
     }
 }

@@ -1,5 +1,5 @@
-<%@ page import="ru.job4j.user_store.UserStore" %>
-<%@ page import="ru.job4j.user_store.User" %>
+<%@ page import="ru.job4j.store.UserStore" %>
+<%@ page import="ru.job4j.store.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
