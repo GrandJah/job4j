@@ -1,0 +1,47 @@
+body {
+    line-height: normal;
+}
+
+caption {
+    caption-side: top;
+    text-align:  center;
+}
+
+#userTable {
+    display: none;
+}
+
+#userTable .number {
+    text-align: right;
+}
+
+#createForm {
+    display: none;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    margin-bottom: 5px;
+}
+
+#createForm button, .input-group {
+    margin-top: 5px;
+}
+
+#createFormButton{
+    margin-bottom: 10px;
+}
+
+.rect {
+    width: 100%;
+    height: 100px;
+    background-color: #1e7e34;
+}
+
+#successCreate{
+    margin: auto;
+    height: 100%;
+    color: #1e7e34;
+    text-align: center;
+    opacity: 0;
+}

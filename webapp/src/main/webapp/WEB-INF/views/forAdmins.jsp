@@ -3,6 +3,7 @@
 <%@ page import="ru.job4j.store.model.Role" %>
 
 <jsp:useBean id="users" scope="request" type="java.util.Map<ru.job4j.store.model.User, ru.job4j.store.model.Role>"/>
+<jsp:useBean id="roles" scope="request" type="java.util.List<ru.job4j.store.model.Role>"/>
 
 <c:import url="header.jsp"/>
 
@@ -15,8 +16,8 @@
             <td><input type="text" name="name" value="${user.key.name}"/></td>
             <td><input type="text" name="email" value="${user.key.email}"/></td>
             <td><select name="role">
-                <c:forEach items="${Role.values()}" var="role_item" >
-                    <option ${role_item == user.value ? "selected" : ""} ><c:out value="${role_item}"/></option>
+                <c:forEach items="${roles}" var="role_item" >
+                    <option ${role_item == user.value ? "selected" : ""} ><c:out value="${role_item.name()}"/></option>
                 </c:forEach>
             </select></td>
             <td>
@@ -36,8 +37,8 @@
     <input type="text" name="name" value="name">
     <input type="text" name="email" value="email">
         <td><select name="role">
-            <c:forEach items="${Role.values()}" var="role_item" >
-                <option><c:out value="${role_item}"/></option>
+            <c:forEach items="${roles}" var="role_item" >
+                <option><c:out value="${role_item.name()}"/></option>
             </c:forEach>
         </select></td>
     <input type="submit" value="Создать">

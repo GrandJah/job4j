@@ -45,9 +45,11 @@ public class DataBasePool implements DBInterface {
         boolean success = false;
         try (Connection connection = DataBasePool.POOL.getConnection()) {
             try (PreparedStatement db = connection.prepareStatement(query)) {
-                ParameterMetaData meta = db.getParameterMetaData();
-                for (int i = 1; i <= params.length; i++) {
-                    db.setObject(i, params[i - 1], meta.getParameterType(i));
+                if (params != null && params.length > 0) {
+                    ParameterMetaData meta = db.getParameterMetaData();
+                    for (int i = 1; i <= params.length; i++) {
+                        db.setObject(i, params[i - 1], meta.getParameterType(i));
+                    }
                 }
                 try {
                     db.execute();

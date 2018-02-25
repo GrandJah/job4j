@@ -61,7 +61,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>MVCServlet</servlet-name>
-        <url-pattern>/^(resources)*</url-pattern>
+        <url-pattern>/mvc</url-pattern>
     </servlet-mapping>
 
 
@@ -90,6 +90,15 @@
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ControllerAJAX</servlet-name>
+        <servlet-class>ru.job4j.pretty_interface.ControllerAJAX</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ControllerAJAX</servlet-name>
+        <url-pattern>/ajax</url-pattern>
     </servlet-mapping>
 
 </web-app>

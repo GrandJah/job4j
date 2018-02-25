@@ -5,6 +5,8 @@ import ru.job4j.store.db.DataBasePool;
 import ru.job4j.store.model.Role;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * junior.
@@ -43,5 +45,21 @@ public class RoleStore implements IRoleStore {
         }
     }
 
-
+    @Override
+    public List<Role> getRoles() {
+        final List<Role> roles = new LinkedList<>();
+        roles.add(Role.DEFAULT_USER);
+        roles.add(Role.ADMINISTRATOR);
+        DB.goDB("SELECT * Roles", rs -> {
+            try {
+                while (rs.next()) {
+                    roles.add(Role.valueOf(rs.getString("name")));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }, null);
+        return roles;
+    }
 }

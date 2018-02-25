@@ -45,6 +45,7 @@ public class Controller extends HttpServlet {
 
         req.setAttribute("users", users);
         req.setAttribute("useUser", useUser);
+        req.setAttribute("roles", roles.getRoles());
 
         if (this.roles.getUserRole(useUser.getLogin()) ==  Role.ADMINISTRATOR) {
             req.getRequestDispatcher("/WEB-INF/views/forAdmins.jsp").forward(req, resp);

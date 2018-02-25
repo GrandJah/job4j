@@ -46,7 +46,7 @@ public class Login extends HttpServlet {
         } else if (session.getAttribute("user") == null) {
             session.setAttribute("user", user);
         }
-        resp.sendRedirect(String.format("%s/", req.getContextPath()));
+        resp.sendRedirect(String.format("%s/mvc", req.getContextPath()));
     }
 }
 

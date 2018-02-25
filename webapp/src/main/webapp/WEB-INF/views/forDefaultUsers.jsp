@@ -17,7 +17,7 @@
         <c:if test="${user.key.login eq useUser.login}">
             <form id="user" method="POST">
                 <input type="hidden" name="login" value="${user.key.login}"/>
-                <input type="hidden" name="role" value="${user.value}"/>
+                <input type="hidden" name="role" value="${user.value.name()}"/>
             </form>
             <td><input form="user" type="text" name="name" value="${user.key.name}"/></td>
             <td><input form="user" type="text" name="email" value="${user.key.email}"/></td>
@@ -28,7 +28,7 @@
             <td><c:out value="${user.key.email}"/></td>
         </c:if>
 
-        <td><c:out value="${user.value}"/></td>
+        <td><c:out value="${user.value.name()}"/></td>
 
         <c:if test="${user.key.login eq useUser.login}">
             <td>

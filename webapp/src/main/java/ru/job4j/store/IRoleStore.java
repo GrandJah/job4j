@@ -2,6 +2,8 @@ package ru.job4j.store;
 
 import ru.job4j.store.model.Role;
 
+import java.util.List;
+
 /**
  * junior.
  *
@@ -22,4 +24,9 @@ public interface IRoleStore {
      * @param role role
      */
     void setUserRole(String login, Role role);
+
+    /**
+     * Все роли.
+     */
+    List<Role> getRoles();
 }

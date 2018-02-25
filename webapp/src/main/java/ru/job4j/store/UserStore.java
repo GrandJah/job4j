@@ -60,7 +60,7 @@ public class UserStore implements IUserStore {
                 e.printStackTrace();
             }
             return null;
-        }, (Object) logins);
+        }, (Object[]) logins);
         if (users.size() == 0) {
             users.add(User.UNKNOWN);
         }
