@@ -16,8 +16,8 @@ import java.io.IOException;
 public class ControllerAJAX extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect(String.format("%s/resources/html/index.html", req.getContextPath()));;
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.sendRedirect(String.format("%s/resources/html/index.html", req.getContextPath()));
     }
 
     @Override

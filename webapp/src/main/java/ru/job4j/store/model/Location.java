@@ -11,39 +11,69 @@ import java.util.Map;
  * @since 22.02.2018
  */
 public class Location {
+    /**
+     * cache cities.
+     */
     private static final Map<String, Country> CITIES = new Hashtable<>();
 
+    /**
+     * City.
+     */
     private final String city;
 
+    /**
+     * Country.
+     */
     private final Country country;
 
-    public Location(String city) {
-        Country country = Location.CITIES.get(city);
-        if (country == null) {
-            country = Country.COUNTRY_404;
-        }
-        this.city = city;
-        this.country = country;
+    /**
+     * @param city city name
+     */
+    private Location(String city) {
+        this(city, null);
     }
-    public Location(String city, Country country) {
+
+    /**
+     * @param city city name
+     * @param country country
+     */
+    private Location(String city, Country country) {
         this.city = city;
-        this.country = country;
+        this.country = country != null ? country : Country.COUNTRY_404;
         Location.CITIES.put(city, country);
     }
 
+    /**
+     * Countries.
+     */
     static class Country {
-
+        /**
+         * Unknown country.
+         */
         public static final Country COUNTRY_404 = new Country("not found");
 
+        /**
+         * country cache.
+         */
         private static final Map<String, Country> COUNTRIES = new Hashtable<>();
 
+        /**
+         * @param name name country.
+         */
         private Country(String name) {
             this.name = name;
             Country.COUNTRIES.put(name, this);
         }
 
+        /**
+         * country name.
+         */
         private final String name;
 
+        /**
+         * @param name country name
+         * @return Country object.
+         */
         public static Country valueOf(String name) {
             Country country = Country.COUNTRIES.get(name);
             if (country == null) {

@@ -27,6 +27,7 @@ public interface IRoleStore {
 
     /**
      * Все роли.
+     * @return list of all roles.
      */
     List<Role> getRoles();
 }
