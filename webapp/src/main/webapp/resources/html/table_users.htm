@@ -1,0 +1,28 @@
+<table id="userTable" class="table table-striped table-bordered table-sm">
+    <caption class=""> User table </caption>
+    <thead><tr><th></th><th>login</th><th>name</th><th>email</th><th>role</th><th>location</th><th>...
+    </th></tr></thead>
+    <tbody>
+    <tr class="form-group">
+
+        <td class="number">n_row</td>
+        <td>login_user</td>
+        <td>name_user</td>
+        <td>email_user</td>
+        <td>role_user</td>
+        <td>location_user</td>
+        <td><button type="submit" formaction = "action"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button></td>
+        <div class="edit" style="display: none">
+            <form method = "POST">
+                <input type="hidden" name="login" value="login">
+                <input type="text" name="name" value="name" title="name">
+                <input type="text" name="email" value="email" title="email">
+            </form>
+        </div>
+    </tr>
+    </tbody>
+</table>
+<script src="../js/table_users.js"></script>
+<script>fill_table()</script>
+
+

@@ -1,0 +1,40 @@
+<div class="row" >
+    <div class="col-sm-6 offset-sm-3" >
+        <button id="createFormButton" class="btn btn-block" onclick="openCreateForm()">
+            <label> Создать пользователя </label>
+            <label style="display: none"> Закрыть форму </label>
+        </button>
+
+        <form id="createForm">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></span></div>
+                <input type="text" pattern="[A-Za-z]{5,15}" min="5" max="15" class="form-control" name="login" value="login" title="login">
+                <div class="valid-feedback"> Ok! </div>
+                <div class="invalid-feedback"> логин должен содержать только латинские буквы. </div>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="glyphicon glyphicon-comment" aria-hidden="true"></i></span></div>
+                <input pattern="[A-zА-я]{3,50}" class="form-control" name="name" value="name" title="name">
+                <div class="valid-feedback"> Ok! </div>
+                <div class="invalid-feedback"> Имя не должно быть пустым и должно состоять только из букв.</div>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i></span></div>
+                <input type="email" pattern="[a-z]+@[a-z]+\.[a-z]+" max="30" class="form-control" name="email" value="email@com.org" title="email">
+                <div class="valid-feedback">  Ok! </div>
+                <div class="invalid-feedback"> Неверный e-mail </div>
+            </div>
+            <div class="row">
+                <button class="col-sm-3 btn btn-primary" onclick="createUser()">Создать</button>
+
+                <div class="col-sm-9" id="successCreate"> Пользователь добавлен </div>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="col-sm-3"></div>
+    <script src="../js/create_form.js"></script>
+</div>
