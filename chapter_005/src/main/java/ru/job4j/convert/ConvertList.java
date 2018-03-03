@@ -18,9 +18,9 @@ public class ConvertList {
      */
     public List<Integer> toList(int[][] array) {
         List<Integer> list = new LinkedList<>();
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[0].length; j++) {
-                list.add(array[i][j]);
+        for (int[] anArray : array) {
+            for (int anAnArray : anArray) {
+                list.add(anAnArray);
             }
         }
         return list;
@@ -37,15 +37,10 @@ public class ConvertList {
     public int[][] toArray(List<Integer> list, int rows) {
         Iterator<Integer> iterator = list.iterator();
         int cols = list.size() / rows + (list.size() % rows == 0 ? 0 : 1);
-
         int[][] array = new int[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                if (iterator.hasNext()) {
-                    array[i][j] = iterator.next();
-                } else {
-                    array[i][j] = 0;
-                }
+                    array[i][j] = iterator.hasNext() ? iterator.next() : 0;
             }
         }
         return array;
