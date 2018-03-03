@@ -4,7 +4,7 @@
 <jsp:useBean id="users" scope="request" type="java.util.Map<ru.job4j.store.model.User, ru.job4j.store.model.Role>"/>
 <jsp:useBean id="useUser" scope="request" type="ru.job4j.store.model.User"/>
 
-<c:import url="header.jsp"/>
+<c:import url="head.jsp"/>
 
 
 

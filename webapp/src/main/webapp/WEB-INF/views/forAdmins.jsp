@@ -2,10 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ru.job4j.store.model.Role" %>
 
+<Doct
 <jsp:useBean id="users" scope="request" type="java.util.Map<ru.job4j.store.model.User, ru.job4j.store.model.Role>"/>
 <jsp:useBean id="roles" scope="request" type="java.util.List<ru.job4j.store.model.Role>"/>
 
-<c:import url="header.jsp"/>
+<c:import url="head.jsp"/>
 
 <c:forEach items="${users}" var="user" varStatus="count">
     <tr>
@@ -46,3 +47,5 @@
 
 
 <c:import url="footer.jsp"/>
+
+

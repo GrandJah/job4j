@@ -1,10 +1,4 @@
-<html>
-<head>
-    <title>User table</title>
-</head>
-<body>
-
-<table border = 1px>
+<table>
     <tr>
         <th></th>
         <th>login</th>
