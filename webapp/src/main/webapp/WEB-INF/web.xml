@@ -101,4 +101,13 @@
         <url-pattern>/ajax</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ResourceController</servlet-name>
+        <servlet-class>ru.job4j.pretty_interface.ResourceController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResourceController</servlet-name>
+        <url-pattern>/src/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
