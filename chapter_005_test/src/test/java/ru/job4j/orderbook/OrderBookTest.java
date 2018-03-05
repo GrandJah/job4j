@@ -1,5 +1,6 @@
 package ru.job4j.orderbook;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class OrderBookTest {
      * Test method.
      * @throws IOException IOException
      */
-//    @Test
+    @Ignore
     public void whenFileOriginalThenAnswerEquals() throws IOException {
         assertThat(new OrderBook().createOrderBook(new ParserOperation().parse("C:\\Users\\Atlant\\IdeaProjects\\junior\\orders.xml")),
                 is("order book : \"book-1\"" + System.lineSeparator()

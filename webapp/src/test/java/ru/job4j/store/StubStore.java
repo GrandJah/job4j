@@ -92,28 +92,29 @@ public class StubStore implements IUserStore, IRoleStore {
      * @param <E> type object
      * @return  object with stub interface
      */
-    public static <E> E stub(E stubObject) {
-        Class clazz = stubObject.getClass();
-        while (clazz != Object.class) {
-            try {
-                Field[] fields = clazz.getDeclaredFields();
-                for (Field field : fields) {
-                    Class fieldType = field.getType();
-                    if (fieldType.isInterface()) {
-                        if (fieldType == IUserStore.class || fieldType == IRoleStore.class) {
-                            field.setAccessible(true);
-                            Field modifiersField = Field.class.getDeclaredField("modifiers");
-                            modifiersField.setAccessible(true);
-                            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL & ~Modifier.PRIVATE);
-                            field.set(stubObject, new StubStore());
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            clazz = clazz.getSuperclass();
-        }
-        return stubObject;
-    }
+    public static <E> E stub(E stubObject) { return stubObject; }
+//
+//        Class clazz = stubObject.getClass();
+//        while (clazz != Object.class) {
+//            try {
+//                Field[] fields = clazz.getDeclaredFields();
+//                for (Field field : fields) {
+//                    Class fieldType = field.getType();
+//                    if (fieldType.isInterface()) {
+//                        if (fieldType == IUserStore.class || fieldType == IRoleStore.class) {
+//                            field.setAccessible(true);
+//                            Field modifiersField = Field.class.getDeclaredField("modifiers");
+//                            modifiersField.setAccessible(true);
+//                            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL & ~Modifier.PRIVATE);
+//                            field.set(stubObject, new StubStore());
+//                        }
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            clazz = clazz.getSuperclass();
+//        }
+//        return stubObject;
+//    }
 }

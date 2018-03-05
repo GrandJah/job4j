@@ -12,7 +12,13 @@ after_success:
 branches:
   only:
   - master
-  - development
+#  - development
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c "CREATE DATABASE job4j;" -U postgres
 
 # Отправлять уведомление на почту youremail@smtp.ru (Изменить на свою) если сборка упала
 notifications:

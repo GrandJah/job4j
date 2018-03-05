@@ -1,6 +1,6 @@
 package ru.job4j.parallelsearch;
 
-//import org.junit.Test;
+import org.junit.Ignore;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class ParallelSearchTest {
     /**
      * Test method.
      */
-//    @Test
+    @Ignore
     public void whenSearchMD5StringThenSearhThatFile() {
         List<String> exts = new ArrayList<>();
         Collections.addAll(exts, "txt", "java");
