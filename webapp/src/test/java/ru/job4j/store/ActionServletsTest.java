@@ -1,5 +1,6 @@
 package ru.job4j.store;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.store.action_servlets.Create;
@@ -15,9 +16,9 @@ import java.io.IOException;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static ru.job4j.store.StubStore.stub;
 
 /**
  * junior.
@@ -58,12 +59,21 @@ public class ActionServletsTest {
         when(this.req.getHeader(eq("Referer"))).thenReturn("RedirectUrl");
     }
 
+    /**
+     * before test.
+     */
+    @After
+    public void after() {
+        users.deleteUser("Login");
+        reset(this.req);
+    }
+
     /** test.
      * @throws IOException IOException
      */
     @Test
     public void whenCreateAddUser() throws IOException {
-        stub(new Create()).doPost(this.req, this.resp);
+        new Create().doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
         Object actual = this.users.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
@@ -76,7 +86,7 @@ public class ActionServletsTest {
     @Test
     public void whenPostThenUpdateDefaultUser() throws IOException {
         this.users.addUser("Login", "Name", "old e-mail");
-        stub(new Update()).doPost(this.req, this.resp);
+        new Update().doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
         Object actual = this.users.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
@@ -91,11 +101,11 @@ public class ActionServletsTest {
     public void whenPostThenUpdateAdministrator() throws IOException {
         this.users.addUser("Login", "Name", "old e-mail");
         when(this.req.getParameter(eq("role"))).thenReturn(Role.ADMINISTRATOR.name());
-        stub(new Update()).doPost(this.req, this.resp);
+        new Update().doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
         Object actual = this.users.getUser("Login");
         User expect = new User("Login", "Name User", "E-mail", 0);
-        assertEquals(actual, expect);
+        assertEquals(expect, actual);
         assertEquals(Role.ADMINISTRATOR, this.roles.getUserRole("Login"));
     }
 
@@ -105,7 +115,7 @@ public class ActionServletsTest {
     @Test
     public void whenDeleteThenDeleteUser() throws IOException {
         this.users.addUser("Login", "Name", "e-mail");
-        stub(new Delete()).doPost(this.req, this.resp);
+        new Delete().doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(eq("RedirectUrl"));
         assertEquals(User.UNKNOWN, this.users.getUser("Login"));
     }

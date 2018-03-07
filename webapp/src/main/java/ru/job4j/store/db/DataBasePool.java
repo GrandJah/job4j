@@ -5,7 +5,6 @@ import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import ru.job4j.config.Configure;
-
 import java.sql.Connection;
 import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
@@ -33,6 +32,7 @@ public class DataBasePool implements DBInterface {
                         config.get("user_name"), config.get("password")),
                 new GenericObjectPool() { { POOL.setPool(this); } },
                 null, null, false, false);
+        new DataBasePool().goDB(Configure.resToString("/sql/user_store.sql"));
     }
 
     @Override

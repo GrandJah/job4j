@@ -1,9 +1,10 @@
 package ru.job4j.authentication;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.store.IUserStore;
-import ru.job4j.store.StubStore;
+import ru.job4j.store.UserStore;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,7 +22,6 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
-import static ru.job4j.store.StubStore.stub;
 
 /**
  * Login test class.
@@ -49,12 +49,12 @@ public class LoginTest {
     /**
      * Login test class object.
      */
-    private Login login = stub(new Login());
+    private Login login = new Login();
 
     /**
      * stub UserStore.
      */
-    private IUserStore stubStore = new StubStore();
+    private IUserStore users = new UserStore();
 
     /**
      * login user stub.
@@ -78,6 +78,14 @@ public class LoginTest {
     }
 
     /**
+     * After method.
+     */
+    @After
+    public void after() {
+        this.users.deleteUser("UserLogin");
+    }
+
+    /**
      * @throws ServletException ServletException
      * @throws IOException IOException
      */
@@ -93,7 +101,7 @@ public class LoginTest {
      */
     @Test
     public void whenLoginIsCorrectPost() throws ServletException, IOException {
-        this.stubStore.addUser("UserLogin", "nameLogin", "email");
+        this.users.addUser("UserLogin", "nameLogin", "email");
 
         login.doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(anyString());
@@ -109,7 +117,7 @@ public class LoginTest {
      */
     @Test
     public void whenLoginIsCorrectGet() throws ServletException, IOException {
-        this.stubStore.addUser("UserLogin", "nameLogin", "email");
+        this.users.addUser("UserLogin", "nameLogin", "email");
 
         login.doPost(this.req, this.resp);
         verify(this.resp).sendRedirect(anyString());
@@ -125,7 +133,7 @@ public class LoginTest {
      */
     @Test
     public void whenLoginIsNotCorrect() throws ServletException, IOException {
-        this.stubStore.deleteUser("UserLogin");
+        this.users.deleteUser("UserLogin");
 
         login.doPost(this.req, this.resp);
         verify(dispatcher).forward(this.req, this.resp);
