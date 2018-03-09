@@ -18,7 +18,9 @@ services:
   - postgresql
 
 before_script:
-  - psql -c "CREATE DATABASE job4j_test;" -U postgres
+  - psql -c "DROP DATABASE job4j_test;"
+  - psql dropdb -U postgres job4j_test
+
 
 # Отправлять уведомление на почту youremail@smtp.ru (Изменить на свою) если сборка упала
 notifications:

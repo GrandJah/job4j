@@ -5,8 +5,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import ru.job4j.data_base.JSONConvert;
 import ru.job4j.pretty_interface.action.AjaxAction;
+import ru.job4j.pretty_interface.action.AjaxLocation;
 import ru.job4j.pretty_interface.action.CreateUser;
 import ru.job4j.pretty_interface.action.FillTable;
+import ru.job4j.pretty_interface.action.RolesAjax;
+import ru.job4j.pretty_interface.action.UpdateUser;
 import ru.job4j.pretty_interface.action.UseUser;
 
 import javax.servlet.http.HttpSession;
@@ -28,6 +31,9 @@ public class RequestJSON implements JSONConvert {
         put("table", new FillTable());
         put("login", new UseUser());
         put("createUser", new CreateUser());
+        put("update", new UpdateUser());
+        put("location", new AjaxLocation());
+        put("roles", new RolesAjax());
     } };
 
     /**
@@ -67,7 +73,8 @@ public class RequestJSON implements JSONConvert {
         }
     }
 
-    /**
+    /** action request.
+     * @param session session
      * @return response
      */
     JSONConvert action(HttpSession session) {

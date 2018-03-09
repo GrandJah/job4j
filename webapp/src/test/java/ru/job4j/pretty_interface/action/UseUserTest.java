@@ -3,16 +3,16 @@ package ru.job4j.pretty_interface.action;
 import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.data_base.model.Role;
-import ru.job4j.data_base.store.RoleStore;
 import ru.job4j.data_base.store.UserStore;
-import ru.job4j.data_base.store.UserStoreTest;
 
 import javax.servlet.http.HttpSession;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -27,7 +27,7 @@ public class UseUserTest {
     /**
      * session mock.
      */
-    HttpSession session;
+    private HttpSession session;
 
     /**
      * Test method.
@@ -35,12 +35,14 @@ public class UseUserTest {
     @Before
     public void before() {
         this.session = mock(HttpSession.class);
-        when(this.session.getAttribute(eq("user"))).thenReturn("Login");
-        UserStoreTest.clear();
     }
 
-    private void test(String expected){
-        assertEquals(expected, new UseUser().action(null, this.session).toJSON());
+    /**
+     * @param expected expected string
+     * @param data data for action
+     */
+    private void test(String expected, JSONObject data) {
+        assertEquals(expected, new UseUser().action(data, this.session).toJSON());
     }
 
     /**
@@ -48,9 +50,8 @@ public class UseUserTest {
      */
     @Test
     public void whenSessionUserPresentThenUseUserOK() {
-        new UserStore().addUser("Login", "Name", "email");
-        new RoleStore().setUserRole("Login", Role.DEFAULT_USER);
-        test("{useUser: {\"login:\"Login\",\"create\":\"false\",\"edit\":\"user\"}}");
+        when(this.session.getAttribute(eq("user"))).thenReturn(new UserStore().getUser("login"));
+        test("{\"useUser\":{\"login\":\"login\",\"create\":false,\"edit\":\"user\"}}", mock(JSONObject.class));
     }
 
     /**
@@ -58,7 +59,7 @@ public class UseUserTest {
      */
     @Test
     public void whenSessionUserNoneThenUseUserOK() {
-        test("{}");
+        test("{}", mock(JSONObject.class));
     }
 
     /**
@@ -66,8 +67,44 @@ public class UseUserTest {
      */
     @Test
     public void whenSessionUserPresentAdminThenUseUserOK() {
+        when(this.session.getAttribute(eq("user"))).thenReturn(new UserStore().getUser("admin"));
+        test("{\"useUser\":{\"login\":\"admin\",\"create\":true,\"edit\":\"all\"}}", mock(JSONObject.class));
+    }
+
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenLogoutThenOK() {
+        JSONObject json = new JSONObject();
+        json.put("action", "logout");
         new UserStore().addUser("Login", "Name", "email");
-        new RoleStore().setUserRole("Login", Role.ADMINISTRATOR);
-        test("{useUser: {\"login:\"Login\",\"create\":\"true\",\"edit\":\"all\"}}");
+        test("{}", json);
+        verify(this.session).removeAttribute(eq("user"));
+    }
+
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenNotLoginInUsersThenOK() {
+        JSONObject json = new JSONObject();
+        json.put("login", "Fghwe");
+        json.put("password", "dcsdc");
+        test("{}", json);
+        verify(this.session, never()).setAttribute(eq("user"), any());
+    }
+
+    /**
+     * Test method.
+     */
+    @Test
+    public void whenLoginInUsersThenSetSesion() {
+        JSONObject json = new JSONObject();
+        json.put("login", "login");
+        json.put("password", "pass");
+        test("{\"useUser\":{\"login\":\"login\",\"create\":false,\"edit\":\"user\"}}", json);
+        verify(this.session).setAttribute(eq("user"), eq(new UserStore().getUser("login")));
     }
 }
+

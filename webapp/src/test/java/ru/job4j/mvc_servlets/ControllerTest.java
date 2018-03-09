@@ -1,6 +1,7 @@
 package ru.job4j.mvc_servlets;
 
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.data_base.store.IRoleStore;
@@ -61,7 +62,7 @@ public class ControllerTest {
      * before test.
      */
     @Before
-    public void init() {
+    public void before() {
         this.users.addUser("1", "", "");
         this.users.addUser("2", "", "");
         this.users.addUser("3", "", "");
@@ -69,6 +70,17 @@ public class ControllerTest {
         when(session.getAttribute(eq("user"))).thenReturn(this.users.getUser("1"));
         when(this.req.getSession()).thenReturn(session);
         when(this.req.getRequestDispatcher(anyString())).thenReturn(mock(RequestDispatcher.class));
+    }
+
+    /**
+     * After test.
+     */
+    @After
+    public void after() {
+        this.roles.setUserRole("1", Role.DEFAULT_USER);
+        this.users.deleteUser("1");
+        this.users.deleteUser("2");
+        this.users.deleteUser("3");
     }
 
     /** test ADMINISTRATOR.

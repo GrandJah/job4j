@@ -7,21 +7,21 @@
 
         <form id="createForm">
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></span></div>
+                <div class="input-group-prepend"><span class="input-group-text glyphicon glyphicon-user" aria-hidden="true"></span></div>
                 <input type="text" pattern="[A-Za-z]{5,15}" min="5" max="15" class="form-control" name="login" value="login" title="login">
                 <div class="valid-feedback"> Ok! </div>
                 <div class="invalid-feedback"> логин должен содержать только латинские буквы. </div>
             </div>
 
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="glyphicon glyphicon-comment" aria-hidden="true"></i></span></div>
+                <div class="input-group-prepend"><span class="input-group-text glyphicon glyphicon-comment" aria-hidden="true"></span></div>
                 <input pattern="[A-zА-я]{3,50}" class="form-control" name="name" value="name" title="name">
                 <div class="valid-feedback"> Ok! </div>
                 <div class="invalid-feedback"> Имя не должно быть пустым и должно состоять только из букв.</div>
             </div>
 
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i></span></div>
+                <div class="input-group-prepend"><span class="input-group-text glyphicon glyphicon-envelope" aria-hidden="true"></span></div>
                 <input type="email" pattern="[a-z]+@[a-z]+\.[a-z]+" max="30" class="form-control" name="email" value="email@com.org" title="email">
                 <div class="valid-feedback">  Ok! </div>
                 <div class="invalid-feedback"> Неверный e-mail </div>

@@ -4,17 +4,12 @@ import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.data_base.model.Role;
-import ru.job4j.data_base.model.User;
-import ru.job4j.data_base.store.IRoleStore;
 import ru.job4j.data_base.store.IUserStore;
-import ru.job4j.data_base.store.RoleStore;
 import ru.job4j.data_base.store.UserStore;
-import ru.job4j.data_base.store.UserStoreTest;
 
-import javax.servlet.descriptor.JspConfigDescriptor;
 import javax.servlet.http.HttpSession;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -28,23 +23,30 @@ import static org.mockito.Mockito.when;
  * @since 09.03.2018
  */
 public class CreateUserTest {
+    /**
+     * Session mock.
+     */
     private HttpSession session = mock(HttpSession.class);
+
+    /**
+     * User Store.
+     */
     private IUserStore users = new UserStore();
-    private IRoleStore roles = new RoleStore();
 
-
+    /**
+     * before test method.
+     */
     @Before
-    public void before(){
+    public void before() {
         reset(this.session);
-        UserStoreTest.clear();
     }
 
-    private User setUser(String login, Role role) {
-        this.users.addUser(login,"","");
-        this.roles.setUserRole(login, role);
-        return this.users.getUser(login);
-    }
-
+    /** set JSON object user.
+     * @param login login
+     * @param name name
+     * @param email email
+     * @return JSON object
+     */
     private JSONObject setJSONUser(String login, String name, String email) {
         JSONObject json = new JSONObject();
         json.put("login", login);
@@ -53,9 +55,16 @@ public class CreateUserTest {
         return json;
     }
 
+    /** test method.
+     * @param login login
+     * @param name name
+     * @param email email
+     * @param roleUseUser user role
+     * @param status success status
+     */
     private void test(String login, String name, String email, Role roleUseUser, boolean status) {
-        when(this.session.getAttribute(eq("user"))).thenReturn(setUser("adm", roleUseUser));
-        JSONObject data = setJSONUser(login,name, email);
+        when(this.session.getAttribute(eq("user"))).thenReturn(this.users.getUser(roleUseUser == Role.ADMINISTRATOR ? "admin" : "login"));
+        JSONObject data = setJSONUser(login, name, email);
         String expected = "{\"success\":\"" + (status ? "true" : "false") + "\"}";
         assertEquals(expected, new CreateUser().action(data, this.session).toJSON());
     }
@@ -65,7 +74,8 @@ public class CreateUserTest {
      */
     @Test
     public void whenCorrectRulesAndParmsThenOK() {
-        test("adhiw","dcs", "d@csd.c", Role.ADMINISTRATOR, true);
+        test("creteTestUser", "dcs", "d@csd.c", Role.ADMINISTRATOR, true);
+        this.users.deleteUser("creteTestUser");
     }
 
     /**
@@ -73,7 +83,7 @@ public class CreateUserTest {
      */
     @Test
     public void whenNotRulesThenFalse() {
-        test("adhiw","dcs", "d@csd.c", Role.DEFAULT_USER, false);
+        test("creteTestUser", "dcs", "d@csd.c", Role.DEFAULT_USER, false);
     }
 
     /**
@@ -81,7 +91,7 @@ public class CreateUserTest {
      */
     @Test
     public void whenNotCorrectedLoginThenFalse() {
-        test("adiw","dcs", "d@csd.c", Role.ADMINISTRATOR, false);
+        test("cre", "dcs", "d@csd.c", Role.ADMINISTRATOR, false);
     }
 
     /**
@@ -89,7 +99,7 @@ public class CreateUserTest {
      */
     @Test
     public void whenNotCorrectedNameThenFalse() {
-        test("adwiw","dc//s", "d@csd.c", Role.ADMINISTRATOR, false);
+        test("creteTestUser", "dc//s", "d@csd.c", Role.ADMINISTRATOR, false);
     }
 
     /**
@@ -97,6 +107,6 @@ public class CreateUserTest {
      */
     @Test
     public void whenNotCorrectedEmailThenFalse() {
-        test("adwiw","dcsss", "dcsd.c", Role.ADMINISTRATOR, false);
+        test("creteTestUser", "dcsss", "dcsd.c", Role.ADMINISTRATOR, false);
     }
 }

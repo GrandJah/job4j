@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Role Users.
  */
-public class Role {
+public class Role implements Comparable<Role> {
     /**
      * Use roles.
      */
@@ -54,6 +54,10 @@ public class Role {
         return role;
     }
 
+    @Override
+    public int compareTo(Role o) {
+        return this.name.compareTo(o.name);
+    }
 }
 
 

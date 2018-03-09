@@ -2,7 +2,7 @@ package ru.job4j.data_base.store;
 
 import ru.job4j.data_base.model.Role;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * junior.
@@ -29,5 +29,5 @@ public interface IRoleStore {
      * Все роли.
      * @return list of all roles.
      */
-    List<Role> getRoles();
+    Set<Role> getRoles();
 }

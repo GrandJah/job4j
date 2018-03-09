@@ -10,17 +10,27 @@
         <td>email_user</td>
         <td>role_user</td>
         <td>location_user</td>
-        <td><button onclick="toggle_edit(this)"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button></td>
+        <td><button class="btn btn-primary" onclick="toggle_edit(this)"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button></td>
     </tr>
     </tbody>
 </table>
-<div class="edit" id="edit_form" style="display: none">
-    <form method = "POST">
-        <input type="hidden" name="login" value="login">
-        <input type="text" name="name" value="name" title="name">
-        <input type="text" name="email" value="email" title="email">
-    </form>
-</div>
+<table>
+    <tr class="edit" id="edit_form" style="display: none">
+        <td colspan=6>
+            <form id="update_form">
+                <label class="label">login</label>
+                <input type="hidden" name="login" value="login">
+                <input type="text" name="name" value="name" title="name">
+                <input type="text" name="email" value="email" title="email">
+                <label class="label">role</label>
+                <div id="edit_role"></div>
+                <div id="edit_country"></div>
+                <div id="edit_city"></div>
+            </form>
+        </td>
+        <td><button onclick="edit_row()" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span></button></td>
+    </tr>
+</table>
 <script src="../js/table_users.js"></script>
 <script>fill_table()</script>
 

@@ -5,7 +5,6 @@ function onload() {
 }
 
 function ajax(action, fun, data) {
-    console.log(action, fun, data)
     $.ajax({
         method: "POST",
         cache: false,
@@ -14,25 +13,13 @@ function ajax(action, fun, data) {
             action: action,
             data: data
         }),
-        success: [
-            function () {
-                console.log("complete")
-                console.log(fun)
-            },
-            function (a,s,d) {
-                console.log("ajax a - " + a)
-                console.log("ajax s - " + s)
-                console.log("ajax d - " + d)
-            },
-            fun],
+        success: fun,
         error: function (a,s,d) {
-            console.log("err a - " + a)
-            console.log("err s - " + s)
-            console.log("err d - " + d)
+            console.log("ajax - error")
         },
         statusCode:{
             200: function () {
-                console.log("200 OK")
+                console.log("ajax - OK")
             }
         }
     });

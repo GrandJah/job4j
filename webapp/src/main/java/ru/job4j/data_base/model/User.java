@@ -117,12 +117,15 @@ public class User implements Comparable<User>, JSONConvert {
     }
 
 
+    /**
+     * Patterns for validate.
+     */
     private static final Pattern
             P_LOGIN = Pattern.compile("[A-Za-z]{5,15}"),
             P_NAME = Pattern.compile("[A-zА-я]{3,50}"),
             P_EMAIL = Pattern.compile("[a-z]+@[a-z]+\\.[a-z]+");
 
-    /** validate params
+    /** validate params.
      * @param login login
      * @param name name
      * @param email email

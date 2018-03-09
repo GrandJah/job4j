@@ -14,13 +14,23 @@ import javax.servlet.http.HttpSession;
  * @since 09.03.2018
  */
 public class Authentification {
+    /** check rules.
+     * @param session session
+     * @param rules check rules.
+     * @return true if rules availability
+     */
     public static boolean checkRules(HttpSession session, String rules) {
         boolean check = false;
         User user = (User) session.getAttribute("user");
         if (user != null) {
             switch (rules) {
+                case  "edit_role":
                 case "create" : check = new RoleStore().getUserRole(user.getLogin()) == Role.ADMINISTRATOR; break;
-                default:break;
+                case "edit_user" :
+                    check = new RoleStore().getUserRole(user.getLogin()) == Role.ADMINISTRATOR
+                    || new RoleStore().getUserRole(user.getLogin()) == Role.DEFAULT_USER;
+                    break;
+                default : break;
             }
         }
         return check;

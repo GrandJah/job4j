@@ -28,7 +28,7 @@ public class UseUser implements AjaxAction {
                 String login = (String) data.get("login");
                 String password = (String) data.get("password");
                 if (login != null && password != null) {
-                    user = new UserStore().getUser(login);//! login must validate password
+                    user = new UserStore().getUser(login); //! login must validate password
                     if (user != User.UNKNOWN) {
                         session.setAttribute("user", user);
                     }

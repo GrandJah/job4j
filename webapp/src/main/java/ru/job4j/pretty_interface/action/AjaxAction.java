@@ -16,6 +16,7 @@ public interface AjaxAction {
     /**
      * Action.
      * @param data data object
+     * @param session session
      * @return answer
      */
     JSONConvert action(JSONObject data, HttpSession session);

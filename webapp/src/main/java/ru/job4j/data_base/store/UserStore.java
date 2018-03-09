@@ -38,7 +38,7 @@ public class UserStore implements IUserStore {
     @Override
     public List<User> getUsers(String ... logins) {
         final List<User> users = new ArrayList<>();
-        StringBuilder builder = new StringBuilder("SELECT * from Users_store");
+        StringBuilder builder = new StringBuilder("SELECT * from users");
         if (logins != null && logins.length > 0) {
             builder.append(" WHERE login in (");
             if (logins.length > 1) {
@@ -69,18 +69,18 @@ public class UserStore implements IUserStore {
 
     @Override
     public boolean addUser(String login, String name, String email) {
-        return db.goDB("INSERT  INTO  users_store VALUES (?, ?, ?, ?)",
+        return db.goDB("INSERT INTO users (login, name, email, created) VALUES (?, ?, ?, ?)",
                 login, name, email, new Timestamp(System.currentTimeMillis()));
     }
 
     @Override
     public void deleteUser(String login) {
-        db.goDB("DELETE FROM users_store WHERE login = ?", login);
+        db.goDB("DELETE FROM users WHERE login = ?", login);
     }
 
     @Override
     public void updateUser(String login, String name, String email) {
-        db.goDB("UPDATE users_store SET name = ?, email =  ? WHERE login = ?",
+        db.goDB("UPDATE users SET name = ?, email =  ? WHERE login = ?",
                 name, email, login);
     }
 

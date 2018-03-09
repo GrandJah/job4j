@@ -18,22 +18,25 @@ import javax.servlet.http.HttpSession;
 public class FillTable implements AjaxAction {
     @Override
     public JSONConvert action(JSONObject data, HttpSession session) {
-        String tableName = "Таблица пользователей";//!
+        String tableName = "Таблица пользователей"; //!
         String tableId = "table_id"; //!
         String tableFill = fullTable(); //!
         return () -> String.format("{\"table\":\"%s\",\"table_id\":\"%s\",\"rows\":%s}",
                 tableName, tableId, tableFill);
     }
 
+    /**
+     * @return json table.
+     */
     private String fullTable() {
         StringBuilder builder = new StringBuilder("[");
-        for (User user : new UserStore().getUsers()){
+        for (User user : new UserStore().getUsers()) {
             if (user != User.UNKNOWN) {
                 builder.append(new FullFieldUser(user).toJSON());
             }
             builder.append(",");
         }
         int len = builder.length();
-        return builder.delete(len-1, len).append("]").toString();
+        return builder.delete(len - 1, len).append("]").toString();
     }
 }

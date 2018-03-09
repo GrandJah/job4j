@@ -36,15 +36,6 @@ CREATE TABLE IF NOT EXISTS user_location (
   city_id INTEGER REFERENCES cities(id) NOT NULL
 );
 --Наполнение таблицы
-INSERT INTO users (login, name, email, created) VALUES
-  ('login', 'user name', 'email', '2000-01-01 00:00:00.000'),
-  ('user', 'user second name', 'email', '2000-01-01 00:00:00.000'),
-  ('admin', 'user other name', 'email', '2000-01-01 00:00:00.000');
-INSERT INTO roles (name) VALUES
-  ('ADMINISTRATOR'),
-  ('DEFAULT_USER');
-INSERT INTO use_role VALUES
-  ( 3, 1);
 INSERT INTO countries (country) VALUES
   ('-------'),
   ('Russia'),
@@ -58,5 +49,15 @@ INSERT INTO cities (city, country) VALUES
   ('Manchester', 4),
   ('Washington D.C.', 3),
   ('NewYork', 3);
+INSERT INTO users (login, name, email, created) VALUES
+  ('login', 'user name', 'email', '2000-01-01 00:00:00.000'),
+  ('user', 'user second name', 'email', '2000-01-01 00:00:00.000'),
+  ('admin', 'user other name', 'email', '2000-01-01 00:00:00.000');
+INSERT INTO roles (name) VALUES
+  ('ADMINISTRATOR'),
+  ('DEFAULT_USER');
+INSERT INTO use_role VALUES
+  ( 3, 1);
+
 
 

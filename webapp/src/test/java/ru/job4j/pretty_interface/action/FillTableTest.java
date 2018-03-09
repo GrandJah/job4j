@@ -1,9 +1,6 @@
 package ru.job4j.pretty_interface.action;
 
-import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.data_base.store.UserStore;
-import ru.job4j.data_base.store.UserStoreTest;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,10 +15,6 @@ import static org.mockito.Mockito.mock;
  * @since 09.03.2018
  */
 public class FillTableTest {
-    @Before
-    public void before() {
-        UserStoreTest.clear();
-    }
 
     /**
      * Test method.
@@ -29,19 +22,12 @@ public class FillTableTest {
     @Test
     public void whenEmptyTableThenEmptyAnswer() {
         FillTable action = new FillTable();
-        assertEquals("{\"table\":\"Таблица пользователей\",\"table_id\":\"table_id\",\"rows\":[]",
-                action.action(null, mock(HttpSession.class)).toJSON());
-    }
-
-    /**
-     * Test method.
-     */
-    @Test
-    public void whenPresentUserThenUserTableOK() {
-        FillTable action = new FillTable();
-        new UserStore().addUser("log","name","email");
-        assertEquals("{\"table\":\"Таблица пользователей\",\"table_id\":\"table_id\",\"rows\":[{\"login\":\"log\";" +
-                "\"name\":\"name\";\"email\":\"email\";\"role\":\"DEFAULT_USER\";\"location\":\"MegaCity\"}]",
+        assertEquals("{\"table\":\"Таблица пользователей\","
+                        + "\"table_id\":\"table_id\",\"rows\":["
+                        + "{\"login\":\"login\",\"name\":\"user name\",\"email\":\"email\",\"role\":\"DEFAULT_USER\",\"location\":{\"city\":\"-------\",\"country\":\"-------\"}},"
+                        + "{\"login\":\"user\",\"name\":\"user second name\",\"email\":\"email\",\"role\":\"DEFAULT_USER\",\"location\":{\"city\":\"-------\",\"country\":\"-------\"}},"
+                        + "{\"login\":\"admin\",\"name\":\"user other name\",\"email\":\"email\",\"role\":\"ADMINISTRATOR\",\"location\":{\"city\":\"-------\",\"country\":\"-------\"}}"
+                        + "]}",
                 action.action(null, mock(HttpSession.class)).toJSON());
     }
 }

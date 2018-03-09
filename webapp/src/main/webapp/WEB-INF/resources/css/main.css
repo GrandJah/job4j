@@ -46,3 +46,17 @@ caption {
     text-align: center;
     opacity: 0;
 }
+
+#edit_form {
+    height: 0px;
+}
+
+button{
+    padding:3px 5px;
+}
+
+.glyphicon{
+    top: 2px;
+    right: 1px;
+    font-size: 1.2em;
+}

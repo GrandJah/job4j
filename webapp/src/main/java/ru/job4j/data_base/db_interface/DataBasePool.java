@@ -60,6 +60,7 @@ public class DataBasePool implements DBInterface {
                     }
                     success = true;
                 } catch (SQLException e) {
+                    e.printStackTrace();
                     connection.rollback();
                 }
             }
