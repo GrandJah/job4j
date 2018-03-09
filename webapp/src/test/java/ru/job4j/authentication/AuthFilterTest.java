@@ -1,7 +1,7 @@
 package ru.job4j.authentication;
 
 import org.junit.Test;
-import ru.job4j.store.model.User;
+import ru.job4j.data_base.model.User;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;

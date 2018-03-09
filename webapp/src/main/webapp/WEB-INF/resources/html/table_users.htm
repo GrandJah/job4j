@@ -4,24 +4,23 @@
     </th></tr></thead>
     <tbody>
     <tr class="form-group">
-
         <td class="number">n_row</td>
         <td>login_user</td>
         <td>name_user</td>
         <td>email_user</td>
         <td>role_user</td>
         <td>location_user</td>
-        <td><button type="submit" formaction = "action"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button></td>
-        <div class="edit" style="display: none">
-            <form method = "POST">
-                <input type="hidden" name="login" value="login">
-                <input type="text" name="name" value="name" title="name">
-                <input type="text" name="email" value="email" title="email">
-            </form>
-        </div>
+        <td><button onclick="toggle_edit(this)"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button></td>
     </tr>
     </tbody>
 </table>
+<div class="edit" id="edit_form" style="display: none">
+    <form method = "POST">
+        <input type="hidden" name="login" value="login">
+        <input type="text" name="name" value="name" title="name">
+        <input type="text" name="email" value="email" title="email">
+    </form>
+</div>
 <script src="../js/table_users.js"></script>
 <script>fill_table()</script>
 

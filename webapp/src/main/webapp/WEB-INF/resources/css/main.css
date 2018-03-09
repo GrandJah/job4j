@@ -9,6 +9,7 @@ caption {
 
 #userTable {
     display: none;
+    z-index: 10000;
 }
 
 #userTable .number {

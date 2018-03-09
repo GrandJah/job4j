@@ -30,7 +30,6 @@ function createUser(){
         }
     }
     if (valid) {
-        newUser.action = "createUser";
-        ajax(JSON.stringify(newUser), update)
+        ajax("createUser", update, newUser)
     }
 }

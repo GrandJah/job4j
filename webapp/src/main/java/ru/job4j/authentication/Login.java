@@ -1,8 +1,8 @@
 package ru.job4j.authentication;
 
-import ru.job4j.store.IUserStore;
-import ru.job4j.store.UserStore;
-import ru.job4j.store.model.User;
+import ru.job4j.data_base.store.IUserStore;
+import ru.job4j.data_base.store.UserStore;
+import ru.job4j.data_base.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class Login extends HttpServlet {
     /**
-     * User store.
+     * User data_base.
      */
     private IUserStore users = new UserStore();
 

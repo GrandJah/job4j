@@ -1,8 +1,8 @@
 <%@ page contentType="text/HTML;charset=UTF-8" language="JAVA" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:useBean id="users" scope="request" type="java.util.Map<ru.job4j.store.model.User, ru.job4j.store.model.Role>"/>
-<jsp:useBean id="useUser" scope="request" type="ru.job4j.store.model.User"/>
+<jsp:useBean id="users" scope="request" type="java.util.Map<ru.job4j.data_base.model.User, ru.job4j.data_base.model.Role>"/>
+<jsp:useBean id="useUser" scope="request" type="ru.job4j.data_base.model.User"/>
 
 <c:import url="head.jsp"/>
 

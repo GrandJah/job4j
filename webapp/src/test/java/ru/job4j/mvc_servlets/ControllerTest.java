@@ -3,11 +3,11 @@ package ru.job4j.mvc_servlets;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.store.IRoleStore;
-import ru.job4j.store.IUserStore;
-import ru.job4j.store.RoleStore;
-import ru.job4j.store.UserStore;
-import ru.job4j.store.model.Role;
+import ru.job4j.data_base.store.IRoleStore;
+import ru.job4j.data_base.store.IUserStore;
+import ru.job4j.data_base.store.RoleStore;
+import ru.job4j.data_base.store.UserStore;
+import ru.job4j.data_base.model.Role;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -48,12 +48,12 @@ public class ControllerTest {
     private Controller controller = new Controller();
 
     /**
-     * stub User store.
+     * stub User data_base.
      */
     private IUserStore users = new UserStore();
 
     /**
-     * stub User store.
+     * stub User data_base.
      */
     private IRoleStore roles = new RoleStore();
 

@@ -21,9 +21,13 @@ public class ControllerAJAX extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String jsonReq = req.getParameter("json");
         resp.setContentType("application/json");
+        req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        resp.getWriter().write(jsonReq);
+
+        RequestJSON requestJSON = new RequestJSON();
+        String request = req.getReader().readLine();
+        requestJSON.fromJSON(request);
+        resp.getWriter().write(requestJSON.action(req.getSession()).toJSON());
     }
 }

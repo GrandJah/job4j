@@ -3,8 +3,8 @@ package ru.job4j.authentication;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.store.IUserStore;
-import ru.job4j.store.UserStore;
+import ru.job4j.data_base.store.IUserStore;
+import ru.job4j.data_base.store.UserStore;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

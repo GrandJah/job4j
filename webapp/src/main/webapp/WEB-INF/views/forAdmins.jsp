@@ -1,10 +1,10 @@
 <%@ page contentType="text/HTML;charset=UTF-8" language="JAVA" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="ru.job4j.store.model.Role" %>
+<%@ page import="ru.job4j.data_base.model.Role" %>
 
 <Doct
-<jsp:useBean id="users" scope="request" type="java.util.Map<ru.job4j.store.model.User, ru.job4j.store.model.Role>"/>
-<jsp:useBean id="roles" scope="request" type="java.util.List<ru.job4j.store.model.Role>"/>
+<jsp:useBean id="users" scope="request" type="java.util.Map<ru.job4j.data_base.model.User, ru.job4j.data_base.model.Role>"/>
+<jsp:useBean id="roles" scope="request" type="java.util.List<ru.job4j.data_base.model.Role>"/>
 
 <c:import url="head.jsp"/>
 

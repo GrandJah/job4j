@@ -1,5 +1,5 @@
 function fill_table(){
-    ajax("{\"action\":\"table\"}",function(json) {
+    ajax("table",function(json) {
         var rowTemplate;
         var table = document.getElementById("userTable");
         table.children[0].innerHTML = json.table;
@@ -17,7 +17,17 @@ function fill_table(){
             el.children[3].innerHTML = row.email;
             el.children[4].innerHTML = row.role !== undefined ? row.role : 'user';
             el.children[5].innerHTML = row.location !== undefined ? row.location : "---";
+            if (!(use_user.edit === "all" || (use_user.edit === "user" && use_user.login === row.login))) {
+                el.children[6].innerHTML = "";
+            }
             body.appendChild(el);
         }
         table.style.display = 'table';
-    })}
+    },{})}
+    
+    function toggle_edit(el) {
+    var edit = document.getElementById("edit_form");
+    var div = el.parentElement.parentElement
+        edit.parentElement = div;
+        edit.style.display = edit.style.display === "none" ? "block" : "none"
+    }

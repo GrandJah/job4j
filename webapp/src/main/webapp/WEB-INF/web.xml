@@ -1,57 +1,29 @@
 <web-app>
     <servlet>
-        <servlet-name>EchoServlet</servlet-name>
-        <servlet-class>ru.job4j.servlets.EchoServlet</servlet-class>
+        <servlet-name>ActionCreate</servlet-name>
+        <servlet-class>ru.job4j.data_base.action_servlets.Create</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>EchoServlet</servlet-name>
-        <url-pattern>/echo</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>UserServlet</servlet-name>
-        <servlet-class>ru.job4j.crud_server.UserServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/user</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>Interface</servlet-name>
-        <servlet-class>ru.job4j.interface_servlet.InterServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Interface</servlet-name>
-        <url-pattern>/get</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>InterfaceCreate</servlet-name>
-        <servlet-class>ru.job4j.store.action_servlets.Create</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>InterfaceCreate</servlet-name>
+        <servlet-name>ActionCreate</servlet-name>
         <url-pattern>/create</url-pattern>
     </servlet-mapping>
 
 
     <servlet>
-        <servlet-name>InterfaceDelete</servlet-name>
-        <servlet-class>ru.job4j.store.action_servlets.Delete</servlet-class>
+        <servlet-name>ActionDelete</servlet-name>
+        <servlet-class>ru.job4j.data_base.action_servlets.Delete</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>InterfaceDelete</servlet-name>
+        <servlet-name>ActionDelete</servlet-name>
         <url-pattern>/delete</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>InterfaceUpdate</servlet-name>
-        <servlet-class>ru.job4j.store.action_servlets.Update</servlet-class>
+        <servlet-name>ActionUpdate</servlet-name>
+        <servlet-class>ru.job4j.data_base.action_servlets.Update</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>InterfaceUpdate</servlet-name>
+        <servlet-name>ActionUpdate</servlet-name>
         <url-pattern>/update</url-pattern>
     </servlet-mapping>
 
@@ -63,7 +35,6 @@
         <servlet-name>MVCServlet</servlet-name>
         <url-pattern>/mvc</url-pattern>
     </servlet-mapping>
-
 
     <filter>
         <filter-name>AuthFilter</filter-name>

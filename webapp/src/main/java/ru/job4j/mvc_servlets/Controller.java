@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ru.job4j.store.IRoleStore;
-import ru.job4j.store.IUserStore;
-import ru.job4j.store.RoleStore;
-import ru.job4j.store.UserStore;
-import ru.job4j.store.model.Role;
-import ru.job4j.store.model.User;
+import ru.job4j.data_base.store.IRoleStore;
+import ru.job4j.data_base.store.IUserStore;
+import ru.job4j.data_base.store.RoleStore;
+import ru.job4j.data_base.store.UserStore;
+import ru.job4j.data_base.model.Role;
+import ru.job4j.data_base.model.User;
 
 /**
  * junior.
@@ -24,12 +24,12 @@ import ru.job4j.store.model.User;
  */
 public class Controller extends HttpServlet {
     /**
-     * User store.
+     * User data_base.
      */
     private IRoleStore roles = new RoleStore();
 
     /**
-     * Role store.
+     * Role data_base.
      */
     private IUserStore users = new UserStore();
 
