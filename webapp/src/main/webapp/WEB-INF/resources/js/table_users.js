@@ -44,28 +44,55 @@ function toggle_edit(el) {
         var parent = sister.parentNode;
         var index = $(parent).children().index(sister);
         parent.insertBefore(inject, parent.children[index + 1]);
-        insertRoles();
-        insertCountries();
-        insertCities();
+
+        var form = document.getElementById("update_form");
+        insertLabel("edit_login", "login", sister.children[1].innerHTML);
+        form.elements.name.value = sister.children[2].innerHTML;
+        form.elements.email.value = sister.children[3].innerHTML;
+        insertRoles(sister.children[4].innerHTML);
+        var location = sister.children[5].innerHTML.split('/');
+        insertCountries(location[1]);
+        insertCities(location[0],location[1]);
     }
 }
 
 function edit_row() {
     var edit_form = document.getElementById("update_form");
     var update = {};
-    update.login = edit_form.elements.login.value;
-    update.name = edit_form.elements.name.value;
-    update.email = edit_form.elements.email.value;
-    update.role = edit_form.elements.role.value;
-    update.country = edit_form.elements.country.value;
-    update.city = edit_form.elements.city.value;
-    ajax("update", function(msg) {inject = undefined; console.log(msg); loadPage({useUser : use_user})}, update);
+    var valid = true;
+    for(var i = 0; i < 3; i++) {
+        var el = edit_form.children[i].children[0];
+        var validate = el.validity;
+        if (validate !== undefined) {
+            if (validate.valid) {
+                el.classList.remove('is-invalid');
+                el.classList.add('is-valid');
+                switch (el.name) {
+                    case 'email' : update.email = el.value; break;
+                    case 'name' : update.name = el.value; break;
+                }
+            } else {
+                el.classList.remove('is-valid');
+                el.classList.add('is-invalid');
+                valid = false;
+            }
+        }
+    }
+    if (valid) {
+        update.login = edit_form.elements.login.value;
+        update.role = edit_form.elements.role.value;
+        update.country = edit_form.elements.country.value;
+        update.city = edit_form.elements.city.value;
+        ajax("update", function(msg) {inject = undefined; console.log(msg); loadPage({useUser : use_user})}, update);
+    }
 }
 
 function insertRoles(selected){
-    ajax('roles', function (data) {
-        insertOption("edit_role", "role", data.roles, selected)
-    },{})
+    if(use_user.edit === "all")
+        ajax('roles', function (data) {
+            insertOption("edit_role", "role", data.roles, selected)
+        },{});
+    else insertLabel("edit_role", "role", selected)
 }
 
 function insertCities(selected, country){
@@ -77,6 +104,7 @@ function insertCities(selected, country){
 
 function insertCountries(selected){
     ajax('location', function (data) {
+        console.log(data,selected);
         insertOption("edit_country", "country", data.countries, selected);
         document.getElementById("edit_country").addEventListener("change", function (ev) {
             console.log(ev,ev.path[0].value); insertCities(undefined, ev.path[0].value)})
@@ -84,17 +112,29 @@ function insertCountries(selected){
 }
 
 function insertOption(selector, name, data, select) {
-    var element = $('<select/>', {id:selector, name:name});
-    $.each(data,function() {
+    var element = $('<select/>', {id: selector, name: name});
+    $.each(data, function () {
         $('<option/>', {
-            val:  this,
+            val: this,
             text: this
         }).appendTo(element);
     });
-    if (select !== undefined && select !== '')
+    if (select !== undefined && select !== '') {
+        console.log(select, "selected");
         $('option[value=' + select + ']', element).attr('selected', 'selected');
-
+    } else {
+        console.log(select, "no selected");
+    }
     $(('#' + selector)).replaceWith(element);
 }
+
+function insertLabel(selector, name, value) {
+    var div = $('<div/>', {id:selector});
+    $('<label/>',{class:"label", text:value}).appendTo(div);
+    $('<input/>',{type:"hidden", name:name, value:value}).appendTo(div);
+    $(('#' + selector)).replaceWith(div);
+}
+
+
 
 

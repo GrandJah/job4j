@@ -1,40 +1,4 @@
 <web-app>
-    <servlet>
-        <servlet-name>ActionCreate</servlet-name>
-        <servlet-class>ru.job4j.data_base.action_servlets.Create</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ActionCreate</servlet-name>
-        <url-pattern>/create</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>ActionDelete</servlet-name>
-        <servlet-class>ru.job4j.data_base.action_servlets.Delete</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ActionDelete</servlet-name>
-        <url-pattern>/delete</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ActionUpdate</servlet-name>
-        <servlet-class>ru.job4j.data_base.action_servlets.Update</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ActionUpdate</servlet-name>
-        <url-pattern>/update</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>MVCServlet</servlet-name>
-        <servlet-class>ru.job4j.mvc_servlets.Controller</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MVCServlet</servlet-name>
-        <url-pattern>/mvc</url-pattern>
-    </servlet-mapping>
 
     <filter>
         <filter-name>AuthFilter</filter-name>
@@ -44,24 +8,6 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>*</url-pattern>
     </filter-mapping>
-
-    <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>ru.job4j.authentication.Login</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Login</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>Logout</servlet-name>
-        <servlet-class>ru.job4j.authentication.Logout</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Logout</servlet-name>
-        <url-pattern>/logout</url-pattern>
-    </servlet-mapping>
 
     <servlet>
         <servlet-name>ControllerAJAX</servlet-name>

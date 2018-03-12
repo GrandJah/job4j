@@ -78,7 +78,6 @@ public class UseUserTest {
     public void whenLogoutThenOK() {
         JSONObject json = new JSONObject();
         json.put("action", "logout");
-        new UserStore().addUser("Login", "Name", "email");
         test("{}", json);
         verify(this.session).removeAttribute(eq("user"));
     }
@@ -89,8 +88,8 @@ public class UseUserTest {
     @Test
     public void whenNotLoginInUsersThenOK() {
         JSONObject json = new JSONObject();
-        json.put("login", "Fghwe");
-        json.put("password", "dcsdc");
+        json.put("login", "nonUser");
+        json.put("password", "***");
         test("{}", json);
         verify(this.session, never()).setAttribute(eq("user"), any());
     }
@@ -99,7 +98,7 @@ public class UseUserTest {
      * Test method.
      */
     @Test
-    public void whenLoginInUsersThenSetSesion() {
+    public void whenLoginInUsersThenSetSession() {
         JSONObject json = new JSONObject();
         json.put("login", "login");
         json.put("password", "pass");

@@ -21,7 +21,7 @@ public class Location implements JSONConvert {
     /**
      * Patterns for validate.
      */
-    private static final Pattern PATTERN = Pattern.compile("[A-zА-я]{3,30}");
+    private static final Pattern PATTERN = Pattern.compile("[A-zА-я]{2,30}");
 
     /** validate params.
      * @param country login
@@ -29,7 +29,9 @@ public class Location implements JSONConvert {
      * @return true if params correct
      */
     public static boolean validate(String country, String city) {
-        return PATTERN.matcher(country).find() && PATTERN.matcher(city).find();
+        boolean flag = PATTERN.matcher(country).find();
+        flag &= PATTERN.matcher(city).find();
+        return flag;
     }
 
     /**
@@ -80,14 +82,6 @@ public class Location implements JSONConvert {
      * Unknown city.
      */
     public static final Location UNKNOWN = Location.valueOf("-------");
-
-
-    /**
-     * @param city city name
-     */
-    private Location(String city) {
-        this(city, null);
-    }
 
     /**
      * @param city city name

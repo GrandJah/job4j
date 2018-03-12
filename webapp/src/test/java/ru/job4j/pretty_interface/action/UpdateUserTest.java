@@ -11,6 +11,8 @@ import ru.job4j.data_base.store.UserStore;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.HashMap;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -74,29 +76,29 @@ public class UpdateUserTest {
      * @return JSON object
      */
     private JSONObject setJSONUser(String name, String email, String role, String country, String city) {
-        JSONObject json = new JSONObject();
+        HashMap<String, String> json = new HashMap<>();
         json.put("login", "testDataUser");
         json.put("name", name);
         json.put("email", email);
         json.put("role", role);
         json.put("country", country);
         json.put("city", city);
-        return json;
+        return new JSONObject(json);
     }
 
     /**
      * Test method.
      */
     @Test
-    public void whenCorrectRulesAndParmsThenOK() {
-        test("dces", "dc@sd.ds", "DEFAULT_USER", "dcWEs", "dcsdc", Role.ADMINISTRATOR, true);
+    public void whenCorrectRulesAndParamsThenOK() {
+        test("drag", "dc@sd.ds", "DEFAULT_USER", "dcWEs", "dolly", Role.ADMINISTRATOR, true);
     }
 
     /**
      * Test method.
      */
     @Test
-    public void whenNotRulesAndParmsThenFalse() {
+    public void whenNotRulesAndParamsThenFalse() {
         test("dcs", "dcs", "dcs", "dcs", "d@csd.c", Role.DEFAULT_USER, false);
     }
 
@@ -104,15 +106,15 @@ public class UpdateUserTest {
      * Test method.
      */
     @Test
-    public void whenNotCorrectParmsThenFalse() {
-        test("dcs", "dcs", "dcs", "dcs", "dcsd.c", Role.ADMINISTRATOR, false);
+    public void whenNotCorrectParamsThenFalse() {
+        test("dcs", "dcs", "dcs", "dcs", "d.c", Role.ADMINISTRATOR, false);
     }
 
     /**
      * Test method.
      */
     @Test
-    public void whenCorrectRulesAndParmsThenOK3() {
-        test("dcrjs", "dc@ee.ss", "ADMINISTRATOR", "dcnns", "deccsdrrc", Role.ADMINISTRATOR, true);
+    public void whenCorrectRulesAndParamsThenOK2() {
+        test("dragon", "dc@ee.ss", "ADMINISTRATOR", "dolly", "manchester", Role.ADMINISTRATOR, true);
     }
 }

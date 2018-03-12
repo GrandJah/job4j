@@ -9,6 +9,8 @@ import ru.job4j.data_base.store.UserStore;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.HashMap;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -48,11 +50,11 @@ public class CreateUserTest {
      * @return JSON object
      */
     private JSONObject setJSONUser(String login, String name, String email) {
-        JSONObject json = new JSONObject();
+        HashMap<String, String> json = new HashMap<>();
         json.put("login", login);
         json.put("name", name);
         json.put("email", email);
-        return json;
+        return  new JSONObject(json);
     }
 
     /** test method.
@@ -73,7 +75,7 @@ public class CreateUserTest {
      * Test method.
      */
     @Test
-    public void whenCorrectRulesAndParmsThenOK() {
+    public void whenCorrectRulesAndParamsThenOK() {
         test("creteTestUser", "dcs", "d@csd.c", Role.ADMINISTRATOR, true);
         this.users.deleteUser("creteTestUser");
     }
@@ -107,6 +109,6 @@ public class CreateUserTest {
      */
     @Test
     public void whenNotCorrectedEmailThenFalse() {
-        test("creteTestUser", "dcsss", "dcsd.c", Role.ADMINISTRATOR, false);
+        test("creteTestUser", "dirty", "em", Role.ADMINISTRATOR, false);
     }
 }

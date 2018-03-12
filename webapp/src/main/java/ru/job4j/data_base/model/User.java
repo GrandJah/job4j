@@ -67,18 +67,10 @@ public class User implements Comparable<User>, JSONConvert {
         return this.email;
     }
 
-    /**
-     * Getter.
-     *
-     * @return createDate createDate
-     */
-    public long getCreateDate() {
-        return this.createDate;
-    }
-
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
+        final StringBuilder sb;
+        sb = new StringBuilder("User{");
         sb.append("name='").append(name).append('\'');
         sb.append(", login='").append(login).append('\'');
         sb.append(", email='").append(email).append('\'');

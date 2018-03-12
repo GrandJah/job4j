@@ -1,7 +1,5 @@
 package ru.job4j.data_base;
 
-import org.json.simple.parser.ParseException;
-
 /**
  * junior.
  *
@@ -22,9 +20,8 @@ public interface JSONConvert {
 
     /**
      * @param string string
-     * @throws ParseException parse exception
      */
-    default void fromJSON(String string) throws ParseException {
+    default void fromJSON(String string) {
         throw new UnsupportedOperationException();
     }
 }

@@ -8,12 +8,10 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,9 +42,6 @@ public class AuthFilterTest {
      * @throws ServletException ServletException
      */
     private void test(String path, User user) throws IOException, ServletException {
-        HttpSession session = mock(HttpSession.class);
-        when(session.getAttribute(eq("user"))).thenReturn(user);
-        when(this.req.getSession()).thenReturn(session);
         when(this.req.getServletPath()).thenReturn(path);
         new AuthFilter().doFilter(this.req, this.resp, this.filter);
     }
@@ -56,7 +51,7 @@ public class AuthFilterTest {
      * @throws ServletException ServletException
      */
     @Test
-    public void whenNotLogin() throws IOException, ServletException {
+    public void whenWrongURL() throws IOException, ServletException {
         test("/hb/k", null);
         verify(this.resp).sendRedirect(anyString());
     }
@@ -66,8 +61,8 @@ public class AuthFilterTest {
      * @throws ServletException ServletException
      */
     @Test
-    public void whenNotLoginUserDefined() throws IOException, ServletException {
-        test("/url", User.UNKNOWN);
+    public void whenSRCPathThenGo() throws IOException, ServletException {
+        test("/src", User.UNKNOWN);
         verify(this.filter).doFilter(this.req, this.resp);
     }
 
@@ -76,9 +71,9 @@ public class AuthFilterTest {
      * @throws ServletException ServletException
      */
     @Test
-    public void whenLoginUrl() throws IOException, ServletException {
-        test("/login", User.UNKNOWN);
-        verify(this.filter).doFilter(this.req, this.resp);
+    public void whenWrongAjaxUrlThenRedirect() throws IOException, ServletException {
+        test("/ajax/gh", User.UNKNOWN);
+        verify(this.resp).sendRedirect(anyString());
     }
 
     /** test.
@@ -86,8 +81,8 @@ public class AuthFilterTest {
      * @throws ServletException ServletException
      */
     @Test
-    public void whenLoginUrlnotUser() throws IOException, ServletException {
-        test("/login", null);
+    public void whenAjaxUrlThenGo() throws IOException, ServletException {
+        test("/ajax", null);
         verify(this.filter).doFilter(this.req, this.resp);
     }
 
@@ -98,5 +93,4 @@ public class AuthFilterTest {
         new AuthFilter().init(mock(FilterConfig.class));
         new AuthFilter().destroy();
     }
-
 }

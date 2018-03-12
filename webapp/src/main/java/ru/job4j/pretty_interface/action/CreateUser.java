@@ -1,7 +1,7 @@
 package ru.job4j.pretty_interface.action;
 
 import org.json.simple.JSONObject;
-import ru.job4j.authentication.Authentification;
+import ru.job4j.authentication.Authentication;
 import ru.job4j.data_base.JSONConvert;
 import ru.job4j.data_base.model.User;
 import ru.job4j.data_base.store.UserStore;
@@ -20,7 +20,7 @@ public class CreateUser implements AjaxAction {
     @Override
     public JSONConvert action(JSONObject data, HttpSession session) {
         boolean success = false;
-        if (Authentification.checkRules(session, "create")) {
+        if (Authentication.checkRules(session, "create")) {
             String login = (String) data.get("login");
             String name = (String) data.get("name");
             String email = (String) data.get("email");

@@ -1,7 +1,7 @@
 package ru.job4j.pretty_interface.action;
 
 import org.json.simple.JSONObject;
-import ru.job4j.authentication.Authentification;
+import ru.job4j.authentication.Authentication;
 import ru.job4j.data_base.JSONConvert;
 import ru.job4j.data_base.model.Location;
 import ru.job4j.data_base.model.Role;
@@ -18,8 +18,8 @@ import javax.servlet.http.HttpSession;
 public class UpdateUser implements AjaxAction {
     @Override
     public JSONConvert action(JSONObject data, HttpSession session) {
-        boolean editUser = Authentification.checkRules(session, "edit_user");
-        boolean editRole = Authentification.checkRules(session, "edit_role");
+        boolean editUser = Authentication.checkRules(session, "edit_user");
+        boolean editRole = Authentication.checkRules(session, "edit_role");
         boolean success = false;
         String login = (String) data.get("login");
         String name = (String) data.get("name");

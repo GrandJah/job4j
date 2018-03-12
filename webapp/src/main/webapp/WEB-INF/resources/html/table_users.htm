@@ -18,11 +18,17 @@
     <tr class="edit" id="edit_form" style="display: none">
         <td colspan=6>
             <form id="update_form">
-                <label class="label">login</label>
-                <input type="hidden" name="login" value="login">
-                <input type="text" name="name" value="name" title="name">
-                <input type="text" name="email" value="email" title="email">
-                <label class="label">role</label>
+                <div id="edit_login"></div>
+                <div class="input-group">
+                    <input type="text" pattern="[A-zА-я]{3,50}" class="form-control" name="name" title="name">
+                    <div class="valid-feedback">  Ok! </div>
+                    <div class="invalid-feedback"> Неверный name </div>
+                </div>
+                <div class="input-group">
+                    <input type="email" pattern="[a-z]+@[a-z]+\.[a-z]+" max="30" class="form-control" name="email" title="email">
+                    <div class="valid-feedback">  Ok! </div>
+                    <div class="invalid-feedback"> Неверный e-mail </div>
+                </div>
                 <div id="edit_role"></div>
                 <div id="edit_country"></div>
                 <div id="edit_city"></div>

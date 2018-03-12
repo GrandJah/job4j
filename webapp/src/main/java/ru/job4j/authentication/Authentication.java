@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
  * @version 0.1
  * @since 09.03.2018
  */
-public class Authentification {
+public class Authentication {
     /** check rules.
      * @param session session
      * @param rules check rules.

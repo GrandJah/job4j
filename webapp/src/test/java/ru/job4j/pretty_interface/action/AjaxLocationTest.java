@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.HashMap;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -15,14 +17,14 @@ public class AjaxLocationTest {
     /**
      * json request.
      */
-    private JSONObject json = new JSONObject();
+    private HashMap<String, String> json = new HashMap<>();
 
     /**
      * @param expect expect json answer
      */
     private void test(String expect) {
         AjaxLocation location = new AjaxLocation();
-        String actual = location.action(this.json, mock(HttpSession.class)).toJSON();
+        String actual = location.action(new JSONObject(this.json), mock(HttpSession.class)).toJSON();
         assertEquals(expect, actual);
     }
 
@@ -57,7 +59,7 @@ public class AjaxLocationTest {
      * Test method.
      */
     @Test
-    public void whenRequestCitiesEmptyCountryThenReturnEmtyAnswer() {
+    public void whenRequestCitiesEmptyCountryThenReturnEmptyAnswer() {
         this.json.put("type", "city");
         test("{\"data\":[]}");
     }

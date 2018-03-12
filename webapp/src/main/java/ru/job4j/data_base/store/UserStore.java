@@ -23,13 +23,6 @@ public class UserStore implements IUserStore {
      */
     private static DBInterface db = new DataBasePool();
 
-    /** Setter.
-     * @param db db_interface
-     */
-    protected static void setDb(DBInterface db) {
-        UserStore.db = db;
-    }
-
     @Override
     public User getUser(String login) {
         return login == null ? User.UNKNOWN : getUsers(login).get(0);

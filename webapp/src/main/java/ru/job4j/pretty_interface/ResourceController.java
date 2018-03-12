@@ -18,7 +18,7 @@ public class ResourceController extends HttpServlet {
      */
     private static final Logger LOG = Logger.getLogger("ResourceController.class");
     /**
-     * Resourse path.
+     * Resource path.
      */
     private static final String RESOURCE_PATH = "/WEB-INF/resources";
     @Override

@@ -40,7 +40,7 @@ public class UseLocation {
      * @param login login user
      * @param location location;
      */
-    void setUserLocation(String login, Location location) {
+    private void setUserLocation(String login, Location location) {
         DB.goDB("INSERT INTO user_location (user_id, city_id) VALUES ((select id FROM users WHERE login = ?),(SELECT id FROM cities WHERE city = ? AND country = (SELECT id FROM countries where countries.country = ?)))",
                 login, location.getCity(), location.geCountry());
     }
@@ -48,7 +48,7 @@ public class UseLocation {
     /** delete location.
      * @param login login
      */
-    void deleteLocation(String login) {
+    private void deleteLocation(String login) {
         DB.goDB("delete from user_location where user_id = (select id from users where login = ?)", login);
     }
 
