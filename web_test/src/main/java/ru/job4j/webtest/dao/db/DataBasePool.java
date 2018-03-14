@@ -57,7 +57,7 @@ public class DataBasePool {
         boolean success = false;
         try (Connection connection = DataBasePool.POOL.getConnection()) {
             try (PreparedStatement db = connection.prepareStatement(query)) {
-                if (params != null && params.length > 0) {
+                if (params.length > 0) {
                     ParameterMetaData meta = db.getParameterMetaData();
                     for (int i = 1; i <= params.length; i++) {
                         db.setObject(i, params[i - 1], meta.getParameterType(i));
@@ -66,7 +66,7 @@ public class DataBasePool {
                 try {
                     db.execute();
                     ResultSet rs = db.getResultSet();
-                    if (function != null && rs != null) {
+                    if (function != null) {
                         function.go(rs);
                     }
                     connection.commit();
