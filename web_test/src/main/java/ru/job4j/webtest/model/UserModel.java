@@ -3,7 +3,7 @@ package ru.job4j.webtest.model;
 /**
  * UserModel.
  */
-public abstract class UserModel extends Model {
+public class UserModel extends Model {
     /**
      * user login.
      */
@@ -36,6 +36,7 @@ public abstract class UserModel extends Model {
     public UserModel(int id, String login, int address) {
         super(id);
         this.login = login;
+        this.address = address;
     }
 
     /** getter.
