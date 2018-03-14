@@ -1,14 +1,14 @@
 package ru.job4j.webtest.dao;
 
-import ru.job4j.webtest.model.MusicType;
+import ru.job4j.webtest.model.MusicTypeModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * DAO MusicType class.
+ * DAO MusicTypeModel class.
  */
-public class MusicTypeDao extends AbstractModelDao<MusicType> {
+public class MusicTypeDao extends AbstractModelDao<MusicTypeModel> {
     /**
      * Create DAO music type.
      */
@@ -16,22 +16,22 @@ public class MusicTypeDao extends AbstractModelDao<MusicType> {
         super("musictypes");
     }
 
-    /** Create MusicType Object.
+    /** Create MusicTypeModel Object.
      * @param musictype music type
-     * @return MusicType Object
+     * @return MusicTypeModel Object
      */
-    public MusicType create(String musictype) {
-        return insert(new MusicType(0, musictype));
+    public MusicTypeModel create(String musictype) {
+        return insert(new MusicTypeModel(0, musictype));
     }
 
     @Override
-    Object[] params(MusicType entity) {
+    Object[] params(MusicTypeModel entity) {
         return new Object[]{entity.getType()};
     }
 
     @Override
-    MusicType convert(ResultSet rs) throws SQLException {
-        return new MusicType(rs.getInt("id"), rs.getString("type"));
+    MusicTypeModel convert(ResultSet rs) throws SQLException {
+        return new MusicTypeModel(rs.getInt("id"), rs.getString("type"));
     }
 
     @Override

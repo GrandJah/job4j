@@ -1,14 +1,14 @@
 package ru.job4j.webtest.dao;
 
-import ru.job4j.webtest.model.Address;
+import ru.job4j.webtest.model.AddressModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Address DAO class.
+ * AddressModel DAO class.
  */
-public class AddressDao extends AbstractModelDao<Address> {
+public class AddressDao extends AbstractModelDao<AddressModel> {
     /**
      * Create DAO address.
      */
@@ -16,22 +16,22 @@ public class AddressDao extends AbstractModelDao<Address> {
         super("addresses");
     }
 
-    /** Create Address Object.
+    /** Create AddressModel Object.
      * @param address address
-     * @return Address Object
+     * @return AddressModel Object
      */
-    public Address create(String address) {
-        return insert(new Address(0, address));
+    public AddressModel create(String address) {
+        return insert(new AddressModel(0, address));
     }
 
     @Override
-    Object[] params(Address entity) {
+    Object[] params(AddressModel entity) {
         return new Object[]{entity.getAddress()};
     }
 
     @Override
-    Address convert(ResultSet rs) throws SQLException {
-        return new Address(rs.getInt("id"), rs.getString("address"));
+    AddressModel convert(ResultSet rs) throws SQLException {
+        return new AddressModel(rs.getInt("id"), rs.getString("address"));
     }
 
     @Override

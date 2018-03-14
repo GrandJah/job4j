@@ -3,7 +3,7 @@ package ru.job4j.webtest.model;
 /**
  * Music type.
  */
-public class MusicType extends Model {
+public class MusicTypeModel extends Model {
     /**
      * Music type.
      */
@@ -13,7 +13,7 @@ public class MusicType extends Model {
      * @param id   id model
      * @param type type Music type
      */
-    public MusicType(int id, String type) {
+    public MusicTypeModel(int id, String type) {
         super(id);
         this.type = type;
     }
@@ -38,7 +38,7 @@ public class MusicType extends Model {
 
     @Override
     public boolean equals(Object o) {
-        return this == o || ((o != null && getClass() == o.getClass()) && this.type.equals(((MusicType) o).type));
+        return this == o || ((o != null && getClass() == o.getClass()) && this.type.equals(((MusicTypeModel) o).type));
     }
 
     @Override

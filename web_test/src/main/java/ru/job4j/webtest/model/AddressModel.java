@@ -1,9 +1,9 @@
 package ru.job4j.webtest.model;
 
 /**
- * Address.
+ * AddressModel.
  */
-public class Address extends Model {
+public class AddressModel extends Model {
     /**
      * address.
      */
@@ -13,7 +13,7 @@ public class Address extends Model {
      * @param id id model.
      * @param address address
      */
-    public Address(int id, String address) {
+    public AddressModel(int id, String address) {
         super(id);
         this.address = address;
     }
@@ -34,7 +34,7 @@ public class Address extends Model {
 
     @Override
     public boolean equals(Object o) {
-        return this == o || ((o != null && getClass() == o.getClass()) && this.address.equals(((Address) o).address));
+        return this == o || ((o != null && getClass() == o.getClass()) && this.address.equals(((AddressModel) o).address));
     }
 
     @Override

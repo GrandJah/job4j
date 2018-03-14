@@ -1,9 +1,9 @@
 package ru.job4j.webtest.model;
 
 /**
- * Role.
+ * RoleModel.
  */
-public class Role extends Model {
+public class RoleModel extends Model {
     /**
      * name role.
      */
@@ -11,9 +11,9 @@ public class Role extends Model {
 
     /**
      * @param id id model
-     * @param name name Role
+     * @param name name RoleModel
      */
-    public Role(int id, String name) {
+    public RoleModel(int id, String name) {
         super(id);
         this.name = name;
     }
@@ -34,7 +34,7 @@ public class Role extends Model {
 
     @Override
     public boolean equals(Object o) {
-        return this == o || ((o != null && getClass() == o.getClass()) && this.name.equals(((Role) o).name));
+        return this == o || ((o != null && getClass() == o.getClass()) && this.name.equals(((RoleModel) o).name));
     }
 
     @Override

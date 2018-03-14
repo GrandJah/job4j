@@ -1,6 +1,6 @@
 package ru.job4j.webtest.dao;
 
-import ru.job4j.webtest.model.Role;
+import ru.job4j.webtest.model.RoleModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 /**
  * DAO role class.
  */
-public class RoleDao extends AbstractModelDao<Role> {
+public class RoleDao extends AbstractModelDao<RoleModel> {
     /**
      * Create DAO role.
      */
@@ -16,22 +16,22 @@ public class RoleDao extends AbstractModelDao<Role> {
         super("roles");
     }
 
-    /** Create Role Object.
-     * @param name name Role
-     * @return Role
+    /** Create RoleModel Object.
+     * @param name name RoleModel
+     * @return RoleModel
      */
-    public Role create(String name) {
-        return insert(new Role(0, name));
+    public RoleModel create(String name) {
+        return insert(new RoleModel(0, name));
     }
 
     @Override
-    Object[] params(Role entity) {
+    Object[] params(RoleModel entity) {
         return new Object[]{entity.getName()};
     }
 
     @Override
-    Role convert(ResultSet rs) throws SQLException {
-        return new Role(rs.getInt("id"), rs.getString("name"));
+    RoleModel convert(ResultSet rs) throws SQLException {
+        return new RoleModel(rs.getInt("id"), rs.getString("name"));
     }
 
     @Override
