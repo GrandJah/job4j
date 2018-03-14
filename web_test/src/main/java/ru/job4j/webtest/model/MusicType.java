@@ -3,11 +3,46 @@ package ru.job4j.webtest.model;
 /**
  * Music type.
  */
-public abstract class MusicType extends Model {
+public class MusicType extends Model {
     /**
-     * @param id id model.
+     * Music type.
      */
-    protected MusicType(int id) {
+    private String type;
+
+    /**
+     * @param id   id model
+     * @param type type Music type
+     */
+    public MusicType(int id, String type) {
         super(id);
+        this.type = type;
+    }
+
+    /**
+     * getter.
+     *
+     * @return Music type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * setter.
+     *
+     * @param type Music type
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o || ((o != null && getClass() == o.getClass()) && this.type.equals(((MusicType) o).type));
+    }
+
+    @Override
+    public int hashCode() {
+        return this.type.hashCode();
     }
 }
