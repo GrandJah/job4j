@@ -51,6 +51,16 @@ public class User {
         return list.size() > 0 ? new User(list.getFirst()) : User.EMPTY;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return this == User.EMPTY ? this == o : this.user.equals(((User) o).user);
+    }
+
+    @Override
+    public int hashCode() {
+        return this == User.EMPTY ? 0 : this.user.hashCode();
+    }
+
     /** crate new user.
      * @param login user name
      * @param address address
@@ -59,7 +69,7 @@ public class User {
      */
     public static User newUser(String login, String address, Role role) {
         AddressModelDao aDao = new AddressModelDao();
-        if (valueOf(login) == User.EMPTY
+        if (valueOf(login) != User.EMPTY
                 || aDao.findByAddress(address).size() != 0) {
             throw new IllegalArgumentException();
         }

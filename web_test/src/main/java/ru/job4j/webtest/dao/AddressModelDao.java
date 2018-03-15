@@ -50,6 +50,6 @@ public class AddressModelDao extends AbstractModelDao<AddressModel> {
      * @return addresses
      */
     public Collection<AddressModel> findByAddress(String address) {
-        return find("address = 7", address);
+        return find("address = ?", address);
     }
 }
