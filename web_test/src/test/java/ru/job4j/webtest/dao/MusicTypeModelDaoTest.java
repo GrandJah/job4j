@@ -17,11 +17,11 @@ public class MusicTypeModelDaoTest {
     @Test(expected = UnsupportedOperationException.class)
     public void whenFullTest() {
         MusicTypeDao musicTypeDao = new MusicTypeDao();
-        MusicTypeModel musicTypeModel = musicTypeDao.create("ROCK");
+        MusicTypeModel musicTypeModel = musicTypeDao.create("type1");
         Collection collection = musicTypeDao.readAll();
         assertEquals(collection.contains(musicTypeModel), true);
         MusicTypeModel newMusicTypeModel = musicTypeDao.read(musicTypeModel.getId());
-        newMusicTypeModel.setType("POP");
+        newMusicTypeModel.setType("type2");
         musicTypeDao.update(newMusicTypeModel);
         collection = musicTypeDao.readAll();
         assertEquals(collection.contains(musicTypeModel), false);

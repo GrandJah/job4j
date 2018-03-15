@@ -25,11 +25,6 @@ public class DataBasePool {
     private static final PoolingDataSource POOL = new PoolingDataSource();
 
     static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         new PoolableConnectionFactory(
                 new DriverManagerConnectionFactory("jdbc:postgresql://localhost:5432/webtest_test",
                         "postgres", "postgres"),

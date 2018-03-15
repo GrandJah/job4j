@@ -4,6 +4,8 @@ import ru.job4j.webtest.model.MusicTypeModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * DAO MusicTypeModel class.
@@ -12,7 +14,7 @@ public class MusicTypeDao extends AbstractModelDao<MusicTypeModel> {
     /**
      * Create DAO music type.
      */
-    MusicTypeDao() {
+    public MusicTypeDao() {
         super("musictypes");
     }
 
@@ -42,5 +44,24 @@ public class MusicTypeDao extends AbstractModelDao<MusicTypeModel> {
     @Override
     String getQueryUpdatePartitionSet() {
         return "type = ?";
+    }
+
+    /** find by field types.
+     * @param type types
+     * @return types
+     */
+    public Collection<MusicTypeModel> findByType(String type) {
+        return find("type = 7", type);
+    }
+
+    /** get musictypes user's.
+     * @param user user id
+     * @return music types
+     */
+    public Collection<MusicTypeModel> getAllTypesForUser(int user) {
+        final LinkedList<MusicTypeModel> list = new LinkedList<>();
+        DB.goDB("",
+                rs -> list.add(convert(rs)), user);
+        return list;
     }
 }

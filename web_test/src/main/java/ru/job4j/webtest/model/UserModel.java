@@ -15,6 +15,24 @@ public class UserModel extends Model {
     private int address;
 
     /**
+     * role user.
+     */
+    private int role;
+
+    /**
+     * @param id id model
+     * @param login user login
+     * @param address user address
+     * @param role role roles
+     */
+    public UserModel(int id, String login, int address, int role) {
+        super(id);
+        this.login = login;
+        this.address = address;
+        this.role = role;
+    }
+
+    /**
      * @return address
      */
     public int getAddress() {
@@ -28,15 +46,18 @@ public class UserModel extends Model {
         this.address = address;
     }
 
-    /**
-     * @param id id model
-     * @param login user login
-     * @param address user address
+    /** getter.
+     * @return role.
      */
-    public UserModel(int id, String login, int address) {
-        super(id);
-        this.login = login;
-        this.address = address;
+    public int getRole() {
+        return role;
+    }
+
+    /** setter.
+     * @param role newRole
+     */
+    public void setRole(int role) {
+        this.role = role;
     }
 
     /** getter.

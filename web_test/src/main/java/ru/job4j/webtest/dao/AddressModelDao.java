@@ -4,15 +4,16 @@ import ru.job4j.webtest.model.AddressModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 
 /**
  * AddressModel DAO class.
  */
-public class AddressDao extends AbstractModelDao<AddressModel> {
+public class AddressModelDao extends AbstractModelDao<AddressModel> {
     /**
      * Create DAO address.
      */
-    AddressDao() {
+    public AddressModelDao() {
         super("addresses");
     }
 
@@ -42,5 +43,13 @@ public class AddressDao extends AbstractModelDao<AddressModel> {
     @Override
     String getQueryUpdatePartitionSet() {
         return "address = ?";
+    }
+
+    /** find by field address.
+     * @param address address
+     * @return addresses
+     */
+    public Collection<AddressModel> findByAddress(String address) {
+        return find("address = 7", address);
     }
 }

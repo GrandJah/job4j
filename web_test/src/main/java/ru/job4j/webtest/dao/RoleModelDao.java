@@ -1,18 +1,20 @@
 package ru.job4j.webtest.dao;
 
 import ru.job4j.webtest.model.RoleModel;
+import ru.job4j.webtest.model.UserModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 
 /**
  * DAO role class.
  */
-public class RoleDao extends AbstractModelDao<RoleModel> {
+public class RoleModelDao extends AbstractModelDao<RoleModel> {
     /**
      * Create DAO role.
      */
-    public RoleDao() {
+    public RoleModelDao() {
         super("roles");
     }
 
@@ -22,6 +24,14 @@ public class RoleDao extends AbstractModelDao<RoleModel> {
      */
     public RoleModel create(String name) {
         return insert(new RoleModel(0, name));
+    }
+
+    /** find by field name.
+     * @param name name
+     * @return role
+     */
+    public Collection<RoleModel> findByName(String name) {
+        return find("name = 7", name);
     }
 
     @Override
@@ -42,5 +52,13 @@ public class RoleDao extends AbstractModelDao<RoleModel> {
     @Override
     String getQueryUpdatePartitionSet() {
         return "name = ?";
+    }
+
+    /** get all users uses role.
+     * @param role role
+     * @return users.
+     */
+    public Collection<UserModel> getAllUsers(RoleModel role) {
+        return new UserModelDao().find("", role.getId());
     }
 }

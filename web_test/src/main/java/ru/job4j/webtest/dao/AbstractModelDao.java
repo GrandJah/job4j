@@ -17,7 +17,7 @@ public abstract class AbstractModelDao<E extends Model> {
     /**
      * Data base connection.
      */
-    private static final DataBasePool DB = new DataBasePool();
+    protected static final DataBasePool DB = new DataBasePool();
 
     /**
      * Table name db.
@@ -49,6 +49,22 @@ public abstract class AbstractModelDao<E extends Model> {
             throw new UnsupportedOperationException();
         }
         return entity;
+    }
+
+    /**find by expression.
+     * @param findExpression expression query partition query
+     * @param param param
+     * @return collection found elements
+     */
+    final Collection<E>  find(String findExpression, Object... param) {
+        final LinkedList<E> list = new LinkedList<>();
+        DB.goDB(String.format("select * from %s where %s", this.tableName, findExpression),
+                rs -> {
+                    while (rs.next()) {
+                        list.add(convert(rs));
+                    }
+                }, param);
+        return list;
     }
 
     /** get all entity.

@@ -16,20 +16,20 @@ public class AddressModelDaoTest {
      */
     @Test(expected = UnsupportedOperationException.class)
     public void whenFullTest() {
-        AddressDao addressDao = new AddressDao();
-        AddressModel addressModel = addressDao.create("USSR");
-        Collection collection = addressDao.readAll();
+        AddressModelDao addressModelDao = new AddressModelDao();
+        AddressModel addressModel = addressModelDao.create("USSR");
+        Collection collection = addressModelDao.readAll();
         assertEquals(collection.contains(addressModel), true);
-        AddressModel newAddressModel = addressDao.read(addressModel.getId());
+        AddressModel newAddressModel = addressModelDao.read(addressModel.getId());
         newAddressModel.setAddress("RF");
-        addressDao.update(newAddressModel);
-        collection = addressDao.readAll();
+        addressModelDao.update(newAddressModel);
+        collection = addressModelDao.readAll();
         assertEquals(collection.contains(addressModel), false);
         assertEquals(collection.contains(newAddressModel), true);
-        addressDao.delete(addressModel.getId());
-        collection = addressDao.readAll();
+        addressModelDao.delete(addressModel.getId());
+        collection = addressModelDao.readAll();
         assertEquals(collection.contains(addressModel), false);
         assertEquals(collection.contains(newAddressModel), false);
-        addressDao.insert(newAddressModel);
+        addressModelDao.insert(newAddressModel);
     }
 }

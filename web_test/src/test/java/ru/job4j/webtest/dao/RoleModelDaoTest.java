@@ -17,20 +17,20 @@ public class RoleModelDaoTest {
      */
     @Test(expected = UnsupportedOperationException.class)
     public void whenFullTest() {
-        RoleDao roleDao = new RoleDao();
-        RoleModel roleModel = roleDao.create("RoleUser");
-        Collection collection = roleDao.readAll();
+        RoleModelDao roleModelDao = new RoleModelDao();
+        RoleModel roleModel = roleModelDao.create("RoleUser");
+        Collection collection = roleModelDao.readAll();
         assertEquals(collection.contains(roleModel), true);
-        RoleModel newRoleModel = roleDao.read(roleModel.getId());
+        RoleModel newRoleModel = roleModelDao.read(roleModel.getId());
         newRoleModel.setName("NewRoleUser");
-        roleDao.update(newRoleModel);
-        collection = roleDao.readAll();
+        roleModelDao.update(newRoleModel);
+        collection = roleModelDao.readAll();
         assertEquals(collection.contains(roleModel), false);
         assertEquals(collection.contains(newRoleModel), true);
-        roleDao.delete(roleModel.getId());
-        collection = roleDao.readAll();
+        roleModelDao.delete(roleModel.getId());
+        collection = roleModelDao.readAll();
         assertEquals(collection.contains(roleModel), false);
         assertEquals(collection.contains(newRoleModel), false);
-        roleDao.insert(newRoleModel);
+        roleModelDao.insert(newRoleModel);
     }
 }

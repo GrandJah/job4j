@@ -2,6 +2,7 @@ package ru.job4j.webtest.dao;
 
 import org.junit.Test;
 import ru.job4j.webtest.model.AddressModel;
+import ru.job4j.webtest.model.RoleModel;
 import ru.job4j.webtest.model.UserModel;
 
 import java.util.Collection;
@@ -17,13 +18,14 @@ public class UserModelDaoTest {
      */
     @Test(expected = UnsupportedOperationException.class)
     public void whenFullTest() {
+        RoleModel role = new RoleModelDao().create("RoleTest");
         UserModelDao userModelDao = new UserModelDao();
-        AddressModel addressModel = new AddressDao().create("Address");
-        UserModel userModel = userModelDao.create("Login", addressModel.getId());
+        AddressModel addressModel = new AddressModelDao().create("Address");
+        UserModel userModel = userModelDao.create("Login", addressModel.getId(), role.getId());
         Collection collection = userModelDao.readAll();
         assertEquals(collection.contains(userModel), true);
         UserModel newUserModel = userModelDao.read(userModel.getId());
-        AddressModel newAddressModel = new AddressDao().create("newAddress");
+        AddressModel newAddressModel = new AddressModelDao().create("newAddress");
         newUserModel.setLogin("NewLogin");
         newUserModel.setAddress(newAddressModel.getId());
         userModelDao.update(newUserModel);
