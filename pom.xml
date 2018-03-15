@@ -29,6 +29,7 @@
         <module>sgl</module>
         <module>sql_test</module>
         <module>webapp</module>
+        <module>web_test</module>
     </modules>
 
 	<dependencies>
