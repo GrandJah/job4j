@@ -7,6 +7,7 @@ import ru.job4j.webtest.model.UserModel;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  * Class User.
@@ -53,7 +54,7 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        return this == User.EMPTY ? this == o : this.user.equals(((User) o).user);
+        return this == o || (o != null && getClass() == o.getClass() && Objects.equals(this.user, ((User) o).user));
     }
 
     @Override
@@ -70,7 +71,8 @@ public class User {
     public static User newUser(String login, String address, Role role) {
         AddressModelDao aDao = new AddressModelDao();
         if (valueOf(login) != User.EMPTY
-                || aDao.findByAddress(address).size() != 0) {
+                || aDao.findByAddress(address).size() != 0
+                || role == Role.EMPTY) {
             throw new IllegalArgumentException();
         }
         return new User(User.DAO.create(login, aDao.create(address).getId(), role.getId()));
@@ -105,7 +107,6 @@ public class User {
         return MusicType.getAllMusicTypes(this);
     }
 
-
     /** find User.
      * @param address address.
      * @param role role
@@ -119,5 +120,12 @@ public class User {
             users[i++] = new User(model);
         }
         return users;
+    }
+
+    /** add music type.
+     * @param music music
+     */
+    public void addMusicTypes(MusicType music) {
+        User.DAO.addMusicType(this.user.getId(), music.getId());
     }
 }

@@ -44,6 +44,4 @@ public class RoleTest {
         assertEquals(0, Role.EMPTY.hashCode());
         assertEquals(Role.EMPTY, Role.valueOf(null));
     }
-
-
 }

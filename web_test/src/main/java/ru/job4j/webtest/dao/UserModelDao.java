@@ -94,4 +94,13 @@ public class UserModelDao extends AbstractModelDao<UserModel> {
         }, param.toArray());
         return list;
     }
+
+    /** add music type for user.
+     * @param user user
+     * @param music type music.
+     */
+    public void addMusicType(int user, int music) {
+        DB.goDB("INSERT INTO usermusic (user_id, musictype) VALUES (?,?)",
+                user, music);
+    }
 }

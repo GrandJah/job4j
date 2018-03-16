@@ -4,6 +4,7 @@ import ru.job4j.webtest.dao.RoleModelDao;
 import ru.job4j.webtest.model.RoleModel;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  * Class role.
@@ -50,7 +51,7 @@ public class Role {
 
     @Override
     public boolean equals(Object o) {
-        return this == Role.EMPTY ? this == o : this.role.equals(((Role) o).role);
+        return this == o || (o != null && getClass() == o.getClass() && Objects.equals(this.role, ((Role) o).role));
     }
 
     @Override
