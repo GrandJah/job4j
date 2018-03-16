@@ -14,7 +14,7 @@ public class UserTest {
      * test exception.
      */
     @Test
-    public void whenOneRoleThenOneHash() {
+    public void whenOneUserThenOneHash() {
         Role role = Role.valueOf("USER");
         Role admin = Role.valueOf("ADMIN");
         String address = "addressHash";
@@ -30,5 +30,14 @@ public class UserTest {
         MusicType music = MusicType.valueOf("JAZZ");
         user.addMusicTypes(music);
         assertArrayEquals(new MusicType[]{music}, user.getTypes());
+    }
+
+    /**
+     * test exception.
+     */
+    @Test (expected = IllegalArgumentException.class)
+    public void whenCreatingUserIfPresentThenThrowException() {
+        User.newUser("testException", "addressException",  Role.valueOf("USER"));
+        User.newUser("testException", "addressException",  Role.valueOf("USER"));
     }
 }

@@ -3,7 +3,6 @@ package ru.job4j.webtest;
 import ru.job4j.webtest.dao.MusicTypeDao;
 import ru.job4j.webtest.model.MusicTypeModel;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -77,18 +76,6 @@ public class MusicType {
      */
     public static MusicType[] getAllMusicTypes(User user) {
         LinkedList<MusicTypeModel> list = new LinkedList<>(MusicType.DAO.getAllTypesForUser(user.getId()));
-        MusicType[] types = new MusicType[list.size()]; int i = 0;
-        for (MusicTypeModel model : list) {
-            types[i++] = new MusicType(model);
-        }
-        return types;
-    }
-
-    /** get all music types.
-     * @return users
-     */
-    public static MusicType[] getAll() {
-        Collection<MusicTypeModel> list = MusicType.DAO.readAll();
         MusicType[] types = new MusicType[list.size()]; int i = 0;
         for (MusicTypeModel model : list) {
             types[i++] = new MusicType(model);
