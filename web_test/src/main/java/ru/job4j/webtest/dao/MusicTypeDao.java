@@ -51,7 +51,7 @@ public class MusicTypeDao extends AbstractModelDao<MusicTypeModel> {
      * @return types
      */
     public Collection<MusicTypeModel> findByType(String type) {
-        return find("type = 7", type);
+        return find("type = ?", type);
     }
 
     /** get musictypes user's.
@@ -60,8 +60,13 @@ public class MusicTypeDao extends AbstractModelDao<MusicTypeModel> {
      */
     public Collection<MusicTypeModel> getAllTypesForUser(int user) {
         final LinkedList<MusicTypeModel> list = new LinkedList<>();
-        DB.goDB("",
-                rs -> list.add(convert(rs)), user);
+        DB.goDB("select m.id as id, m.type as type from musictypes m "
+                        + "RIGHT JOIN usermusic u ON u.musictype = m.id WHERE u.user_id = ?",
+                rs -> {
+                    while (rs.next()) {
+                        list.add(convert(rs));
+                    }
+                }, user);
         return list;
     }
 }

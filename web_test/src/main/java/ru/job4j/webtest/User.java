@@ -7,6 +7,7 @@ import ru.job4j.webtest.model.UserModel;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  * Class User.
@@ -51,6 +52,16 @@ public class User {
         return list.size() > 0 ? new User(list.getFirst()) : User.EMPTY;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return this == o || (o != null && getClass() == o.getClass() && Objects.equals(this.user, ((User) o).user));
+    }
+
+    @Override
+    public int hashCode() {
+        return this == User.EMPTY ? 0 : this.user.hashCode();
+    }
+
     /** crate new user.
      * @param login user name
      * @param address address
@@ -59,8 +70,9 @@ public class User {
      */
     public static User newUser(String login, String address, Role role) {
         AddressModelDao aDao = new AddressModelDao();
-        if (valueOf(login) == User.EMPTY
-                || aDao.findByAddress(address).size() != 0) {
+        if (valueOf(login) != User.EMPTY
+                || aDao.findByAddress(address).size() != 0
+                || role == Role.EMPTY) {
             throw new IllegalArgumentException();
         }
         return new User(User.DAO.create(login, aDao.create(address).getId(), role.getId()));
@@ -95,7 +107,6 @@ public class User {
         return MusicType.getAllMusicTypes(this);
     }
 
-
     /** find User.
      * @param address address.
      * @param role role
@@ -109,5 +120,12 @@ public class User {
             users[i++] = new User(model);
         }
         return users;
+    }
+
+    /** add music type.
+     * @param music music
+     */
+    public void addMusicTypes(MusicType music) {
+        User.DAO.addMusicType(this.user.getId(), music.getId());
     }
 }

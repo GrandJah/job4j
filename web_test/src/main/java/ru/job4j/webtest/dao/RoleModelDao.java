@@ -31,7 +31,7 @@ public class RoleModelDao extends AbstractModelDao<RoleModel> {
      * @return role
      */
     public Collection<RoleModel> findByName(String name) {
-        return find("name = 7", name);
+        return find("name = ?", name);
     }
 
     @Override

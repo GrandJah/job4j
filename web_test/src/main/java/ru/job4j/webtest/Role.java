@@ -4,6 +4,7 @@ import ru.job4j.webtest.dao.RoleModelDao;
 import ru.job4j.webtest.model.RoleModel;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  * Class role.
@@ -48,23 +49,32 @@ public class Role {
         return list.size() > 0 ? new Role(list.getFirst()) : Role.EMPTY;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return this == o || (o != null && getClass() == o.getClass() && Objects.equals(this.role, ((Role) o).role));
+    }
+
+    @Override
+    public int hashCode() {
+        return this == Role.EMPTY ? 0 : this.role.hashCode();
+    }
+
     /** crate new role.
      * @param name role name
      * @return new Role
      */
     public static Role newRole(String name) {
-        if (valueOf(name) == Role.EMPTY) {
+        if (valueOf(name) != Role.EMPTY) {
             throw new IllegalArgumentException();
         }
         return new Role(Role.DAO.create(name));
     }
 
-    /** get all Users use Role.
-     * @param role role
+    /** get all Users use this Role.
      * @return users
      */
-    public User[] getAllUsers(Role role) {
-        return User.findByFild(null, role, null);
+    public User[] getAllUsers() {
+        return User.findByFild(null, this, null);
     }
 }
 

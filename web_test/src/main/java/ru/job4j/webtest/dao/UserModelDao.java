@@ -78,13 +78,13 @@ public class UserModelDao extends AbstractModelDao<UserModel> {
         }
         if (role != null) {
             query.append(" JOIN roles r ON r.id = u.role");
-            expression.append(p ? "AND" : "").append(" r.name = ?");
+            expression.append(p ? "AND" : "").append(" r.id = ?");
             param.add(role.getId());
             p = true;
         }
         if (type != null) {
             query.append(" LEFT JOIN usermusic mu ON mu.user_id = u.id LEFT JOIN musictypes m ON mu.musictype = m.id");
-            expression.append(p ? "AND" : "").append(" m.type = ?");
+            expression.append(p ? "AND" : "").append(" m.id = ?");
             param.add(type.getId());
         }
         DB.goDB(query.append(expression).toString(), rs -> {
@@ -93,5 +93,14 @@ public class UserModelDao extends AbstractModelDao<UserModel> {
             }
         }, param.toArray());
         return list;
+    }
+
+    /** add music type for user.
+     * @param user user
+     * @param music type music.
+     */
+    public void addMusicType(int user, int music) {
+        DB.goDB("INSERT INTO usermusic (user_id, musictype) VALUES (?,?)",
+                user, music);
     }
 }
