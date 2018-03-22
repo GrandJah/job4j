@@ -16,7 +16,8 @@
 	<modules>
 		<module>complete</module>
 		<module>level3</module>
-	</modules>
+        <module>stringequal</module>
+    </modules>
 
 	<dependencies>
 		<dependency>
