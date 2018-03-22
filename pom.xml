@@ -14,22 +14,9 @@
 	</properties>
 
 	<modules>
-		<module>chapter_001</module>
-		<module>chapter_001_test</module>
-		<module>chapter_002</module>
-		<module>tracker</module>
-        <module>chapter_002_test</module>
-        <module>mergeArray</module>
-        <module>bank</module>
-        <module>chapter_005</module>
-        <module>chapter_005_test</module>
-        <module>unitsort</module>
-        <module>chapter_007</module>
-        <module>bomberman</module>
-        <module>sgl</module>
-        <module>sql_test</module>
-        <module>webapp</module>
-        <module>web_test</module>
+		<module>complete</module>
+		<module>level3</module>
+        <module>stringequal</module>
     </modules>
 
 	<dependencies>
