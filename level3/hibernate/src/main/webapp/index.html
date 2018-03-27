@@ -68,16 +68,19 @@
         });
         $("thead", table).append(title_cell);
         $.each(table_item.data, function (i, data) {
-            var last = data.length - 1;
-            if(!show_done && data[last]) return;
+            var len = table_item.head.length;
+            if(!show_done && data[len-1]) return;
             var data_cell = $('<tr/>');
-            $.each(data, function (i, data) {
-                if(i === last) {
-                    data_cell.append($('<td/>').append($('<input/>', { type:"checkbox", checked:data, disabled:true})));
+            for(var j = 0; j < len; j++){
+                console.log(j);
+                if(table_item.head[j] === "done") {
+                    console.log("done");
+                    data_cell.append($('<td/>').append($('<input/>', { type:"checkbox", checked:data.done, disabled:true})));
                 } else {
-                    data_cell.append($('<td/>', {text: data}));
+                    console.log(table_item.head[j]);
+                    data_cell.append($('<td/>', {text: data[table_item.head[j]]}));
                 }
-            });
+            };
             $("tbody", table).append(data_cell);
         });
         $('#table_task').replaceWith(table);

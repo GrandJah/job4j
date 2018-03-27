@@ -1,9 +1,16 @@
 package ru.job4j.hibernate;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.json.JSONObject;
+import ru.job4j.hibernate.models.Item;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * web hibernate application.
@@ -14,20 +21,36 @@ public class Ajax extends HttpServlet {
         resp.setContentType("application/json");
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-
-        //action:get - table
-
-        resp.getWriter().write("{\"head\":[\"id\", \"item\", \"description\",\"create\",\"done\"],"
-                + "\"data\": ["
-                + "[\"3\",\"fg\",\"sdccsdsd dsdcd sdcds\", \"056561\", true],"
-                + "[\"5\",\"gf\",\"dcsgerb\", \"065315151\", false],"
-                + "[\"19\",\"csd\", \"wev wr rw erwver\", \"065351\", true]"
-                + "]}");
-
-        //action:create
-        //task: - text
-        //description: -text
-        //return success: boolean
-        //error:
+        JSONObject answer = new JSONObject();
+        JSONObject json = new JSONObject(req.getReader().readLine());
+        try (SessionFactory factory = new Configuration().configure().buildSessionFactory()) {
+            try (Session session = factory.openSession()) {
+                session.beginTransaction();
+                switch (json.getString("action")) {
+                    case "get":
+                        List list = session.createQuery("from Item").list();
+                        answer.put("head", Item.getFields());
+                        answer.put("data", list);
+                        break;
+                    case "create":
+                        Item item = new Item();
+                        item.setTask(json.getString("task"));
+                        item.setDescription(json.getString("description"));
+                        item.setCreated(System.currentTimeMillis());
+                        item.setDone(false);
+                        if (session.save(item) != null) {
+                            answer.put("success", true);
+                        } else {
+                            answer.put("success", false);
+                            answer.put("error", "X3");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                session.getTransaction().commit();
+            }
+        }
+        resp.getWriter().write(answer.toString());
     }
 }
