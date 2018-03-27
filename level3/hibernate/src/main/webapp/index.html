@@ -80,7 +80,7 @@
                     console.log(table_item.head[j]);
                     data_cell.append($('<td/>', {text: data[table_item.head[j]]}));
                 }
-            };
+            }
             $("tbody", table).append(data_cell);
         });
         $('#table_task').replaceWith(table);
