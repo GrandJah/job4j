@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sell car</title>
+</head>
+<body>
+<form action="new.html">
+    <button type="submit">Добавить объявление</button>
+</form>
+
+<div id="table_task"></div>
+
+<button type="button" onclick="get_table();update_table();">Обновить</button>
+
+<script src="js/jquery-3.3.1.min.js.js"></script>
+
+<script>
+    function ajax(data, func) {
+        $.ajax({
+            method: "POST",
+            cache: false,
+            url: "ajax",
+            data: JSON.stringify(data),
+            success: func,
+            error: function (a,s,d) {
+                console.log(a,s,d);
+                console.log("ajax - error")
+            }
+        });
+    }
+
+    var table_item = {};
+    var show_done = true;
+
+    function get_table() {
+        ajax({action:"get"}, function(data) {
+            table_item = data;
+            update_table();
+        });
+    }
+
+    function update_table() {
+        var table = $('<table/>', {id: "table_task", class: 'table'}).append(
+            $('<thead/>'), $('<tfoot/>'), $('<tbody/>'));
+        var title_cell = $('<tr/>');
+        $.each(table_item.head, function (i, data) {
+            title_cell.append($('<th/>', {text: data}));
+        });
+        $("thead", table).append(title_cell);
+        $.each(table_item.data, function (i, data) {
+            var len = table_item.head.length;
+            if(!show_done && data[len-1]) return;
+            var data_cell = $('<tr/>');
+            for(var j = 0; j < len; j++){
+                console.log(j);
+                if(table_item.head[j] === "done") {
+                    console.log("done");
+                    data_cell.append($('<td/>').append($('<input/>', { type:"checkbox", checked:data.done, disabled:true})));
+                } else {
+                    console.log(table_item.head[j]);
+                    data_cell.append($('<td/>', {text: data[table_item.head[j]]}));
+                }
+            }
+            $("tbody", table).append(data_cell);
+        });
+        $('#table_task').replaceWith(table);
+    }
+
+    get_table();
+</script>
+</body>
+</html>

@@ -1,6 +1,0 @@
-
-ru.job4j.hibernate -
-
-1. одна таблица в базе item. id, desc. created, done.
-
-7. данные должны сохраняться через hibernate,
