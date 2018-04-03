@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -31,17 +30,14 @@ public class Upload extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json");
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
         JSONObject answer = new JSONObject();
+        answer.put("success", false);
         if (ServletFileUpload.isMultipartContent(req)) {
             ServletFileUpload upload = new ServletFileUpload(factory);
             try {
                 List items = upload.parseRequest(req);
-                Iterator it = items.iterator();
-                while (it.hasNext()) {
-                    FileItem item = (FileItem) it.next();
+                for (Object item1 : items) {
+                    FileItem item = (FileItem) item1;
                     String name = item.getName();
                     long size = item.getSize();
                     String cct = item.getContentType();
@@ -51,11 +47,16 @@ public class Upload extends HttpServlet {
                 answer.put("success", true);
             } catch (FileUploadException e) {
                 e.printStackTrace();
-                answer.put("success", false);
             }
-        } else {
-            answer.put("success", false);
         }
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(answer.toString());
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("image");
+        resp.getWriter().write("image");
     }
 }

@@ -5,13 +5,12 @@
     <title>sell car</title>
 </head>
 <body>
-<form action="new.html">
-    <button type="submit">Добавить объявление</button>
-</form>
 
 <div id="table_task"></div>
 
 <button type="button" onclick="get_table();update_table();">Обновить</button>
+
+<button type="button" onclick="new_announce();">Добавить объявление</button>
 
 <script src="js/jquery-3.3.1.min.js.js"></script>
 
@@ -28,6 +27,16 @@
                 console.log("ajax - error")
             }
         });
+    }
+
+    function new_announce(){
+        ajax({action:"getUser"}, function (data) {
+            if(data.success === true && data.user !== undefined) {
+                document.location = '/new.html';
+            } else {
+                document.location = '/login.html';
+            }
+        })
     }
 
     var table_item = {};

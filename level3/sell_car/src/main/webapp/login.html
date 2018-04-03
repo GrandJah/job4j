@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="login">
+    <input type="text" name="login" value="login" title="login">
+    <input type="password" name="password" value="" title="password">
+</form>
+<button type="button" onclick="logIn()">Войти</button>
+<button type="button" onclick="registration()">Зарегистрировать</button>
+<script src="js/jquery-3.3.1.min.js.js"></script>
+<script>
+    function ajax(action, success) {
+        var form = document.getElementById("login");
+        $.ajax({
+            method: "POST",
+            url: "ajax",
+            data: JSON.stringify({
+                action:action,
+                login:form.elements.login.value,
+                password:form.elements.password.value
+            }),
+            success: success,
+            error: function (){console.log("ajax - error")
+            }
+        });
+    }
+    function registration() {
+        ajax("registration", function (data) {
+            if(data.success) {
+                logIn();
+            } else {
+                alert("Неудачная регистрация.");
+            }
+        })
+    }
+    function logIn(){
+        ajax("login", function () {
+            document.location = '/index.html';
+        });
+    }
+</script>
+</body>
+</html>
