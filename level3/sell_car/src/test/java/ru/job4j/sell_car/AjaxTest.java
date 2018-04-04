@@ -33,7 +33,7 @@ public class AjaxTest {
     @BeforeClass
     public static void clearBD() {
         try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/job4j_test", "postgres", "postgres")) {
-            conn.createStatement().executeUpdate("drop table if exists announcements; drop table if exists  images; drop table if exists cars; drop table if exists users;\n");
+            conn.createStatement().executeUpdate("drop table if exists  announcements cascade; drop table if exists images cascade; drop table if exists cars cascade; drop table if exists users cascade;");
         } catch (SQLException e) {
             e.printStackTrace();
         }
