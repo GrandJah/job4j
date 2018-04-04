@@ -49,14 +49,12 @@
     }
 
     function file_upload() {
-        var form = document.getElementById("upload");
-        var formData = new FormData(form);
         $.ajax({
             url: "upload",
             type: "POST",
             contentType: false,
             processData: false,
-            data: formData,
+            data: new FormData(document.getElementById("upload")),
             dataType: 'json',
             success: function(json){
                 if (json.success) console.log("files uploaded!");

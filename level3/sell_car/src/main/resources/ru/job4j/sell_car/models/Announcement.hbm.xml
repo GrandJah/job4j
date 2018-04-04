@@ -4,8 +4,8 @@
         <id name="id" column="id">
             <generator class="identity"/>
         </id>
-        <many-to-one name="user" column="user_id" class="ru.job4j.sell_car.models.User"/>
-        <many-to-one name="car" column="car_id" class="ru.job4j.sell_car.models.Car"/>
-        <property name="sell" column="sell"/>
+        <many-to-one name="user" column="user_id" class="ru.job4j.sell_car.models.User" not-null="true"/>
+        <many-to-one name="car" column="car_id" class="ru.job4j.sell_car.models.Car" not-null="true"/>
+        <property name="sell" column="sell" not-null="true"/>
     </class>
 </hibernate-mapping>

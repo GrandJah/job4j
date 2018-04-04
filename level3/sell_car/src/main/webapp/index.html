@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div id="table_task"></div>
+<div id="announces"></div>
 
 <button type="button" onclick="get_table();update_table();">Обновить</button>
 
@@ -39,41 +39,24 @@
         })
     }
 
-    var table_item = {};
-    var show_done = true;
+    var show_data = {};
 
     function get_table() {
         ajax({action:"get"}, function(data) {
-            table_item = data;
+            show_data = data;
             update_table();
         });
     }
 
     function update_table() {
-        var table = $('<table/>', {id: "table_task", class: 'table'}).append(
-            $('<thead/>'), $('<tfoot/>'), $('<tbody/>'));
-        var title_cell = $('<tr/>');
-        $.each(table_item.head, function (i, data) {
-            title_cell.append($('<th/>', {text: data}));
-        });
-        $("thead", table).append(title_cell);
-        $.each(table_item.data, function (i, data) {
-            var len = table_item.head.length;
-            if(!show_done && data[len-1]) return;
-            var data_cell = $('<tr/>');
-            for(var j = 0; j < len; j++){
-                console.log(j);
-                if(table_item.head[j] === "done") {
-                    console.log("done");
-                    data_cell.append($('<td/>').append($('<input/>', { type:"checkbox", checked:data.done, disabled:true})));
-                } else {
-                    console.log(table_item.head[j]);
-                    data_cell.append($('<td/>', {text: data[table_item.head[j]]}));
-                }
-            }
-            $("tbody", table).append(data_cell);
-        });
-        $('#table_task').replaceWith(table);
+    var announces = $('<div/>', {id:"announces"});
+    for (var data in show_data) {
+            var announce = $('<div/>', {id: ("announce_" + data.id), class:"announce"});
+
+
+            announces.append(announce);
+        }
+        $('#announces').replaceWith(announces);
     }
 
     get_table();

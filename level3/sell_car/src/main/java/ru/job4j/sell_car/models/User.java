@@ -3,6 +3,8 @@ package ru.job4j.sell_car.models;
 import org.hibernate.query.Query;
 import ru.job4j.sell_car.Hibernate;
 
+import javax.persistence.NoResultException;
+
 /**
  * User models class.
  */
@@ -79,18 +81,16 @@ public class User {
 
     /** select user from DB.
      * @param login login
-     * @param password password
      * @return User
      */
-    public static User findUser(String login, String password) {
+    public static User findUser(String login) {
         try (Hibernate hibernate = new Hibernate()) {
             Query<User> query = hibernate.createQuery("from User where login = :login", User.class);
-            User user = null;
-            for (User element : query.setParameter("login", login).list()) {
-                if (element.password.equals(password)) {
-                    user = element;
-                    break;
-                }
+            User user;
+            try {
+                user = query.setParameter("login", login).getSingleResult();
+            } catch (NoResultException e) {
+                user = null;
             }
             return user;
         }
@@ -102,8 +102,21 @@ public class User {
      * @return true if create new user
      */
     public static boolean newUser(String login, String password) {
-        try (Hibernate hibernate = new Hibernate()) {
-            return hibernate.save(new User(login, password)) != null;
+        boolean result = false;
+        if (findUser(login) == null) {
+            try (Hibernate hibernate = new Hibernate()) {
+                hibernate.save(new User(login, password));
+            }
+            result = (findUser(login) != null);
         }
+        return result;
+    }
+
+    /** check pass.
+     * @param password password.
+     * @return check result
+     */
+    public boolean checkPass(String password) {
+        return this.password.equals(password);
     }
 }

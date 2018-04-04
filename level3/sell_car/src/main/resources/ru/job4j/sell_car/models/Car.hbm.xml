@@ -4,7 +4,7 @@
         <id name="id" column="id">
             <generator class="identity"/>
         </id>
-        <property name="model" column="model"/>
+        <property name="model" column="model" not-null="true"/>
         <bag name="images" inverse="true">
             <key column="car_id"/>
             <one-to-many class="ru.job4j.sell_car.models.Image"/>

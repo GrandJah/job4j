@@ -24,6 +24,22 @@ public class Announcement {
      */
     private boolean sell;
 
+    /** constructor new announcement.
+     * @param user user
+     * @param car car
+     */
+    public Announcement(User user, Car car) {
+        this.user = user;
+        this.car = car;
+        this.sell = false;
+    }
+
+    /**
+     * default.
+     */
+    public Announcement() {
+    }
+
     /**
      * @return id
      */
