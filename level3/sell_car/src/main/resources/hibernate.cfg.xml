@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/job4j</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">postgres</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
+        <property name="show_sql">true</property>
+
+        <mapping resource="ru/job4j/sell_car/models/Car.hbm.xml"/>
+        <mapping resource="ru/job4j/sell_car/models/User.hbm.xml"/>
+        <mapping resource="ru/job4j/sell_car/models/Image.hbm.xml"/>
+        <mapping resource="ru/job4j/sell_car/models/Announcement.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>

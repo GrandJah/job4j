@@ -16,7 +16,6 @@
 	<modules>
 		<module>complete</module>
 		<module>level3</module>
-        <module>stringequal</module>
     </modules>
 
 	<dependencies>
