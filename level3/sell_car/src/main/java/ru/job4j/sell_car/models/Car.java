@@ -2,20 +2,12 @@ package ru.job4j.sell_car.models;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Car model class.
  */
 public class Car {
-    //        марка
-    //        коробка
-    //        год выпуска
-    //        привод
-    //        двигатель тип
-    //        двигатель объем
-    //        модель
-    //        кузов тип
-    //        пробег
-
     /**
      * id.
      */
@@ -38,19 +30,19 @@ public class Car {
     /**
      * images.
      */
-    private Image[] images;
+    private List<Image> images;
 
     /**
      * @return images
      */
-    public Image[] getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
     /**
      * @param images images
      */
-    public void setImages(Image[] images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 
@@ -58,28 +50,65 @@ public class Car {
     /**
      * model.
      */
-    private String model;
+    private String description;
 
     /**
      * @return model
      */
-    public String getModel() {
-        return model;
+    public String getDescription() {
+        return description;
     }
 
     /**
      * @param model model
      */
-    public void setModel(String model) {
-        this.model = model;
+    public void setDescription(String model) {
+        this.description = model;
     }
 
-    /** convert Car from json object.
-     * @param car json object car
+    /**
+     * price.
+     */
+    private int price;
+
+    /**
+     * @return price
+     */
+    public int getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price price
+     */
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    /** convertArray Car from json object.
+     * @param json json object car
      * @return Car object
      */
-    public static Car fromJSON(Object car) {
-        JSONObject answer = new JSONObject(car);
-        return null;
+    public static Car fromJSON(JSONObject json) {
+        Car car = new Car();
+        car.setDescription(json.getString("model"));
+        List<Image> images = Image.convert(json.getJSONArray("images"));
+        for (Image image : images) {
+            image.setCar(car);
+        }
+        car.setImages(images);
+        return car;
+    }
+
+    /**
+     * @return json object
+     */
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("id", this.id);
+        json.put("price", this.price);
+        json.put("description", this.description);
+        json.put("images", Image.toJSON(getImages()));
+        return json;
     }
 }

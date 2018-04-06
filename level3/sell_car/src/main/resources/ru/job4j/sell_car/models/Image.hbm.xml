@@ -6,6 +6,6 @@
         </id>
         <property name="path" column="path" not-null="true"/>
         <property name="image" column="image" not-null="true"/>
-
+        <many-to-one name="car" column="car_id"/>
     </class>
 </hibernate-mapping>

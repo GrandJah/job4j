@@ -92,5 +92,10 @@ public class AjaxTest {
         test("{\"action\":\"login\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":true}");
         test("{\"action\":\"get\"}", "{\"head\":[\"\",\"\"],\"data\":[],\"success\":true}");
         test("{\"action\":\"getUser\"}", "{\"success\":true,\"user\":\"login\"}");
+        test("{\"action\":\"create\"}", "{\"success\":false,\"error\":\"JSONObject[\\\"car\\\"] not found.\"}");
+        test("{\"action\":\"create\",\"car\":{}}", "{\"success\":false,\"error\":\"JSONObject[\\\"model\\\"] not found.\"}");
+        test("{\"action\":\"create\",\"car\":{\"model\":\"lada\"}}", "{\"success\":false,\"error\":\"JSONObject[\\\"images\\\"] not found.\"}");
+        test("{\"action\":\"create\",\"car\":{\"model\":\"lada\",\"images\":[\"path\",\"ds\"]}}", "{\"success\":true}");
+        test("{\"action\":\"get\"}", "{\"head\":[\"\",\"\"],\"data\":[{\"car\":{\"images\":[\"path\",\"ds\"],\"price\":0,\"description\":\"lada\",\"id\":1},\"sell\":false,\"id\":1,\"user\":\"login\"}],\"success\":true}");
     }
 }

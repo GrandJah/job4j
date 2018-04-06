@@ -9,13 +9,21 @@ import javax.servlet.http.HttpSession;
  */
 public abstract class JsonAction {
     /**
+     * session.
+     */
+    private HttpSession session;
+
+    /**
+     * @return session
+     */
+    protected HttpSession getSession() {
+        return session;
+    }
+
+    /**
      * json answer object.
      */
-    private JSONObject answer = new JSONObject();
-    /**
-     * success.
-     */
-    private boolean success = false;
+    private JSONObject answer;
 
     /**
      * @return json answer object.
@@ -24,23 +32,21 @@ public abstract class JsonAction {
         return this.answer;
     }
 
-    /**
-     * set success true.
-     */
-    protected void success() {
-        this.success = true;
-    }
-
-    /** abstract method action.
+    /** json method action.
      * @param json json
      * @param session session
+     * @return JSON String
      */
-    public abstract void action(JSONObject json, HttpSession session);
-
-    @Override
-    public String toString() {
-        this.answer.put("success", this.success);
-        success = false;
+    public String action(JSONObject json, HttpSession session) {
+        this.answer = new JSONObject();
+        this.session = session;
+        this.answer.put("success", action(json));
         return this.answer.toString();
     }
+
+    /**
+     * @param json json
+     * @return result action
+     */
+    protected abstract boolean action(JSONObject json);
 }

@@ -3,6 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>sell car</title>
+    <style type="text/css">
+        .announce {
+            height: 5em;
+            width: 90%;
+            margin: 5px auto;
+        }
+        .sell {
+            background-color: gray;
+        }
+        .active {
+            background-color: gold;
+        }
+        #announces {
+            background-color: aqua;
+            padding: 5px;
+        }
+        #announces .image{
+            float: left;
+            background-color: blueviolet;
+            height: 5em;
+            width: 5em;
+        }
+
+        #announces img{
+            border: 1px;
+            height: 5em;
+            width: 5em;
+        }
+
+        #announces .descriptor{
+            float : left;
+            margin: 5px 5px 10px;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -49,12 +84,18 @@
     }
 
     function update_table() {
-    var announces = $('<div/>', {id:"announces"});
-    for (var data in show_data) {
-            var announce = $('<div/>', {id: ("announce_" + data.id), class:"announce"});
-
-
+        var announces = $('<div/>', {id:"announces"});
+        for (var i = 0; i < show_data.data.length; i++) {
+            var data = show_data.data[i];
+            var car = data.car;
+            var announce = $('<div/>', {id: ("announce_" + data.id), class: "announce" + (data.sell ? " sell" : " active")});
             announces.append(announce);
+            if(car.images[0] !== undefined) announce.append($('<div/>',{class:"image"}).append($('<img>', {src: car.images[0]})));
+            var descriptor = $('<div/>', {class:"descriptor"});
+            announce.append(descriptor);
+            descriptor.append($('<div/>', {class: "price", text:car.price}));
+            descriptor.append($('<div/>', {class: "user", text:data.user}));
+            descriptor.append($('<div/>', {class: "car", text: car.description}));
         }
         $('#announces').replaceWith(announces);
     }

@@ -1,9 +1,6 @@
 package ru.job4j.sell_car.models;
 
-import org.hibernate.query.Query;
 import ru.job4j.sell_car.Hibernate;
-
-import javax.persistence.NoResultException;
 
 /**
  * User models class.
@@ -85,14 +82,7 @@ public class User {
      */
     public static User findUser(String login) {
         try (Hibernate hibernate = new Hibernate()) {
-            Query<User> query = hibernate.createQuery("from User where login = :login", User.class);
-            User user;
-            try {
-                user = query.setParameter("login", login).getSingleResult();
-            } catch (NoResultException e) {
-                user = null;
-            }
-            return user;
+            return hibernate.getSingle("from User where login = ?", User.class, login);
         }
     }
 

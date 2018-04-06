@@ -1,5 +1,10 @@
 package ru.job4j.sell_car.models;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.List;
+
 /**
  *  Announcement model class.
  */
@@ -95,4 +100,29 @@ public class Announcement {
     public void setSell(boolean sell) {
         this.sell = sell;
     }
+
+    /**
+     * @return json object
+     */
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("id", this.id);
+        json.put("car", this.car.toJSON());
+        json.put("user", this.user.getLogin());
+        json.put("sell", this.sell);
+        return json;
+    }
+
+    /**
+     * @param announcements announcements
+     * @return json array
+     */
+    public static JSONArray toJSON(List<Announcement> announcements) {
+        JSONArray json = new JSONArray();
+        for (Announcement announcement : announcements) {
+            json.put(announcement.toJSON());
+        }
+        return json;
+    }
+
 }

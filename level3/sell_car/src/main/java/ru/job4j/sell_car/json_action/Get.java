@@ -4,19 +4,17 @@ import org.json.JSONObject;
 import ru.job4j.sell_car.Hibernate;
 import ru.job4j.sell_car.models.Announcement;
 
-import javax.servlet.http.HttpSession;
-
 /**
  * Get action.
  */
 public class Get extends JsonAction {
 
     @Override
-    public void action(JSONObject json, HttpSession session) {
+    public boolean action(JSONObject json) {
         try (Hibernate hibernate = new Hibernate()) {
             getJSON().put("head", new String[]{"", ""});
-            getJSON().put("data", hibernate.createQuery("from Announcement", Announcement.class).list());
-            success();
+            getJSON().put("data", Announcement.toJSON(hibernate.getAll("from Announcement", Announcement.class)));
         }
+        return true;
     }
 }

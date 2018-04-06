@@ -9,7 +9,6 @@ import ru.job4j.sell_car.models.User;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -21,36 +20,43 @@ public class Ajax extends HttpServlet {
      * JSON actions.
      */
     private static final HashMap<String, JsonAction> ACTION = new HashMap<>();
+
     static {
         Ajax.ACTION.put(null, new Get());
         Ajax.ACTION.put("get", new Get());
         Ajax.ACTION.put("create", new Create());
         Ajax.ACTION.put("registration", new JsonAction() {
             @Override
-            public void action(JSONObject json, HttpSession session) {
+            public boolean action(JSONObject json) {
+                boolean success = false;
                 if (User.newUser(json.getString("login"), json.getString("password"))) {
-                    success();
+                    success = true;
                 }
+                return success;
             }
         });
         Ajax.ACTION.put("getUser", new JsonAction() {
             @Override
-            public void action(JSONObject json, HttpSession session) {
-                User user = (User) session.getAttribute("user");
+            public boolean action(JSONObject json) {
+                User user = (User) getSession().getAttribute("user");
+                boolean success = false;
                 if (user != null) {
                     getJSON().put("user", user.getLogin());
-                    success();
+                    success = true;
                 }
+                return success;
             }
         });
         Ajax.ACTION.put("login", new JsonAction() {
             @Override
-            public void action(JSONObject json, HttpSession session) {
+            public boolean action(JSONObject json) {
                 User user = User.findUser(json.getString("login"));
+                boolean success = false;
                 if (user != null && user.checkPass(json.getString("password"))) {
-                    session.setAttribute("user", user);
-                    success();
+                    getSession().setAttribute("user", user);
+                    success = true;
                 }
+                return success;
             }
         });
     }
@@ -58,12 +64,9 @@ public class Ajax extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
-        JSONObject query = new JSONObject(req.getReader().readLine());
-        HttpSession session = req.getSession();
-        JsonAction answer = Ajax.ACTION.get(query.getString("action"));
-        answer.action(query, session);
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        resp.getWriter().write(answer.toString());
+        JSONObject query = new JSONObject(req.getReader().readLine());
+        resp.getWriter().write(Ajax.ACTION.get(query.getString("action")).action(query, req.getSession()));
     }
 }

@@ -32,16 +32,20 @@
         });
     }
 
+    var images = [];
+
     function create_task() {
         var form = document.getElementById("create");
         var data = {};
         data.action = "create";
         data.car = {
-            model : form.elements.model.value
+            model : form.elements.model.value,
+            images : images
         };
         ajax(data, function (data) {
             if(data.success === true) {
                 console.log("ok-create");
+                document.location = '/index.html';
             } else {
                 console.log("error create - " + data.error);
             }
