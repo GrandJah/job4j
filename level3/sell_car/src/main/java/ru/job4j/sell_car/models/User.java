@@ -2,6 +2,8 @@ package ru.job4j.sell_car.models;
 
 import ru.job4j.sell_car.Hibernate;
 
+import java.util.HashMap;
+
 /**
  * User models class.
  */
@@ -82,7 +84,9 @@ public class User {
      */
     public static User findUser(String login) {
         try (Hibernate hibernate = new Hibernate()) {
-            return hibernate.getSingle("from User where login = ?", User.class, login);
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("login", login);
+            return hibernate.getSingle("from User where login = :login", User.class, params);
         }
     }
 
