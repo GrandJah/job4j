@@ -1,6 +1,5 @@
 package ru.job4j.sell_car;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.sell_car.models.User;
 
@@ -10,9 +9,6 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.assertEquals;
@@ -28,18 +24,6 @@ import static org.mockito.Mockito.when;
  */
 public class AjaxTest {
     /**
-     * Clear test DB.
-     */
-    @BeforeClass
-    public static void clearBD() {
-        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/job4j_test", "postgres", "postgres")) {
-            conn.createStatement().executeUpdate("drop table if exists  announcements cascade; drop table if exists images cascade; drop table if exists cars cascade; drop table if exists users cascade;");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * User session test object.
      */
     private User user = null;
@@ -49,6 +33,7 @@ public class AjaxTest {
      * @param expect answer json
      */
     private void test(String json, String expect) {
+        System.out.println("JSON: " +  json + " /");
         try {
             AtomicReference<String> answer = new AtomicReference<>();
             HttpServletRequest req = mock(HttpServletRequest.class);
@@ -77,6 +62,7 @@ public class AjaxTest {
             e.printStackTrace();
             throw new Error("error test!");
         }
+        System.out.println("-ok!");
     }
 
     /**

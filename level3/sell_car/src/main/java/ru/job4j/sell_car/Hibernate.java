@@ -8,6 +8,7 @@ import org.hibernate.query.Query;
 import javax.persistence.NoResultException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Abstract hibernate.
@@ -63,12 +64,12 @@ public class Hibernate implements AutoCloseable {
      * @param <T> type generic
      * @return single result or null
      */
-    public <T> T getSingle(String hibernateQuery, Class<T> type, Object... params) {
+    public <T> T getSingle(String hibernateQuery, Class<T> type, Map<String, Object> params) {
         T answer;
         try {
             Query<T> query = this.session.createQuery(hibernateQuery, type);
-            for (int i = 0; i < params.length; i++) {
-                query.setParameter(i, params[i]);
+            for (Map.Entry<String, Object> param : params.entrySet()) {
+                query.setParameter(param.getKey(), param.getValue());
             }
             answer = query.getSingleResult();
         } catch (NoResultException e) {
