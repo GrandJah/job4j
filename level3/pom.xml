@@ -15,6 +15,7 @@
     <modules>
         <module>hibernate</module>
         <module>sell_car</module>
+        <module>spring</module>
     </modules>
 <dependencies>
     <dependency>
