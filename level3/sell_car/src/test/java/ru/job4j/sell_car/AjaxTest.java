@@ -23,65 +23,57 @@ import static org.mockito.Mockito.when;
  * test class.
  */
 public class AjaxTest {
-    /**
-     * User session test object.
-     */
-    private User user = null;
-
     /** main test method.
      * @param json json action
      * @param expect answer json
+     * @param user user session
+     * @throws IOException IOException
      */
-    private void test(String json, String expect) {
+    private void test(String json, String expect, AtomicReference<User> user) throws IOException {
         System.out.println("JSON: " +  json + " /");
-        try {
-            AtomicReference<String> answer = new AtomicReference<>();
-            HttpServletRequest req = mock(HttpServletRequest.class);
-            HttpServletResponse resp = mock(HttpServletResponse.class);
-            BufferedReader reader = mock(BufferedReader.class);
-            when(req.getReader()).thenReturn(reader);
-
-            when(reader.readLine()).thenReturn(json);
-
-            PrintWriter writer = mock(PrintWriter.class);
-            when(resp.getWriter()).thenReturn(writer);
-            HttpSession session = mock(HttpSession.class);
-            when(req.getSession()).thenReturn(session);
-            when(session.getAttribute(eq("user"))).thenReturn(this.user);
-            doAnswer(invocationOnMock -> {
-                user = invocationOnMock.getArgumentAt(1, User.class);
-                return null;
-            }).when(session).setAttribute(eq("user"), any());
-            doAnswer(invocationOnMock -> {
-                answer.set(invocationOnMock.getArgumentAt(0, String.class));
-                return null;
-            }).when(writer).write(anyString());
-            new Ajax().doPost(req, resp);
-            assertEquals(expect, answer.get());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new Error("error test!");
-        }
+        AtomicReference<String> answer = new AtomicReference<>();
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        HttpServletResponse resp = mock(HttpServletResponse.class);
+        BufferedReader reader = mock(BufferedReader.class);
+        when(req.getReader()).thenReturn(reader);
+        when(reader.readLine()).thenReturn(json);
+        PrintWriter writer = mock(PrintWriter.class);
+        when(resp.getWriter()).thenReturn(writer);
+        HttpSession session = mock(HttpSession.class);
+        when(req.getSession()).thenReturn(session);
+        when(session.getAttribute(eq("user"))).thenReturn(user.get());
+        doAnswer(invocationOnMock -> {
+            user.set(invocationOnMock.getArgumentAt(1, User.class));
+            return null;
+        }).when(session).setAttribute(eq("user"), any());
+        doAnswer(invocationOnMock -> {
+            answer.set(invocationOnMock.getArgumentAt(0, String.class));
+            return null;
+        }).when(writer).write(anyString());
+        new Ajax().doPost(req, resp);
+        assertEquals(expect, answer.get());
         System.out.println("-ok!");
     }
 
     /**
      * test method.
+     * @throws IOException IOException
      */
     @Test
-    public void whenFullAjaxThenReturnJSONSAnswer() {
-        test("{\"action\":\"getUser\"}", "{\"success\":false}");
-        test("{\"action\":\"login\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":false}");
-        test("{\"action\":\"create\"}", "{\"success\":false,\"error\":\"no login user\"}");
-        test("{\"action\":\"registration\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":true}");
-        test("{\"action\":\"registration\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":false}");
-        test("{\"action\":\"login\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":true}");
-        test("{\"action\":\"get\"}", "{\"head\":[\"\",\"\"],\"data\":[],\"success\":true}");
-        test("{\"action\":\"getUser\"}", "{\"success\":true,\"user\":\"login\"}");
-        test("{\"action\":\"create\"}", "{\"success\":false,\"error\":\"JSONObject[\\\"car\\\"] not found.\"}");
-        test("{\"action\":\"create\",\"car\":{}}", "{\"success\":false,\"error\":\"JSONObject[\\\"model\\\"] not found.\"}");
-        test("{\"action\":\"create\",\"car\":{\"model\":\"lada\"}}", "{\"success\":false,\"error\":\"JSONObject[\\\"images\\\"] not found.\"}");
-        test("{\"action\":\"create\",\"car\":{\"model\":\"lada\",\"images\":[\"path\",\"ds\"]}}", "{\"success\":true}");
-        test("{\"action\":\"get\"}", "{\"head\":[\"\",\"\"],\"data\":[{\"car\":{\"images\":[\"path\",\"ds\"],\"price\":0,\"description\":\"lada\",\"id\":1},\"sell\":false,\"id\":1,\"user\":\"login\"}],\"success\":true}");
+    public void whenFullAjaxThenReturnJSONSAnswer() throws IOException {
+        AtomicReference<User> user = new AtomicReference<>();
+        test("{\"action\":\"getUser\"}", "{\"success\":false}", user);
+        test("{\"action\":\"login\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":false}", user);
+        test("{\"action\":\"create\"}", "{\"success\":false,\"error\":\"no login user\"}", user);
+        test("{\"action\":\"registration\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":true}", user);
+        test("{\"action\":\"registration\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":false}", user);
+        test("{\"action\":\"login\", \"login\":\"login\", \"password\":\"pass\"}", "{\"success\":true}", user);
+        test("{\"action\":\"get\"}", "{\"head\":[\"\",\"\"],\"data\":[],\"success\":true}", user);
+        test("{\"action\":\"getUser\"}", "{\"success\":true,\"user\":\"login\"}", user);
+        test("{\"action\":\"create\"}", "{\"success\":false,\"error\":\"JSONObject[\\\"car\\\"] not found.\"}", user);
+        test("{\"action\":\"create\",\"car\":{}}", "{\"success\":false,\"error\":\"JSONObject[\\\"model\\\"] not found.\"}", user);
+        test("{\"action\":\"create\",\"car\":{\"model\":\"lada\"}}", "{\"success\":false,\"error\":\"JSONObject[\\\"images\\\"] not found.\"}", user);
+        test("{\"action\":\"create\",\"car\":{\"model\":\"lada\",\"images\":[\"path\",\"ds\"]}}", "{\"success\":true}", user);
+        test("{\"action\":\"get\"}", "{\"head\":[\"\",\"\"],\"data\":[{\"car\":{\"images\":[\"path\",\"ds\"],\"price\":0,\"description\":\"lada\",\"id\":1},\"sell\":false,\"id\":1,\"user\":\"login\"}],\"success\":true}", user);
     }
 }
