@@ -1,6 +1,5 @@
 package ru.job4j.hibernate;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,12 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -23,17 +19,6 @@ import static org.mockito.Mockito.when;
  * Test class.
  */
 public class AjaxTest {
-    /**
-     * Clear test DB.
-     */
-    @BeforeClass
-    public static void clearBD() {
-        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/job4j_test", "postgres", "postgres")) {
-            conn.createStatement().executeUpdate("DELETE FROM items;");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     /** main test body.
      * @param data action data
@@ -56,8 +41,8 @@ public class AjaxTest {
         }).when(writer).write(anyString());
         Ajax ajax = new Ajax();
         ajax.doPost(req, resp);
-        assertEquals(answer.get().startsWith(expectStart), true);
-        assertEquals(answer.get().endsWith(expectEnd), true);
+        assertTrue(answer.get().startsWith(expectStart));
+        assertTrue(answer.get().endsWith(expectEnd));
     }
 
     /**test method.

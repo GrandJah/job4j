@@ -1,5 +1,9 @@
 package ru.job4j.hibernate.models;
 
+import ru.job4j.hibernate.models.dao.ItemDao;
+
+import java.util.List;
+
 /**
  * Model Item.
  */
@@ -105,5 +109,26 @@ public class Item {
      */
     public static String[] getFields() {
         return new String[] {"id", "task", "description", "created", "done"};
+    }
+
+    /**
+     * @return all Items.
+     */
+    public static List<Item> getAll() {
+        return ItemDao.getAll();
+    }
+
+    /** Create new Item.
+     * @param task task
+     * @param  description description
+     * @return new Item or null.
+     */
+    public static Item create(String task, String description) {
+        Item item = new Item();
+        item.setTask(task);
+        item.setDescription(description);
+        item.setCreated(System.currentTimeMillis());
+        item.setDone(false);
+        return ItemDao.create(item);
     }
 }
