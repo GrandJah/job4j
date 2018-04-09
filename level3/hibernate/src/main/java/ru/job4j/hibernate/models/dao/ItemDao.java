@@ -21,11 +21,12 @@ public class ItemDao {
      * @return all items.
      */
     public static List<Item> getAll() {
-        Session session = FACTORY.openSession();
-        session.beginTransaction();
-        List<Item> list = session.createQuery("from Item", Item.class).list();
-        session.getTransaction().commit();
-        session.close();
+        List<Item> list;
+        try (Session session = FACTORY.openSession()) {
+            session.beginTransaction();
+            list = session.createQuery("from Item", Item.class).list();
+            session.getTransaction().commit();
+        }
         return list;
     }
 
@@ -34,12 +35,12 @@ public class ItemDao {
      * @return item
      */
     public static Item create(Item item) {
-        Session session = FACTORY.openSession();
-        session.beginTransaction();
-        Serializable id = session.save(item);
-        session.getTransaction().commit();
-        item = session.get(Item.class, id);
-        session.close();
+        try (Session session = FACTORY.openSession()) {
+            session.beginTransaction();
+            Serializable id = session.save(item);
+            session.getTransaction().commit();
+            item = session.get(Item.class, id);
+        }
         return item;
     }
 }
