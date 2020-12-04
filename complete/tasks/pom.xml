@@ -15,7 +15,6 @@
     <url>http://job4j.ru/</url>
 
     <modules>
-        <module>tracker</module>
         <module>mergeArray</module>
         <module>bank</module>
         <module>unitsort</module>
