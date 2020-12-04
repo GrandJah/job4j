@@ -19,20 +19,10 @@ import lombok.ToString;
  * @since 24.05.2017
  */
 @Data
-@EqualsAndHashCode(callSuper = true, exclude = "created")
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Item extends ru.job4j.tracker.Item {
   private static int GEN_ID = (int) System.currentTimeMillis();
-
-  /**
-   * Описание задачию.
-   */
-  private String description = "";
-
-  /**
-   * Время создания.
-   */
-  private Timestamp created;
 
   /**
    * Комментарии к заявки.
@@ -45,7 +35,6 @@ public class Item extends ru.job4j.tracker.Item {
   public Item(String name) {
     super(name);
     setId(GEN_ID++);
-    setCreated(Timestamp.from(Instant.now()));
   }
 
   /**
@@ -54,7 +43,7 @@ public class Item extends ru.job4j.tracker.Item {
    */
   public Item(String name, String description) {
     this(name);
-    this.description = description;
+    setDescription(description);
   }
 
   /**
@@ -69,7 +58,7 @@ public class Item extends ru.job4j.tracker.Item {
   private Item(Integer id, String name, String description, Timestamp created, List<String> comments) {
     this(name,description);
     setId(id);
-    this.created = created;
+    setCreated(created);
     this.comments = comments;
   }
 
