@@ -2,6 +2,7 @@ package ru.job4j.tracker;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+import ru.job4j.tracker.expire.Item;
 
 /**
  * junior.
@@ -31,7 +32,7 @@ public class TrackerArray implements Tracker {
      * @return итератор в установленном месте
      * @throws NotFound ненайденый элемент
      */
-    private ListIterator<Item> iteratorFindId(String id) throws NotFound {
+    private ListIterator<Item> iteratorFindId(Integer id) throws NotFound {
         ListIterator<Item> it = this.items.listIterator();
         while (it.hasNext()) {
             if (id.equals(it.next().getId())) {
@@ -62,8 +63,13 @@ public class TrackerArray implements Tracker {
     }
 
     @Override
-    public Item findById(String id) throws NotFound {
+    public Item findById(Integer id) throws NotFound {
         return iteratorFindId(id).next();
+    }
+
+    @Override
+    public Item findById(String id) throws NotFound {
+        return findById(Integer.valueOf(id));
     }
 
     @Override

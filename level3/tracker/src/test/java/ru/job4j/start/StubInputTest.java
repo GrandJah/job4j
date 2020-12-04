@@ -1,7 +1,8 @@
 package ru.job4j.start;
 
 import org.junit.Test;
-import ru.job4j.tracker.Item;
+
+import ru.job4j.tracker.expire.Item;
 import ru.job4j.tracker.Tracker;
 import ru.job4j.tracker.TrackerArray;
 
@@ -102,7 +103,7 @@ public class StubInputTest {
      */
     @Test
     public void whenDeleteItemThenSaveOrder() {
-        String[] answer = {"3", this.itemTest.getId(), "6"};
+        String[] answer = {"3", this.itemTest.getId().toString(), "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
@@ -117,7 +118,7 @@ public class StubInputTest {
      */
     @Test
     public void whenFindByIdThenReturnCorrect() {
-        String[] answer = {"4", this.itemTest.getId(), "6"};
+        String[] answer = {"4", this.itemTest.getId().toString(), "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
         assertThat(input.getOut()[3], is(String.format("%s%s", this.itemTest.toString(), System.lineSeparator())));
@@ -140,7 +141,7 @@ public class StubInputTest {
      */
     @Test
     public void whenEditThenEditCorrect() throws Tracker.NotFound {
-        String[] answer = {"2", this.itemTest.getId(), "НольТриПятнадцать", "Новое описание", "6"};
+        String[] answer = {"2", this.itemTest.getId().toString(), "НольТриПятнадцать", "Новое описание", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
         assertThat(this.tracker.findById(this.itemTest.getId()).getName(), is("НольТриПятнадцать"));

@@ -1,6 +1,7 @@
 package ru.job4j.tracker;
 
 import java.util.ArrayList;
+import ru.job4j.tracker.expire.Item;
 
 /**
  * junior.
@@ -28,6 +29,16 @@ public interface Tracker {
      * @throws NotFound ненайденый элемент
      */
     Item findById(String id) throws NotFound;
+
+    /**
+     * Поиск по ID.
+     *
+     * @param id ID заявки
+     * @return заявка
+     * @throws NotFound ненайденый элемент
+     */
+    Item findById(Integer id) throws NotFound;
+
 
     /** Обновление заявки.
      * @param item Заявка

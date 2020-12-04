@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import ru.job4j.tracker.expire.Item;
 
 /**
  * junior.
@@ -166,17 +167,22 @@ public class TrackerDB implements Tracker, Closeable {
     }
 
     @Override
-    public Item findById(String id) throws NotFound {
+    public Item findById(Integer id) throws NotFound {
         Item item = null;
         try {
             try (ResultSet rs = this.db.executeQuery(String.format(
-                    this.conf.get("get_tracker_id"), id))) {
+                this.conf.get("get_tracker_id"), id))) {
                 item = getItemFromRS(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return item;
+    }
+
+    @Override
+    public Item findById(String id) throws NotFound {
+        return findById(Integer.valueOf(id));
     }
 
     @Override

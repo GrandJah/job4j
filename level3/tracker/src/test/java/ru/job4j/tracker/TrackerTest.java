@@ -5,6 +5,8 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import ru.job4j.tracker.expire.Item;
+
 /**
  * junior.
  *
@@ -126,5 +128,14 @@ public class TrackerTest {
         }
         String expectOrder = "Второй, Четвертый, Пятый, ";
         assertThat(result.toString(), is(expectOrder));
+        this.tracker.delete(this.tracker.findByName("Второй"));
+        this.tracker.delete(this.tracker.findByName("Пятый"));
+        this.tracker.delete(this.tracker.findByName("Четвертый"));
+        result = new StringBuilder();
+        for (Item item : this.tracker.getAll()) {
+            result.append(item.getName());
+            result.append(", ");
+        }
+        assertThat(result.toString(), is(""));
     }
 }
