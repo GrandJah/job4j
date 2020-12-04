@@ -1,80 +1,90 @@
 package ru.job4j.tracker;
 
 import java.util.List;
+import java.util.function.Function;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-public class HibernateRun {
-  public static void main(String[] args) {
+public class HibernateRun implements AutoCloseable {
+  private final StandardServiceRegistry registry;
 
-    final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-        .configure().build();
-    try {
-      SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-      Item item = create(new Item("Learn Hibernate"), sf);
-      System.out.println(item);
-      item.setName("Learn Hibernate 5.");
-      update(item, sf);
-      System.out.println(item);
-      Item rsl = findById(item.getId(), sf);
-      System.out.println(rsl);
-      delete(rsl.getId(), sf);
-      List<Item> list = findAll(sf);
-      for (Item it : list) {
-        System.out.println(it);
-      }
-    }  catch (Exception e) {
-      e.printStackTrace();
-    } finally {
-      StandardServiceRegistryBuilder.destroy(registry);
+  private final SessionFactory sf;
+
+  private static HibernateRun APP = new HibernateRun();
+
+  HibernateRun() {
+    this.registry = new StandardServiceRegistryBuilder().configure().build();
+    this.sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+  }
+
+  @Override
+  public void close() {
+    StandardServiceRegistryBuilder.destroy(this.registry);
+  }
+
+  public static void main(String[] args) {
+    APP.testRun();
+  }
+
+  private void testRun() {
+    Item item = create(new Item("Learn Hibernate"));
+    System.out.println(item);
+
+    item.setName("Learn Hibernate 5.");
+    update(item);
+    System.out.println(item);
+
+    Item rsl = findById(item.getId());
+    System.out.println(rsl);
+
+    delete(rsl.getId());
+    List<Item> list = findAll();
+    for (Item it : list) {
+      System.out.println(it);
     }
   }
 
-  public static Item create(Item item, SessionFactory sf) {
-    Session session = sf.openSession();
+  private <T> T action(Function<Session, T> function) {
+    Session session = this.sf.openSession();
     session.beginTransaction();
-    session.save(item);
-    session.getTransaction().commit();
-    session.close();
-    return item;
-  }
-
-  public static void update(Item item, SessionFactory sf) {
-    Session session = sf.openSession();
-    session.beginTransaction();
-    session.update(item);
-    session.getTransaction().commit();
-    session.close();
-  }
-
-  public static void delete(Integer id, SessionFactory sf) {
-    Session session = sf.openSession();
-    session.beginTransaction();
-    Item item = new Item(null);
-    item.setId(id);
-    session.delete(item);
-    session.getTransaction().commit();
-    session.close();
-  }
-
-  public static List<Item> findAll(SessionFactory sf) {
-    Session session = sf.openSession();
-    session.beginTransaction();
-    List result = session.createQuery("from ru.job4j.tracker.Item").list();
+    T result = function.apply(session);
     session.getTransaction().commit();
     session.close();
     return result;
   }
 
-  public static Item findById(Integer id, SessionFactory sf) {
-    Session session = sf.openSession();
-    session.beginTransaction();
-    Item result = session.get(Item.class, id);
-    session.getTransaction().commit();
-    session.close();
-    return result;
+  public Item create(Item item) {
+    return action(sf -> {
+      sf.save(item);
+      return item;
+    });
+  }
+
+  private void update(Item item) {
+    action(sf -> {
+      sf.update(item);
+      return null;
+    });
+  }
+
+  private void delete(Integer id) {
+    action(sf -> {
+      Item item = new Item(null);
+      item.setId(id);
+      sf.delete(item);
+      return null;
+    });
+  }
+
+  private List<Item> findAll() {
+    return action(sf -> (sf.createQuery("from ru.job4j.tracker.Item").list()));
+  }
+
+  public Item findById(Integer id) {
+    return action(sf -> sf.get(Item.class, id));
   }
 }
