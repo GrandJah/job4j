@@ -27,7 +27,23 @@ public class HibernateRun implements AutoCloseable {
   }
 
   public static void main(String[] args) {
+    APP.createEntries();
     APP.testRun();
+  }
+
+  public void createItemEntry(String name, String description) {
+    Item item = new Item();
+    item.setName(name);
+    item.setDescription(description);
+    create(item);
+  }
+
+  private void createEntries() {
+    createItemEntry("First", "First description");
+    createItemEntry("Second", "Second description");
+    createItemEntry("Third", "Third description");
+    createItemEntry("Fourth", "Fourth description");
+    createItemEntry("Fifth", "Fifth description");
   }
 
   private void testRun() {
