@@ -137,7 +137,7 @@ public class TrackerDB implements Tracker, Closeable {
         valid(item);
         try {
             this.db.executeUpdate(String.format(this.conf.get("set_item"), item.getId(), item.getName(), item.getDescription(),
-                    new Timestamp(item.getCreated()).toString()));
+                    item.getCreated().toString()));
             if (item.getComments() != null) {
                 for (String comment : item.getComments()) {
                     this.db.executeUpdate(String.format(this.conf.get("set_comment"), item.getId(), comment));
@@ -190,7 +190,7 @@ public class TrackerDB implements Tracker, Closeable {
         valid(item);
         try {
             this.db.executeUpdate(String.format(this.conf.get("update_id"), item.getId(), item.getName(), item.getDescription(),
-                    new Timestamp(item.getCreated()).toString()));
+                    item.getCreated().toString()));
         } catch (SQLException e) {
             e.printStackTrace();
         }

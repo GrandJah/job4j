@@ -2,9 +2,13 @@ package ru.job4j.tracker.expire;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * junior.
@@ -15,6 +19,8 @@ import lombok.Data;
  * @since 24.05.2017
  */
 @Data
+@EqualsAndHashCode(callSuper = true, exclude = "created")
+@ToString(callSuper = true)
 public class Item extends ru.job4j.tracker.Item {
   private static int GEN_ID = (int) System.currentTimeMillis();
 
@@ -24,10 +30,9 @@ public class Item extends ru.job4j.tracker.Item {
   private String description = "";
 
   /**
-   * Время создания в миллисекундах.
+   * Время создания.
    */
-  private long created = (System.currentTimeMillis()/1000)*1000;
-  //Problem with converting the database type "timestamp"
+  private Timestamp created;
 
   /**
    * Комментарии к заявки.
@@ -35,18 +40,12 @@ public class Item extends ru.job4j.tracker.Item {
   private List<String> comments = new ArrayList<>();
 
   /**
-   * Default constructor.
-   */
-  public Item() {
-    this("unknown");
-  }
-
-  /**
    * @param name Имя пользователя
    */
   public Item(String name) {
     super(name);
     setId(GEN_ID++);
+    setCreated(Timestamp.from(Instant.now()));
   }
 
   /**
@@ -67,10 +66,9 @@ public class Item extends ru.job4j.tracker.Item {
    * @param created     Время создания
    * @param comments    Комментарии к заявке
    */
-  private Item(Integer id, String name, String description, long created, List<String> comments) {
-    this(name);
+  private Item(Integer id, String name, String description, Timestamp created, List<String> comments) {
+    this(name,description);
     setId(id);
-    this.description = description;
     this.created = created;
     this.comments = comments;
   }
@@ -92,18 +90,7 @@ public class Item extends ru.job4j.tracker.Item {
     return new Item(item.getInt("id"),
         item.getString("name"),
         item.getString("description"),
-        item.getTimestamp("created").getTime(),
+        item.getTimestamp("created"),
         commentArray);
-  }
-
-  @Override
-  public String toString() {
-    return "Item{" +
-        "id=" + getId() +
-        ", name='" + getName() + '\'' +
-        ", description='" + description + '\'' +
-        ", created=" + created +
-        ", comments=" + comments +
-        '}';
   }
 }
