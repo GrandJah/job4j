@@ -2,6 +2,7 @@ package ru.job4j.todolist.storage;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -10,11 +11,11 @@ import java.util.List;
 import java.util.function.Function;
 import ru.job4j.todolist.models.Item;
 
-public class HbmStorageItem implements AutoCloseable,Storage<Item> {
+public class HbmStorageItem implements AutoCloseable, Storage<Item> {
 
    private final StandardServiceRegistry registry =
-      new StandardServiceRegistryBuilder().configure().build();
-   private final SessionFactory sf 
+    new StandardServiceRegistryBuilder().configure().build();
+   private final SessionFactory sf
     = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 
    @Override
@@ -24,13 +25,19 @@ public class HbmStorageItem implements AutoCloseable,Storage<Item> {
 
    private <T> T query(Function<Session, T> function) {
       Session session = this.sf.openSession();
-      session.beginTransaction();
-      T result = function.apply(session);
-      session.getTransaction().commit();
-      session.close();
-      return result;
+      Transaction tx = session.beginTransaction();
+      try {
+         T result = function.apply(session);
+         tx.commit();
+         return result;
+      } catch (final Exception e) {
+         tx.rollback();
+         throw e;
+      } finally {
+         session.close();
+      }
    }
-   
+
    @Override
    public List<Item> getAll() {
       return query(sf ->
@@ -40,7 +47,7 @@ public class HbmStorageItem implements AutoCloseable,Storage<Item> {
    @Override
    public Item create(Item item) {
       return query(sf ->
-       sf.get(Item.class,sf.save(item)));
+       sf.get(Item.class, sf.save(item)));
    }
 
    @Override
