@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>hibernate</module>
         <module>sell_car</module>
         <module>tracker</module>
     </modules>
