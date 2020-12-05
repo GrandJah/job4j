@@ -1,4 +1,4 @@
-package ru.job4j.hibernate;
+package ru.job4j.hibernate.controller;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

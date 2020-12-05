@@ -1,7 +1,7 @@
 <web-app>
     <servlet>
         <servlet-name>Ajax</servlet-name>
-        <servlet-class>ru.job4j.hibernate.Ajax</servlet-class>
+        <servlet-class>ru.job4j.hibernate.controller.Ajax</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Ajax</servlet-name>
