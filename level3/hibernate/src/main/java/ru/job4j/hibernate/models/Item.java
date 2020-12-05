@@ -1,5 +1,15 @@
 package ru.job4j.hibernate.models;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.job4j.hibernate.models.dao.ItemDao;
 
 import java.util.List;
@@ -7,12 +17,18 @@ import java.util.List;
 /**
  * Model Item.
  */
+@Data
+@Entity
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
+@Table(name = "items")
 public class Item {
-
     /**
      * id.
      */
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     /**
      * task name.
@@ -27,83 +43,13 @@ public class Item {
     /**
      * time created.
      */
-    private long created;
+    private Timestamp created = Timestamp.from(Instant.now());
 
     /**
      * item done.
      */
-    private boolean done;
-
-    /** getter.
-     * @return id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /** setter.
-     * @param id id
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /** getter.
-     * @return task
-     */
-    public String getTask() {
-        return task;
-    }
-
-    /** setter.
-     * @param task task
-     */
-    public void setTask(String task) {
-        this.task = task;
-    }
-
-    /** getter.
-     * @return description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /** setter.
-     * @param desc description
-     */
-    public void setDescription(String desc) {
-        this.description = desc;
-    }
-
-    /** getter.
-     * @return created
-     */
-    public long getCreated() {
-        return created;
-    }
-
-    /** setter.
-     * @param created created
-     */
-    public void setCreated(long created) {
-        this.created = created;
-    }
-
-    /** getter.
-     * @return done
-     */
-    public boolean isDone() {
-        return done;
-    }
-
-    /** setter.
-     * @param done done
-     */
-    public void setDone(boolean done) {
-        this.done = done;
-    }
-
+    private Boolean done = false;
+    
     /**
      * @return All field's names
      */
@@ -127,8 +73,6 @@ public class Item {
         Item item = new Item();
         item.setTask(task);
         item.setDescription(description);
-        item.setCreated(System.currentTimeMillis());
-        item.setDone(false);
         return ItemDao.create(item);
     }
 }
