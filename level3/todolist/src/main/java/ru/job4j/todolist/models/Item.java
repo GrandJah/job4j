@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -16,30 +18,34 @@ import lombok.Data;
 @Entity
 @Table(name = "items")
 public class Item {
-    /**
-     * id.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+   /**
+    * id.
+    */
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Integer id;
 
-    /**
-     * task name.
-     */
-    private String task;
+   /**
+    * task name.
+    */
+   private String task;
 
-    /**
-     * description task.
-     */
-    private String description;
+   /**
+    * description task.
+    */
+   private String description;
 
-    /**
-     * time created.
-     */
-    private Timestamp created = Timestamp.from(Instant.now());
+   /**
+    * time created.
+    */
+   private Timestamp created = Timestamp.from(Instant.now());
 
-    /**
-     * item done.
-     */
-    private Boolean done = false;
+   /**
+    * item done.
+    */
+   private Boolean done = false;
+
+   @ManyToOne
+   @JoinColumn(name = "user_id")
+   private User user;
 }

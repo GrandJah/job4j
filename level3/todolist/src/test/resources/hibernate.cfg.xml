@@ -12,5 +12,6 @@
         <property name="use_sql_comments">true</property>
 
         <mapping class="ru.job4j.todolist.models.Item"/>
+        <mapping class="ru.job4j.todolist.models.User"/>
     </session-factory>
 </hibernate-configuration>
