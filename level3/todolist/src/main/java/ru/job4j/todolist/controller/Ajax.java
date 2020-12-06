@@ -17,13 +17,13 @@ import ru.job4j.todolist.storage.Storage;
  * web hibernate application.
  */
 public class Ajax extends HttpServlet {
-   private static Storage<Item> STORAGE;
+   private static Storage<Item> itemStorage;
    {
       Properties properties = new Properties();
       ClassLoader loader = getClass().getClassLoader();
       try {
          properties.load(loader.getResourceAsStream("application.properties"));
-         STORAGE = (Storage<Item>) loader.loadClass(properties.getProperty("item_storage")).newInstance();
+         itemStorage = (Storage<Item>) loader.loadClass(properties.getProperty("item_storage")).newInstance();
       } catch (Exception e) {
          e.printStackTrace();
       }
@@ -65,7 +65,7 @@ public class Ajax extends HttpServlet {
     */
    private static JSONObject get(JSONObject json) {
       JSONObject answer = new JSONObject();
-      answer.put("data", STORAGE.getAll());
+      answer.put("data", itemStorage.getAll());
       return answer;
    }
 
@@ -77,7 +77,7 @@ public class Ajax extends HttpServlet {
       Item item = new Item();
       item.setTask(json.getString("task"));
       item.setDescription(json.getString("description"));
-      if (STORAGE.create(item) != null) {
+      if (itemStorage.create(item) != null) {
          answer.put("success", true);
       } else {
          answer.put("success", false);
@@ -92,9 +92,9 @@ public class Ajax extends HttpServlet {
    private static JSONObject done(JSONObject json) {
       JSONObject answer = new JSONObject();
       Integer id = json.getInt("id");
-      Item item = STORAGE.getById(id);
+      Item item = itemStorage.getById(id);
       item.setDone(json.getBoolean("done"));
-      if (STORAGE.update(id, item)) {
+      if (itemStorage.update(id, item)) {
          answer.put("success", true);
       } else {
          answer.put("success", false);
