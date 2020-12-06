@@ -5,10 +5,65 @@
     <title>todolist</title>
 </head>
 <body>
-<form id="create">
+<form hidden id="create">
+    <label id="user"> Unknown </label>
+    <button onclick="onLogOut()">Выйти</button>
     <input type="text" name="task" value="Задание" title="task">
     <input type="text" name="description" value="Описание" title="description">
     <button onclick="create_task()">Создать задание.</button>
+</form>
+<form id="login">
+    <h1>Войти</h1>
+    <p>
+        <label for="username"> Ваш логин </label>
+        <input id="username" name="username" required="required" type="text"
+               placeholder="myusername"
+               oninput="document.getElementById('error_user').setAttribute('hidden','')"/>
+    </p>
+    <p>
+        <label for="password"> Ваш пароль </label>
+        <input id="password" name="password" required="required" type="password"
+               placeholder="eg. X8df!90EO"
+               oninput="document.getElementById('error_user').setAttribute('hidden','')"/>
+    </p>
+    <p class="login button">
+        <button onclick="onLogin()">Войти</button>
+        <label hidden id='error_user' style="color:red">Пользователь не найден</label>
+    </p>
+    <p class="change_link">
+        Не зарегестрированы?
+        <button onclick="switchForm('register','login')">Регистрация</button>
+    </p>
+</form>
+<form hidden id="register">
+    <h1> Sign up </h1>
+    <p>
+        <label for="usernamesignup">Ваше имя</label>
+        <input id="usernamesignup" name="usernamesignup" required="required" type="text"
+               placeholder="mysuperusername"
+               oninput="document.getElementById('error_name').setAttribute('hidden','')"/>
+        <label hidden id='error_name' style="color:red">Данное имя уже существует</label>
+    </p>
+    <p>
+        <label for="passwordsignup">Ваш пароль</label>
+        <input id="passwordsignup" name="passwordsignup" required="required"
+               type="password" placeholder="eg. X8df!90EO"
+               oninput="document.getElementById('error_pass').setAttribute('hidden','')"/>
+    </p>
+    <p>
+        <label for="passwordsignup_confirm">Подтвердите пароль</label>
+        <input id="passwordsignup_confirm" name="passwordsignup_confirm"
+               required="required" type="password" placeholder="eg. X8df!90EO"
+               oninput="document.getElementById('error_pass').setAttribute('hidden','')"/>
+        <label hidden id='error_pass' style="color:red">Пароли не совпадают</label>
+    </p>
+    <p class="signin button">
+        <button onclick="onRegister()">Зарегистрироватся</button>
+    </p>
+    <p class="change_link">
+        Уже зарегистрированы ?
+        <button onclick="switchForm('login','register')">Войти</button>
+    </p>
 </form>
 <label>
     <input type="checkbox" checked onclick="show_done=this.checked;get_table()">
@@ -18,11 +73,77 @@
 <button onclick="get_table();">Обновить</button>
 
 <script>
+    let login
+    let username
     let table_item = {};
     let show_done = true;
-    let head_fields = ["id", "task", "description", "created", "done"]
+    let head_fields = ["id", "author", "task", "description", "created", "done"]
+
+    function switchForm(visible, ...hide) {
+        event.preventDefault()
+        document.getElementById(visible).removeAttribute('hidden')
+        hide.forEach(el => document.getElementById(el).setAttribute('hidden', ''))
+    }
+
+    function onLogin() {
+        event.preventDefault();
+        let form = document.getElementById("login");
+        username = form.elements.username.value
+        let pass = form.elements.password.value;
+        let data = {
+            action: "login",
+            username,
+            pass
+        };
+        ajax(data, data => {
+            if (data.success === true) {
+                login = data.login
+                document.getElementById("user").innerText = username
+                switchForm('create', 'register', 'login')
+            } else if (data.success === false && data.error === 'errorUser') {
+                switchForm('login', 'create', 'register')
+                document.getElementById('error_user').removeAttribute('hidden')
+            } else {
+                console.log("error login - " + data.error);
+            }
+        });
+    }
+
+    function onLogOut() {
+        login = undefined;
+        switchForm('login', 'register', 'create')
+    }
+
+    function onRegister() {
+        event.preventDefault();
+        let form = document.getElementById("register");
+        username = form.elements.usernamesignup.value
+        let pass = form.elements.passwordsignup.value;
+        if (pass !== form.elements.passwordsignup_confirm.value) {
+            document.getElementById('error_pass').removeAttribute('hidden')
+            return
+        }
+        let data = {
+            action: "register",
+            username,
+            pass
+        };
+        ajax(data, data => {
+            if (data.success === true) {
+                document.getElementById("user").innerText = username
+                switchForm('create', 'register', 'login')
+            } else if (data.success === false && data.error === 'errorName') {
+                switchForm('register', 'create', 'login')
+                document.getElementById('error_name').removeAttribute('hidden')
+            } else {
+                console.log("error register - " + data.error);
+            }
+        });
+    }
+
 
     function ajax(data, func) {
+        data = {...data, login}
         fetch("ajax", {
             method: 'post',
             headers: {
@@ -51,12 +172,11 @@
     let checkBox = (checked, id) => {
         let check = document.createElement('input')
         check.setAttribute('type', 'checkbox')
-        if(checked) {
-            check.setAttribute('checked','')
+        if (checked) {
+            check.setAttribute('checked', '')
         }
-        // check.setAttribute('disabled', 'true')
         check.onclick = function () {
-            ajax({action: 'done', id, done:this.checked}, () => get_table())
+            ajax({action: 'done', id, done: this.checked}, () => get_table())
         }
         return check;
     }
@@ -70,11 +190,11 @@
             let tr = document.createElement('tr');
             for (let i of head_fields) {
                 let t = document.createElement('td')
+                t.style = 'border: 1px solid grey; padding:5px; '
                 if (i === 'done') {
                     t.appendChild(checkBox(row['done'] === true, row['id']))
                 } else if (row[i] !== undefined) {
                     t.innerText = row[i]
-                    t.style = 'border: 1px solid grey; padding:5px; '
                 }
                 tr.appendChild(t)
             }
@@ -91,7 +211,7 @@
             " color: white; border: 1px solid grey;" +
             " margin:0; border-spacing:0; text-align: center;"
         table.appendChild(buildHeader())
-        table.appendChild(buildBody(table_item.data.sort((a,b) => a.id - b.id)))
+        table.appendChild(buildBody(table_item.data.sort((a, b) => a.id - b.id)))
         table.appendChild(document.createElement('tfoot'))
         document.getElementById('table_task').replaceWith(table);
     }
