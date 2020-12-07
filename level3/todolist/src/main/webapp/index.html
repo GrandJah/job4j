@@ -73,14 +73,14 @@
 <button onclick="get_table();">Обновить</button>
 
 <script>
-    let login
+    let token
     let username
     let table_item = {};
     let show_done = true;
     let head_fields = ["id", "author", "task", "description", "created", "done"]
 
     function switchForm(visible, ...hide) {
-        event.preventDefault()
+        if (event !== undefined) event.preventDefault()
         document.getElementById(visible).removeAttribute('hidden')
         hide.forEach(el => document.getElementById(el).setAttribute('hidden', ''))
     }
@@ -97,7 +97,7 @@
         };
         ajax(data, data => {
             if (data.success === true) {
-                login = data.login
+                token = data.token
                 document.getElementById("user").innerText = username
                 switchForm('create', 'register', 'login')
             } else if (data.success === false && data.error === 'errorUser') {
@@ -110,7 +110,8 @@
     }
 
     function onLogOut() {
-        login = undefined;
+        event.preventDefault();
+        token = undefined;
         switchForm('login', 'register', 'create')
     }
 
@@ -130,6 +131,7 @@
         };
         ajax(data, data => {
             if (data.success === true) {
+                token = data.token
                 document.getElementById("user").innerText = username
                 switchForm('create', 'register', 'login')
             } else if (data.success === false && data.error === 'errorName') {
@@ -143,7 +145,7 @@
 
 
     function ajax(data, func) {
-        data = {...data, login}
+        data = {...data, token}
         fetch("ajax", {
             method: 'post',
             headers: {
@@ -193,6 +195,8 @@
                 t.style = 'border: 1px solid grey; padding:5px; '
                 if (i === 'done') {
                     t.appendChild(checkBox(row['done'] === true, row['id']))
+                } else if (i === 'author') {
+                    t.innerText = row['author'] === undefined ? 'Unknown' : row['author'].name
                 } else if (row[i] !== undefined) {
                     t.innerText = row[i]
                 }
