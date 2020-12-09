@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -16,6 +18,10 @@ public class Model {
    private Integer id;
 
    private String name;
+
+   @ManyToOne
+   @JoinColumn(name = "manufacturer_id")
+   private Manufacturer manufacturer;
 
    public static Model ofName(String name) {
       Model entity = new Model();

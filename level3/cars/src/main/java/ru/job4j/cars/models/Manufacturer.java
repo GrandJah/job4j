@@ -1,7 +1,7 @@
 package ru.job4j.cars.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Entity
+@EqualsAndHashCode(exclude = "models")
+@ToString(exclude = "models")
 @Table(name = "manufacturers")
 public class Manufacturer {
    @Id
@@ -23,11 +27,12 @@ public class Manufacturer {
    @Column(unique = true)
    private String name;
 
-   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-   private List<Model> models = new ArrayList<>();
+   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "manufacturer")
+   private Set<Model> models = new HashSet<>();
 
    public Manufacturer addModel(Model model) {
       models.add(model);
+      model.setManufacturer(this);
       return this;
    }
 
