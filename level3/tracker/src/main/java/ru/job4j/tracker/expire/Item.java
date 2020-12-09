@@ -3,11 +3,11 @@ package ru.job4j.tracker.expire;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -20,6 +20,7 @@ import lombok.ToString;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(force = true)
 @ToString(callSuper = true)
 public class Item extends ru.job4j.tracker.Item {
   private static int GEN_ID = (int) System.currentTimeMillis();
