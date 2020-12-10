@@ -1,20 +1,22 @@
 package ru.job4j.todolist.controller;
 
-import org.junit.Test;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.concurrent.atomic.AtomicReference;
-import ru.job4j.todolist.storage.hibernate.HbmStorageItem;
-import ru.job4j.todolist.storage.hibernate.HbmStorageUser;
-
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.junit.Test;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import ru.job4j.todolist.storage.hibernate.HbmStorageCategory;
+import ru.job4j.todolist.storage.hibernate.HbmStorageItem;
+import ru.job4j.todolist.storage.hibernate.HbmStorageUser;
 
 /**
  * Test class.
@@ -40,7 +42,7 @@ public class AjaxTest {
             answer.set(i.getArgumentAt(0, String.class));
             return null;
         }).when(writer).write(anyString());
-        Ajax ajax = new Ajax(new HbmStorageItem(), new HbmStorageUser());
+        Ajax ajax = new Ajax(new HbmStorageItem(), new HbmStorageUser(), new HbmStorageCategory());
         ajax.doPost(req, resp);
         assertTrue(answer.get().startsWith(expectStart));
         assertTrue(answer.get().endsWith(expectEnd));

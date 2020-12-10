@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import ru.job4j.todolist.models.Category;
 import ru.job4j.todolist.models.Item;
 import ru.job4j.todolist.models.User;
 import ru.job4j.todolist.storage.Storage;
@@ -24,16 +25,19 @@ public class Ajax extends HttpServlet {
    public Ajax() {
       this(
        StorageInstance.instance(Item.class),
-       StorageInstance.instance(User.class)
+       StorageInstance.instance(User.class),
+       StorageInstance.instance(Category.class)
       );
    }
 
    private final Storage<Item> items;
    private final Storage<User> users;
+   private final Storage<Category> categories;
 
-   public Ajax(Storage<Item> items, Storage<User> users) {
+   public Ajax(Storage<Item> items, Storage<User> users, Storage<Category> categories) {
       this.items = items;
       this.users = users;
+      this.categories = categories;
    }
 
    /**
@@ -47,6 +51,7 @@ public class Ajax extends HttpServlet {
       actions.put("done", this::done);
       actions.put("login", this::login);
       actions.put("register", this::register);
+      actions.put("categories", this::categories);
    }
 
    @Override
@@ -100,6 +105,9 @@ public class Ajax extends HttpServlet {
                item.setTask(json.getString("task"));
                item.setDescription(json.getString("description"));
                item.setAuthor(user);
+               for (Object id : json.getJSONArray("categories").toList()) {
+                  item.addCategory(categories.getById((Integer) id));
+               }
                if (this.items.create(item) != null) {
                   answer.put("success", true);
                   return answer;
@@ -171,6 +179,12 @@ public class Ajax extends HttpServlet {
          answer.put("success", false);
          answer.put("error", "errorName");
       }
+      return answer;
+   }
+
+   private JSONObject categories(JSONObject jsonObject) {
+      JSONObject answer = new JSONObject();
+      answer.put("data", this.categories.getAll());
       return answer;
    }
 

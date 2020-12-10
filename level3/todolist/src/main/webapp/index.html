@@ -10,6 +10,7 @@
     <button onclick="onLogOut()">Выйти</button>
     <input type="text" name="task" value="Задание" title="task">
     <input type="text" name="description" value="Описание" title="description">
+    <select name="cIds" id="cIds" multiple></select>
     <button onclick="create_task()">Создать задание.</button>
 </form>
 <form id="login">
@@ -78,6 +79,24 @@
     let table_item = {};
     let show_done = true;
     let head_fields = ["id", "author", "task", "description", "created", "done"]
+    let categories = []
+
+    function addOption(select, category) {
+        const option = document.createElement('option')
+        option.setAttribute('value', category.id)
+        option.innerText = category.name
+        select.appendChild(option)
+    }
+
+    function fillCategories() {
+        ajax({action: "categories"}, (data => {
+            const sel = document.getElementById('cIds')
+            sel.innerText = ''
+            for (let category of data.data) {
+                addOption(sel, category)
+            }
+        }))
+    }
 
     function switchForm(visible, ...hide) {
         if (event !== undefined) event.preventDefault()
@@ -225,6 +244,7 @@
             table_item = data;
             update_table();
         });
+        fillCategories();
     }
 
     get_table();
@@ -235,7 +255,10 @@
         let data = {
             action: "create",
             task: form.elements.task.value,
-            description: form.elements.description.value
+            description: form.elements.description.value,
+            categories: [...form.elements.cIds]
+                .filter(e => e.selected === true)
+                .flatMap(e => +e.value)
         };
         ajax(data, data => {
             if (data.success === true) {
