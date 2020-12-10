@@ -6,27 +6,28 @@ import java.util.Map;
 import java.util.Properties;
 
 public class StorageInstance {
-   private static final Map<Class, Storage> storageInstance = new HashMap<>();
-   private static final Properties properties = new Properties();
-   private static final ClassLoader loader = StorageInstance.class.getClassLoader();
-   
+   private static final Map<Class, Storage> STORAGE_INSTANCE = new HashMap<>();
+   private static final Properties PROPERTIES = new Properties();
+   private static final ClassLoader LOADER = StorageInstance.class.getClassLoader();
+
    static {
       try {
-         properties.load(loader.getResourceAsStream("application.properties"));
+         PROPERTIES.load(LOADER.getResourceAsStream("application.properties"));
       } catch (IOException e) {
          e.printStackTrace();
       }
    }
 
    public static <T> Storage<T> instance(Class<T> clazz) {
-      storageInstance.computeIfAbsent(clazz, StorageInstance::newInstance);
-      return storageInstance.get(clazz);
+      STORAGE_INSTANCE.computeIfAbsent(clazz, StorageInstance::newInstance);
+      return STORAGE_INSTANCE.get(clazz);
    }
 
    private static <T> Storage<T> newInstance(Class<T> clazz) {
       System.out.println(clazz.getName());
       try {
-         return (Storage<T>) loader.loadClass(properties.getProperty(clazz.getName())).newInstance();
+         return (Storage<T>) LOADER.loadClass(PROPERTIES.getProperty(clazz.getName()))
+          .newInstance();
       } catch (Exception e) {
          e.printStackTrace();
       }

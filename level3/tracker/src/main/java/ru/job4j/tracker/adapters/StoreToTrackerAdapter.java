@@ -17,7 +17,7 @@ public final class StoreToTrackerAdapter implements Tracker {
       t.setDescription(f.getDescription());
       t.setCreated(f.getCreated());
       t.setId(f.getId());
-      return  t;
+      return t;
    }
 
    private ru.job4j.tracker.expire.Item convert(Item item) {
@@ -45,7 +45,7 @@ public final class StoreToTrackerAdapter implements Tracker {
 
    @Override
    public void update(ru.job4j.tracker.expire.Item item) throws NotFound, ErrorValue {
-      store.replace(item.getId().toString(),item);
+      store.replace(item.getId().toString(), item);
    }
 
    @Override
@@ -61,7 +61,7 @@ public final class StoreToTrackerAdapter implements Tracker {
    @Override
    public ArrayList<ru.job4j.tracker.expire.Item> getAll() {
       ArrayList<ru.job4j.tracker.expire.Item> result = new ArrayList<>();
-      store.findAll().forEach(i-> result.add(convert(i)));
+      store.findAll().forEach(i -> result.add(convert(i)));
       return result;
    }
 }

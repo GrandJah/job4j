@@ -3,7 +3,6 @@ package ru.job4j.todolist.storage.hibernate;
 import java.util.List;
 import ru.job4j.todolist.models.Item;
 import ru.job4j.todolist.storage.Storage;
-import ru.job4j.todolist.storage.hibernate.HbmStorage;
 
 public class HbmStorageItem extends HbmStorage implements Storage<Item> {
 
