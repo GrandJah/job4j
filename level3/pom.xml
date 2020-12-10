@@ -13,21 +13,27 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>hibernate</module>
+        <module>books</module>
+        <module>cars</module>
+        <module>todolist</module>
         <module>sell_car</module>
-        <module>spring</module>
+        <module>tracker</module>
     </modules>
 <dependencies>
     <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
-        <version>5.2.16.Final</version>
+        <version>5.4.15.Final</version>
     </dependency>
     <dependency>
         <groupId>org.hsqldb</groupId>
         <artifactId>hsqldb</artifactId>
         <version>2.4.0</version>
-        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.2.12</version>
     </dependency>
 </dependencies>
 

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sell_car</artifactId>
+    <artifactId>todolist</artifactId>
     <packaging>war</packaging>
     <dependencies>
         <dependency>
@@ -23,7 +23,6 @@
             <artifactId>commons-dbcp</artifactId>
             <version>1.2.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
@@ -34,12 +33,6 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20201115</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.3</version>
         </dependency>
     </dependencies>
 </project>
