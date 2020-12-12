@@ -1,7 +1,7 @@
 package ru.job4j.todolist.models;
 
-import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.Data;
 
 /**
@@ -43,7 +45,9 @@ public class Item {
    /**
     * time created.
     */
-   private Timestamp created = Timestamp.from(Instant.now());
+   @Temporal( TemporalType.TIMESTAMP)
+//   private Date created = Timestamp.from(Instant.now());
+   private Date created = Date.from(Instant.now());
 
    /**
     * item done.
