@@ -18,6 +18,7 @@
         <module>todolist</module>
         <module>sell_car</module>
         <module>tracker</module>
+        <module>entityCars</module>
     </modules>
 <dependencies>
     <dependency>
