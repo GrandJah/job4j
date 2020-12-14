@@ -1,7 +1,7 @@
 package models;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,11 +30,11 @@ public class Driver {
 
    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    @JoinTable(name = "history_owner", joinColumns = {
-    @JoinColumn(name = "driver_id", nullable = false, updatable = false)
+    @JoinColumn(name = "driver_id", nullable = false)
    }, inverseJoinColumns = {
-    @JoinColumn(name = "car_id", nullable = false, updatable = false)
+    @JoinColumn(name = "car_id", nullable = false)
    })
-   public Set<Car> cars = new HashSet<>();
+   private List<Car> cars = new ArrayList<>();
 
    public void addCar(Car car) {
       this.cars.add(car);
@@ -42,7 +42,7 @@ public class Driver {
 
    public static Driver of(String driverName) {
       Driver driver = new Driver();
-         driver.setName(driverName);
-         return driver;
-      }
+      driver.setName(driverName);
+      return driver;
+   }
 }

@@ -1,11 +1,10 @@
 package models;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,28 +27,27 @@ public class Car {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   private String number;
+   private String serialNumber;
 
-   @ManyToOne
-   @JoinColumn(name = "engine_id", foreignKey = @ForeignKey(name = "ENGINE_ID_FK"))
+   @ManyToOne(cascade = CascadeType.ALL)
+   @JoinColumn(name = "engine_id")
    private Engine engine;
-
 
    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    @JoinTable(name = "history_owner", joinColumns = {
-    @JoinColumn(name = "car_id", nullable = false, updatable = false)
+    @JoinColumn(name = "car_id", nullable = false)
    }, inverseJoinColumns = {
-    @JoinColumn(name = "driver_id", nullable = false, updatable = false)
+    @JoinColumn(name = "driver_id", nullable = false)
    })
-   public Set<Driver> drivers = new HashSet<>();
+   private List<Driver> drivers = new ArrayList<>();
 
    public void addDriver(Driver driver) {
       this.drivers.add(driver);
    }
 
-   public static Car of(String carNamber) {
+   public static Car of(String serialNumber) {
       Car car = new Car();
-      car.setNumber(carNamber);
+      car.setSerialNumber(serialNumber);
       return car;
    }
 }
