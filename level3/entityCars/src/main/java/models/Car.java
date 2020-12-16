@@ -23,6 +23,7 @@ import lombok.ToString;
 @EqualsAndHashCode(exclude = "drivers")
 @Table(name = "cars")
 public class Car {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;

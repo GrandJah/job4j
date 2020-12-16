@@ -11,6 +11,7 @@ import lombok.Data;
 @Entity
 @Table(name = "engines")
 public class Engine {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;

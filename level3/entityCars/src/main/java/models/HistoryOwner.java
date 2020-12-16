@@ -16,6 +16,7 @@ import lombok.Data;
 @Entity
 @Table(name = "history_owner")
 public class HistoryOwner {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @JoinColumn(name = "id")
@@ -30,7 +31,6 @@ public class HistoryOwner {
    @JoinColumn(name = "car_id", nullable = false)
    @NotNull
    private Car car;
-
 
    private Timestamp startOwner;
 
