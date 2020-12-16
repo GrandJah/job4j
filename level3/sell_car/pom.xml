@@ -11,6 +11,10 @@
     <artifactId>sell_car</artifactId>
     <packaging>war</packaging>
     <dependencies>
-
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
+        </dependency>
     </dependencies>
 </project>
