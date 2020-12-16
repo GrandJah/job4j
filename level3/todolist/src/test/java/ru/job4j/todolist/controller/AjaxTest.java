@@ -1,6 +1,6 @@
 package ru.job4j.todolist.controller;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -53,7 +53,7 @@ public class AjaxTest {
      */
     @Test
     public void whenGetThenReturnJsonString() throws IOException {
-//        test("{\"action\":\"get\"}", "{\"data\":[]}", "[]}");
+        test("{\"action\":\"get\"}", "{\"data\":[]}", "[]}");
 //        test("{\"action\":\"create\",\"task\":\"NewTask\",\"description\":\"DeskTask\"}", "{\"success\":true}", "");
 //        test("{\"action\":\"get\"}", "{\"data\":[{\"task\":\"NewTask\",\"created\":", "\"done\":false}]}");
     }
