@@ -15,7 +15,7 @@ create table cars
 (
 	id integer primary key,
 	serialnumber varchar(255),
-	engine_id references engines(id)
+	engine_id not null unique references engines(id)
 );
 
 create table history_owner

@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,8 +30,8 @@ public class Car {
 
    private String serialNumber;
 
-   @ManyToOne(cascade = CascadeType.ALL)
-   @JoinColumn(name = "engine_id")
+   @OneToOne(cascade = CascadeType.ALL)
+   @JoinColumn(name = "engine_id", unique = true, nullable = false)
    private Engine engine;
 
    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -49,6 +49,7 @@ public class Car {
    public static Car of(String serialNumber) {
       Car car = new Car();
       car.setSerialNumber(serialNumber);
+      car.setEngine(Engine.of("empty"));
       return car;
    }
 }

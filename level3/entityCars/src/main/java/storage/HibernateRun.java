@@ -18,7 +18,7 @@ public class HibernateRun extends HbmStorage {
       createEngine("low", "medium", "high");
       createCar("Camry", "low");
       createCar("Solaris", "medium");
-      createCar("Corolla", "medium");
+      createCar("Corolla", "new model");
       createEntry("Ivanov", "Camry", "Land Cruiser", "Corolla", "Fortuner", "Hiace");
       createEntry("Petrov", "Solaris", "Creta", "Accent");
       createEntry("Sidorov", "Solaris", "Corolla", "Camry");
@@ -26,8 +26,8 @@ public class HibernateRun extends HbmStorage {
 
    private void listHistoryOwner() {
       List<HistoryOwner> list = query(sf -> sf.createQuery("from HistoryOwner", HistoryOwner.class).list());
-      for (HistoryOwner h_o : list) {
-         System.out.println(h_o.toString());
+      for (HistoryOwner hO : list) {
+         System.out.println(hO.toString());
       }
    }
 
