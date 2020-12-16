@@ -26,3 +26,4 @@ create table history_owner
 	car_id integer not null references cars(id),
 	driver_id integer not null references drivers(id)
 );
+

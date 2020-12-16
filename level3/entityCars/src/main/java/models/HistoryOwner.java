@@ -16,7 +16,6 @@ import lombok.Data;
 @Entity
 @Table(name = "history_owner")
 public class HistoryOwner {
-
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @JoinColumn(name = "id")

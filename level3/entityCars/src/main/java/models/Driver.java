@@ -22,7 +22,6 @@ import lombok.ToString;
 @EqualsAndHashCode(exclude = "cars")
 @Table(name = "drivers")
 public class Driver {
-
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
