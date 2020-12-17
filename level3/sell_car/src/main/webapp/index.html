@@ -1,25 +1,8 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <title>Продажа машин</title>
+    <script src="js/$.js"></script>
 </head>
 <body>
-<form id="upload">
-    Загрузите фото: <input name="fileUpload" required multiple type="file"/>
-    <button onclick="upload()">Загрузить</button>
-</form>
-<script>
-    let formData;
-    let form;
-    function upload() {
-        event.preventDefault()
-        form = document.querySelector("#upload");
-        formData = new FormData(form);
-        fetch("upload", {
-            method: 'post',
-            body: formData
-        })
-    }
-</script>
 
 </body>
