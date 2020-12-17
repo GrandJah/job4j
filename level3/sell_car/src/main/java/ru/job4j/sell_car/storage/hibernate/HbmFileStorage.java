@@ -4,11 +4,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
+import ru.job4j.sell_car.environment.interfaces.FileStorage;
 import ru.job4j.sell_car.models.ImageFile;
 
-public class HbmFileStorage extends HbmStorage {
+public class HbmFileStorage extends HbmStorage implements FileStorage {
    //todo move to config enviroment
-   String ROOT_PATH = "image_sell_car";
+   private static final String ROOT_PATH = "image_sell_car";
 
    public String addFile(String contentType, byte[] content) {
       ImageFile file = new ImageFile();
@@ -40,9 +41,10 @@ public class HbmFileStorage extends HbmStorage {
          image.setContent(buf);
          int s = 0;
          try (FileInputStream in = new FileInputStream(filepath)) {
-            for (int n = 0; s < image.getSize(); ) {
+            int n = 0;
+            do {
                n += in.read(buf, n, image.getSize() - n);
-            }
+            } while (n < image.getSize());
          } catch (IOException e) {
             e.printStackTrace();
          }

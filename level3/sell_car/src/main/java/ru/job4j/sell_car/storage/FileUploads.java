@@ -20,7 +20,7 @@ public class FileUploads implements Upload {
    private final DiskFileItemFactory factory = new DiskFileItemFactory();
 
    @Override
-   public boolean isUploaded(HttpServletRequest req){
+   public boolean isUploaded(HttpServletRequest req) {
       return ServletFileUpload.isMultipartContent(req);
    }
 

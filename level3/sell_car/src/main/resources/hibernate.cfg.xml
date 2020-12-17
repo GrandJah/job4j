@@ -17,5 +17,11 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="use_sql_comments">true</property>
+
+        <mapping class="ru.job4j.sell_car.models.ImageFile"/>
+        <mapping class="ru.job4j.sell_car.models.Advert"/>
+        <mapping class="ru.job4j.sell_car.models.Car"/>
+        <mapping class="ru.job4j.sell_car.models.User"/>
+        <mapping class="ru.job4j.sell_car.models.Shadow"/>
     </session-factory>
 </hibernate-configuration>
