@@ -1,4 +1,4 @@
-package ru.job4j.sell_car.entity;
+package ru.job4j.sell_car.models;
 
 import java.sql.Timestamp;
 import java.time.Instant;

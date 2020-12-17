@@ -1,12 +1,12 @@
-package ru.job4j.sell_car.storage;
+package ru.job4j.sell_car.storage.hibernate;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
-import ru.job4j.sell_car.entity.ImageFile;
+import ru.job4j.sell_car.models.ImageFile;
 
-public class FileStorage extends HbmStorage {
+public class HbmFileStorage extends HbmStorage {
    //todo move to config enviroment
    String ROOT_PATH = "image_sell_car";
 

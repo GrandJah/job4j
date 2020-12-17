@@ -1,4 +1,4 @@
-package ru.job4j.sell_car.storage;
+package ru.job4j.sell_car.storage.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

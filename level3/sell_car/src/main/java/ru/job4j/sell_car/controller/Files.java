@@ -1,54 +1,34 @@
 package ru.job4j.sell_car.controller;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ru.job4j.sell_car.entity.ImageFile;
-import ru.job4j.sell_car.storage.FileStorage;
+import ru.job4j.sell_car.models.ImageFile;
+import ru.job4j.sell_car.environment.Environment;
+import ru.job4j.sell_car.environment.interfaces.FileStorage;
+import ru.job4j.sell_car.environment.interfaces.Upload;
+
 
 public class Files extends HttpServlet {
+   private final Environment env = Environment.inst(this);
 
-   private DiskFileItemFactory factory;
+   private final Upload upload = env.get(Upload.class);
 
-   private FileStorage fileStorage;
-
-   @Override
-   public void init() throws ServletException {
-      super.init();
-      this.factory = new DiskFileItemFactory();
-      this.fileStorage = new FileStorage();
-   }
+   private final FileStorage fileStorage = env.get(FileStorage.class);
 
    @Override
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
       JSONObject answer = new JSONObject();
       answer.put("success", false);
-      if (ServletFileUpload.isMultipartContent(req)) {
+      assert this.upload != null;
+      if (this.upload.isUploaded(req)) {
          List<String> list = new ArrayList<>();
-         ServletFileUpload upload = new ServletFileUpload(this.factory);
-         try {
-            for (FileItem item : upload.parseRequest(req)) {
-               if (item.getContentType().startsWith("image")) {
-                  String path = this.fileStorage
-                   .addFile(item.getContentType(), item.get());
-                  if (path != null) {
-                     list.add(path);
-                  }
-               }
-            }
-         } catch (FileUploadException e) {
-            e.printStackTrace();
-         }
+         this.upload.upload(req, list);
          if (list.size() != 0) {
             answer.put("success", true);
             answer.put("files", list);
@@ -61,6 +41,7 @@ public class Files extends HttpServlet {
 
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+      assert this.fileStorage != null;
       ImageFile image = this.fileStorage.getFile(req.getPathInfo().trim().toLowerCase());
       if (image != null) {
          resp.setContentType(image.getType());
