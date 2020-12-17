@@ -20,4 +20,12 @@
             org.apache.commons.fileupload.servlet.FileCleanerCleanup
         </listener-class>
     </listener>
+    <servlet>
+        <servlet-name>Ajax</servlet-name>
+        <servlet-class>ru.job4j.sell_car.controller.Ajax</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Ajax</servlet-name>
+        <url-pattern>/ajax</url-pattern>
+    </servlet-mapping>
 </web-app>
