@@ -40,7 +40,7 @@ public class Files extends HttpServlet {
             for (FileItem item : upload.parseRequest(req)) {
                if (item.getContentType().startsWith("image")) {
                   String path = this.fileStorage
-                   .addFile(item.getName(), item.getContentType(), item.getSize(), item.get());
+                   .addFile(item.getContentType(), item.get());
                   if (path != null) {
                      list.add(path);
                   }
@@ -61,9 +61,10 @@ public class Files extends HttpServlet {
 
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-      System.out.println(req.getPathInfo());
-      ImageFile image = this.fileStorage.getFile(req.getPathInfo().trim().toLowerCase().substring(1));
-      resp.setContentType(image.getType());
-      resp.getOutputStream().write(image.getContent());
+      ImageFile image = this.fileStorage.getFile(req.getPathInfo().trim().toLowerCase());
+      if (image != null) {
+         resp.setContentType(image.getType());
+         resp.getOutputStream().write(image.getContent());
+      }
    }
 }
