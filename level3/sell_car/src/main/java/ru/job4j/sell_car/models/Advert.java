@@ -22,7 +22,7 @@ public class Advert {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   @JoinColumn(name = "price", nullable = false)
+   @JoinColumn(name = "description", nullable = false)
    private String description = "";
 
    @JoinColumn(name = "price", nullable = false)
