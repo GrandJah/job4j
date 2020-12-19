@@ -106,6 +106,7 @@
 
         if (check(item.user.id)) {
             status.style.backgroundColor = "black";
+            _search(".align_status", el).style.width = "65%"
             _search(".status", el).innerText = item.status ? "Еще не продали? Жми сюда?" : "Уже продали? Жми сюда?";
             _search(".status", el).style.color = item.status ? "pink" : "lightgreen";
             status.onclick = click_status
@@ -132,6 +133,7 @@
     }
 
     .status {
+        font-size: small;
         color: white;
         position: relative;
         top: 50%;
@@ -140,7 +142,7 @@
     }
 
     .align_status {
-        width: 15%;
+        width: 30%;
         position: relative;
         float: right;
         right: 5%;
@@ -157,7 +159,7 @@
 
     .price {
         color: blue;
-        font-size: 200%;
+        font-size: large;
         position: relative;
         top: 50%;
         transform: translateY(-50%);
@@ -290,6 +292,7 @@
         overflow-y: scroll;
         overflow-x: hidden;
         max-height: 100%;
+        font-size: small;
     }
 
     .out {

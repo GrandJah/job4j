@@ -75,6 +75,19 @@ const _add_render = callBack => {
     state_app.renders.push(callBack)
 }
 
+const _cookies = () => {
+    return document.cookie.split(";").map(cookieString => {
+        const cookieEntry = cookieString.trim().split("=")
+        return {[cookieEntry[0]]: cookieEntry[1]}
+    }).reduce((arr, cookie) => {
+        return {...cookie, ...arr}
+    }, {})
+}
+
+const _set_cookie = (key, value) =>  document.cookie = `${key}=${value}`
+
+const _del_cookie = (key) => document.cookie = `${key}=; 'max-age'=0; expires=0`
+
 const main = _create("script")
 main.src = "js/main.js"
 document.head.appendChild(main);
