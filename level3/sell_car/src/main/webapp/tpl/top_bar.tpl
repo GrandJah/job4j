@@ -5,7 +5,7 @@
                 <div>
                     <button id="user_button">OK!</button>
                 </div>
-                <div id="user_form" hidden></div>
+                <div id="user_form"></div>
             </div>
         </div>
         <div class="opacity"></div>
@@ -14,29 +14,25 @@
 </template>
 <script src="js/$.js"></script>
 <script>
-    const list_ad = _loadUrlTpl("tpl/listing_card.tpl", ".list")
-    const login_form = _loadUrlTpl("tpl/login.tpl", "#user_form")
-
     const user_button = _search("#user_button")
-    const user_form = _search("#user_form")
 
-    user_button.onclick = () => {
-        user_form.hidden = !user_form.hidden
-        console.log(user_form.hidden)
-    }
+    _loadUrlTpl("listing_card", ".list")
+    _loadUrlTpl("login", "#user_form", () => {
+        const login = _find_module("login")
 
-    if (_cookies().token !== undefined) {
-        user_button.innerText = "Выйти"
-    } else {
-        user_button.innerText = "Войти"
-    }
+        user_button.onclick = () => {
+            if (login.property.hidden) {
+                login.method.openDialog()
+            } else {
+                login.method.closeDialog()
+            }
+        }
 
-    document.cookie = "ucffser=John";
-    console.log(document.cookie)
-    _set_cookie("token", "vfgj")
-    _del_cookie("token")
+        user_button.innerText = login.property.login
+            ? user_button.innerText = "Выйти"
+            : user_button.innerText = "Войти"
+    })
 
-    console.log(_cookies())
 
     _add_render(() =>
         _search(".list").style.height =
@@ -56,8 +52,8 @@
 
     #user_form {
         width: 80%;
-        margin: auto;
-        top: 60pt;
+        margin: 0 auto;
+        top: 80pt;
         position: relative;
     }
 
@@ -75,11 +71,12 @@
     }
 
     .opacity {
+        top: -1pt;
         position: relative;
-        height: 15pt;
+        height: 16pt;
         z-index: 100;
         outline: blue 1px dotted;
-        background-image: linear-gradient(rgba(255, 255, 255, 255), rgba(255, 255, 255, 0));
+        background-image: linear-gradient(rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
     }
 
 
@@ -119,7 +116,6 @@
 
     .list {
         top: -16pt;
-        height: 400px;
         position: relative;
         overflow-x: hidden;
         overflow-y: scroll;

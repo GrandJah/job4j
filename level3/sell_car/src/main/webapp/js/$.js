@@ -1,3 +1,6 @@
+const root_path = "tpl"
+const ext_tpl = "tpl"
+
 const _debug = msg => console.log(msg)
 
 const _search = (selector, element) => {
@@ -5,8 +8,16 @@ const _search = (selector, element) => {
     return el.querySelector(selector)
 }
 
+function _hide(selector) {
+    _search(selector).setAttribute('hidden', '')
+}
+
+function _visible(selector) {
+    _search(selector).removeAttribute('hidden')
+}
+
 const _stub = () => {
-    if (event !== null) {
+    if (event !== undefined) {
         event.preventDefault()
     }
 }
@@ -27,19 +38,26 @@ const _app = title => {
 
 const state_app = {
     data: {},
-    modules: [],
+    modules: {},
     renders: [],
     render: () => {
         state_app.renders.forEach(render => render())
     }
 }
 
+const _add_module = module => {
+    const {id, ...config} = module
+    state_app.data[id] = {...config}
+}
+
+const _find_module = id => state_app.data[id]
+
 const _render = () => state_app.render()
 
-const _loadUrlTpl = (url, selector) => {
+const _loadUrlTpl = (id, selector, callback) => {
     const module = []
     const wrapper = document.createElement("div")
-    fetch(url)
+    fetch(`${root_path}/${id}.${ext_tpl}`)
         .then(resp => resp.text())
         .then(html => {
             wrapper.innerHTML = html;
@@ -65,10 +83,14 @@ const _loadUrlTpl = (url, selector) => {
                 }
             }
         ))
-        .then(() => _render())
+        .then(() => {
+            state_app.modules[id] = module
+            _render()
+            if (callback) {
+                callback()
+            }
+        })
         .catch(error => _debug(error))
-    state_app.modules.push(module)
-    return module
 }
 
 const _add_render = callBack => {
@@ -84,7 +106,7 @@ const _cookies = () => {
     }, {})
 }
 
-const _set_cookie = (key, value) =>  document.cookie = `${key}=${value}`
+const _set_cookie = (key, value) => document.cookie = `${key}=${value}`
 
 const _del_cookie = (key) => document.cookie = `${key}=; 'max-age'=0; expires=0`
 

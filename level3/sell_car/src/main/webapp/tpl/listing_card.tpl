@@ -83,7 +83,7 @@
         const target = _search(".status", event.target.parentElement)
         const status = target.style.color === "pink"
         target.style.color = !status ? "pink" : "lightgreen";
-        target.innerText = !status ? "Еще не продали?\n\rжми сюда?" : "Уже продали?\n\rжми сюда?";
+        target.innerText = !status ? "Не продали? Жми сюда?" : "Уже продали? Жми сюда?";
     }
 
     //todo проверка id текущего пользователя
@@ -107,7 +107,7 @@
         if (check(item.user.id)) {
             status.style.backgroundColor = "black";
             _search(".align_status", el).style.width = "65%"
-            _search(".status", el).innerText = item.status ? "Еще не продали? Жми сюда?" : "Уже продали? Жми сюда?";
+            _search(".status", el).innerText = item.status ? "Не продали? Жми сюда?" : "Уже продали? Жми сюда?";
             _search(".status", el).style.color = item.status ? "pink" : "lightgreen";
             status.onclick = click_status
         } else {

@@ -1,5 +1,5 @@
 _app("Продажа машин")
-const m_upload = _loadUrlTpl("tpl/top_bar.tpl", "body")
+_loadUrlTpl("top_bar", "body")
 
 let token = undefined;
 
@@ -14,7 +14,9 @@ const _ajax_fetch = async data =>
         .then(data => data.json())
 
 const _ajax = (data, func) => {
-    _ajax_fetch({...data, token})
+
+    // _ajax_fetch({...data, token})
+    _ajax_stub({...data,  token:_cookies().token})
         .then(func)
         .catch(err => console.log("ajax - error:" + err))
 }
@@ -38,7 +40,8 @@ const m_user = (id, name, email, phone, registration) => {
 }
 
 const _ajax_stub = async data => {
-
+    _debug(data)
+    throw "stub"
 }
 
 const _rnd = (min, max) => {
