@@ -1,6 +1,9 @@
 const _debug = msg => console.log(msg)
 
-const _search = selector => document.querySelector(selector)
+const _search = (selector, element) => {
+    const el = element !== undefined ? element : document
+    return el.querySelector(selector)
+}
 
 const _stub = () => {
     if (event !== null) {
@@ -61,7 +64,9 @@ const _loadUrlTpl = (url, selector) => {
                     module.push(...el.childNodes)
                 }
             }
-        )).catch(error => _debug(error))
+        ))
+        .then(() => _render())
+        .catch(error => _debug(error))
     state_app.modules.push(module)
     return module
 }
