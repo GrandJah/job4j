@@ -3,46 +3,60 @@
         <div class="top_bar">
             <div class="container">
                 <div>
+                    <label id="user_name"></label>
+                </div>
+                <div>
                     <button id="user_button">OK!</button>
                 </div>
                 <div id="user_form"></div>
             </div>
         </div>
         <div class="opacity"></div>
-        <div class="list"></div>
+        <div id="card_list_site" class="list"></div>
     </div>
 </template>
 <script src="js/$.js"></script>
 <script>
-    const user_button = _search("#user_button")
+    (() => {
+        _loadUrlTpl("login", "#user_form", () => {
+            const user_button = _search("#user_button")
 
-    _loadUrlTpl("listing_card", ".list")
-    _loadUrlTpl("login", "#user_form", () => {
-        const login = _find_module("login")
+            const user_name = _search("#user_name")
 
-        user_button.onclick = () => {
-            if (login.property.hidden) {
-                login.method.openDialog()
-            } else {
-                login.method.closeDialog()
+            const login = _find_module("login")
+            user_button.onclick = () => {
+                if (login.property.login) {
+                    login.method.logout()
+                } else {
+                    if (login.property.hidden) {
+                        login.method.openDialog()
+                    } else {
+                        login.method.closeDialog()
+                    }
+                }
             }
-        }
 
-        user_button.innerText = login.property.login
-            ? user_button.innerText = "Выйти"
-            : user_button.innerText = "Войти"
-    })
+            _add_render(() => {
+                user_name.innerText = login.property.username
+
+                user_button.innerText = login.property.login
+                    ? user_button.innerText = "Выйти"
+                    : user_button.innerText = "Войти"
+            })
+
+            _render()
+        })
 
 
-    _add_render(() =>
-        _search(".list").style.height =
-            (document.documentElement.clientHeight
-                - _search(".top_bar").clientHeight) + "px"
-    )
+        _loadUrlTpl("listing_card", "#card_list_site")
 
-    window.onresize = function () {
-        _render();
-    };
+
+        _add_render(() =>
+            _search(".list").style.height =
+                (document.documentElement.clientHeight
+                    - _search(".top_bar").clientHeight) + "px"
+        )
+    })()
 </script>
 <style>
     body {
@@ -53,7 +67,7 @@
     #user_form {
         width: 80%;
         margin: 0 auto;
-        top: 80pt;
+        top: 60pt;
         position: relative;
     }
 
@@ -65,6 +79,15 @@
     #user_button {
         float: right;
         right: 5pt;
+        width: 15%;
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+
+    #user_name {
+        float: right;
+        right: 18%;
         position: absolute;
         top: 50%;
         transform: translate(0, -50%);

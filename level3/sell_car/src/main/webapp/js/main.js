@@ -13,13 +13,11 @@ const _ajax_fetch = async data =>
     })
         .then(data => data.json())
 
-const _ajax = (data, func) => {
-
-    // _ajax_fetch({...data, token})
-    _ajax_stub({...data,  token:_cookies().token})
-        .then(func)
-        .catch(err => console.log("ajax - error:" + err))
-}
+const _ajax = data =>
+    _ajax_stub({...data, token: _cookies().token})
+        .catch(err => {
+            throw `ajax - error: <|${err}|>`
+        })
 
 
 const m_advert = (id, description, price, user, car, status, created) => {
@@ -39,10 +37,6 @@ const m_user = (id, name, email, phone, registration) => {
     return {id, name, email, phone, registration}
 }
 
-const _ajax_stub = async data => {
-    _debug(data)
-    throw "stub"
-}
 
 const _rnd = (min, max) => {
     return ~~(Math.random() * 1000000000) % (max - min) + min
@@ -81,16 +75,69 @@ const adv_generator = (n, f) => {
         adverts.push(m_advert("A" + id,
             bredogenerator(_rnd(300, 1500)),
             _rnd(100000, 10000000),
-            m_user("U" + id, "nameuser" + id, "email-" + id, "phone-" + id, "cdscasc"),
+            m_user("U" + id, _rnd(1, 500) > 100 ? "nameuser" + id : "q", "email-" + id, "phone-" + id, "cdscasc"),
             m_car("C" + id, img_generator(id, _rnd(1, 9))),
             _rnd(0, 100) > 50,
             _rnd(100000000, 1000000000)
             )
         )
     }
-    console.log(adverts)
     return adverts
 }
 
 
 state_app.data.items = [...adv_generator(25, 10)]//todo заглушка для данных
+
+
+const _ajax_action = async (data, action) => {
+    const answer = await _ajax({action, ...data})
+    if (answer.success === true) {
+        return {...answer, success: undefined}
+    }
+    throw answer.error !== undefined ? answer.error : "Unknown error"
+}
+
+
+_add_module({
+    id: "action",
+    login: data => _ajax_action(data, "login"),
+    register: data => _ajax_action(data, "register"),
+    change_status: id_adv => _ajax_action({id: id_adv}, "changeStatus")
+        .then(data => data.status),
+    checkUser: name => _get_prop("login", "username") === name
+})
+
+const users = {q: ""}
+
+function retError(error) {
+    return {success: false, error}
+}
+
+function retOk(data) {
+    return {success: true, ...data}
+}
+
+const _ajax_stub = async data => {
+    // await new Promise((resolve, reject) => setTimeout(resolve, 3000));//todo
+    if (data.action === "register") {
+        if (users[data.username] !== undefined) {
+            return retError("errorName")
+        } else {
+            users[data.username] = data.pass;
+            return retOk({token: Math.random()})
+        }
+    }
+    if (data.action === "login") {
+        if (users[data.username] === undefined || users[data.username] !== data.pass) {
+            return retError("errorUser")
+        } else {
+            return retOk({token: Math.random()})
+        }
+    }
+    if (data.action === "changeStatus") {
+        const item = state_app.data.items.filter(item => item.id === data.id).shift()
+        item.status = !item.status
+        return retOk({status: item.status})
+    }
+    throw "stub"
+}

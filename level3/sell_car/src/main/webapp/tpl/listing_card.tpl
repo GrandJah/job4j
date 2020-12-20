@@ -7,11 +7,13 @@
                     <div class="ratio ratio_card">
                         <div class="ratio-content border_1">
                             <div class="content">
-                                <div class="img ratio ratio_img border_2">
-                                    <div class="ratio-content">
-                                        <div class="image_container"></div>
-                                        <button class="left" onclick="left()">&lt;</button>
-                                        <button class="right" onclick="right()">&gt;</button>
+                                <div id="image_container">
+                                    <div class="img ratio ratio_img border_2">
+                                        <div class="ratio-content">
+                                            <div class="image_container"></div>
+                                            <button class="left">&lt;</button>
+                                            <button class="right">&gt;</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="info">
@@ -47,85 +49,90 @@
 </template>
 <script src="js/$.js"></script>
 <script>
-    const card = _search("#card-item")
-    const list = card.parentElement
-    list.removeChild(card)
+    (() => {
+        const card = _search("#card-item")
+        const list = card.parentElement
+        list.removeChild(card)
 
-    const left = () => {
-        switch_image(false)
-    }
-
-    const right = () => {
-        switch_image(true)
-    }
-
-    const switch_image = (direction) => {
-        const images = [..._search(".image_container", event.target.parentElement).childNodes]
-        for (let i in images) {
-            if (!images[i].hidden) {
-                const new_i = direction ? (+i + 1) : (+i + images.length - 1)
-                images[i].hidden = true
-                images[new_i % images.length].hidden = false
-                return
+        const switch_image = (direction) => {
+            const images = [..._search(".image_container", event.target.parentElement).childNodes]
+            for (let i in images) {
+                if (!images[i].hidden) {
+                    const new_i = direction ? (+i + 1) : (+i + images.length - 1)
+                    images[i].hidden = true
+                    images[new_i % images.length].hidden = false
+                    return
+                }
             }
         }
-    }
 
-    const add_image = (container, filepath) => {
-        const image = _create("img")
-        image.src = filepath;
-        image.setAttribute("hidden", "")
-        container.appendChild(image)
-    }
-
-    //todo смена статуса объявления
-    const click_status = () => {
-        const target = _search(".status", event.target.parentElement)
-        const status = target.style.color === "pink"
-        target.style.color = !status ? "pink" : "lightgreen";
-        target.innerText = !status ? "Не продали? Жми сюда?" : "Уже продали? Жми сюда?";
-    }
-
-    //todo проверка id текущего пользователя
-    const check = id => parseInt(id.slice(2), 10) % 3 === 0
-
-    const getCard = item => {
-        let el = _create("div", item.id)
-        el.innerHTML = card.innerHTML
-        const image_container = _search(".image_container", el)
-        if (item.car.images.length === 0) {
-            add_image(image_container, "image/NoPhoto1.png")
+        const add_image = (container, filepath) => {
+            const image = _create("img")
+            image.src = filepath;
+            image.setAttribute("hidden", "")
+            container.appendChild(image)
         }
-        for (let img of item.car.images) {
-            add_image(image_container, img.filepath)
+
+        const action = _find_module("action")
+
+        //todo смена статуса объявления
+        const click_status = (item, button) => () => {
+            const target = _search(".status", event.target.parentElement)
+            button.onclick = ""
+            button.style.backgroundColor = "blue"
+            action.change_status(item.id)
+                .then(status => {
+                        target.style.color = status ? "pink" : "lightgreen";
+                        target.innerText = status ? "Не продали? Жми сюда?" : "Уже продали? Жми сюда?";
+                        setTimeout(() => {
+                            button.onclick = click_status(item, button)
+                            button.style.backgroundColor = "black"
+                        }, 5000)
+
+                    }
+                )
+
         }
-        image_container.firstChild.removeAttribute("hidden")
-        _search(".price", el).innerText = item.price;
-        _search(".status", el).innerText = item.status ? "Продано" : "Продаётся";
-        const status = _search(".align_status", el);
 
-        if (check(item.user.id)) {
-            status.style.backgroundColor = "black";
-            _search(".align_status", el).style.width = "65%"
-            _search(".status", el).innerText = item.status ? "Не продали? Жми сюда?" : "Уже продали? Жми сюда?";
-            _search(".status", el).style.color = item.status ? "pink" : "lightgreen";
-            status.onclick = click_status
-        } else {
-            status.style.backgroundColor = item.status ? "pink" : "lightgreen";
+        const getCard = item => {
+            let el = _create("div", item.id)
+            el.innerHTML = card.innerHTML
+            _search("button.left", el).onclick = () => switch_image(false)
+            _search("button.right", el).onclick = () => switch_image(true)
+            const image_container = _search(".image_container", el)
+            if (item.car.images.length === 0) {
+                add_image(image_container, "image/NoPhoto1.png")
+            }
+            for (let img of item.car.images) {
+                add_image(image_container, img.filepath)
+            }
+            image_container.firstChild.removeAttribute("hidden")
+            _search(".price", el).innerText = item.price;
+            _search(".status", el).innerText = item.status ? "Продано" : "Продаётся";
+            const status = _search(".align_status", el);
+
+            if (action.checkUser(item.user.name)) {
+                status.style.backgroundColor = "black";
+                _search(".align_status", el).style.width = "65%"
+                _search(".status", el).innerText = item.status ? "Не продали? Жми сюда?" : "Уже продали? Жми сюда?";
+                _search(".status", el).style.color = item.status ? "pink" : "lightgreen";
+                status.onclick = click_status(item, status)
+            } else {
+                status.style.backgroundColor = item.status ? "pink" : "lightgreen";
+            }
+            _search(".description", el).innerText = item.description
+
+            //todo загрузка параметров автомобиля
+            return el
         }
-        _search(".description", el).innerText = item.description
 
-        //todo загрузка параметров автомобиля
-        return el
-    }
-
-    const load = () => {
-        state_app.data.items.forEach((item) => {
-            list.appendChild(getCard(item))
+        _add_render(() => {
+            list.innerText = ''
+            state_app.data.items.forEach((item) => {
+                list.appendChild(getCard(item))
+            })
         })
-    }
-
-    load()
+    })()
 </script>
 <style>
     .bar {
