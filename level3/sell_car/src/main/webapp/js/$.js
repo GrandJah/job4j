@@ -1,7 +1,7 @@
 const root_path = "tpl"
 const ext_tpl = "tpl"
 
-const _debug = msg => console.log(msg)
+const _debug = (...msg) => msg.forEach(msg => console.log(msg))
 
 const _search = (selector, element) => {
     const el = element !== undefined ? element : document
@@ -46,13 +46,42 @@ const state_app = {
 }
 
 const _add_module = module => {
-    const {id, ...config} = module
-    state_app.data[id] = {...config}
+    state_app.data[module.id] = module
+    module.on = (slot, callback) => {
+        if (module.hasOwnProperty("slots") && module.slots[slot] !== undefined) {
+            module.callback = {
+                ...module.callback,
+                [slot]: [
+                    ...module.callback[slot],
+                    callback
+                ]
+            }
+        } else {
+            _debug(`error on slot ${slot} in module ${module.id}`)
+        }
+    }
+    module.emit = (slot, event) => {
+        if (!module.hasOwnProperty("callback")) {
+            return
+        }
+        if (module.callback[slot] !== undefined) {
+            [...module.callback[slot]].forEach(f => f(event))
+        } else {
+            _debug(`error emit slot ${slot} in module ${module.id}`)
+        }
+    }
 }
 
 const _find_module = id => state_app.data[id]
 
+const _get_prop = (moduleId,prop) => {
+    const module = _find_module(moduleId)
+    return module === undefined ? undefined : module.property[prop]
+}
+
 const _render = () => state_app.render()
+
+window.onresize = () => _render()
 
 const _loadUrlTpl = (id, selector, callback) => {
     const module = []
@@ -62,6 +91,7 @@ const _loadUrlTpl = (id, selector, callback) => {
         .then(html => {
             wrapper.innerHTML = html;
         })
+        // .then(() => new Promise((resolve, reject) => setTimeout(resolve, 500)))//todo debug slow net
         .then(() => wrapper.childNodes.forEach(
             node => {
                 const tag = node.nodeName
@@ -106,9 +136,12 @@ const _cookies = () => {
     }, {})
 }
 
-const _set_cookie = (key, value) => document.cookie = `${key}=${value}`
+const _set_cookie = (key, value) => document.cookie = `${key}=${value};path=/;`
 
-const _del_cookie = (key) => document.cookie = `${key}=; 'max-age'=0; expires=0`
+const _del_cookie = (key) => {
+    document.cookie = name + `${key}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+    document.cookie = name + `${key}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+}
 
 const main = _create("script")
 main.src = "js/main.js"
