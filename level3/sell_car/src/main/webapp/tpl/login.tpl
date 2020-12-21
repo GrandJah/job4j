@@ -24,7 +24,7 @@
             </p>
         </form>
         <form hidden id="register">
-            <h1> Sign up </h1>
+            <h1>Зарегистрироваться</h1>
             <p>
                 <label for="usernamesignup">Ваше имя</label>
                 <input id="usernamesignup" name="usernamesignup" required="required" type="text"
@@ -94,7 +94,7 @@
                         switchForm('#login', '#register')
                         _visible('#error_user')
                     } else {
-                        _debug(`error login - ${error}`);
+                        _debugError(`error login - ${error}`);
                     }
                 })
         }
@@ -116,13 +116,13 @@
                 .catch(error => {
                     if (error === 'errorName') {
                         switchForm('#register', '#login')
-                        _visible('#')
+                        _visible('#error_name')
                     }
                     if (error === 'errorEmail') {
                         switchForm('#register', '#login')
                         _visible('#error_email')
                     } else {
-                        _debug(`error register - ${error}`);
+                        _debugError(`error register - ${error}`);
                     }
                 })
         }
@@ -142,31 +142,38 @@
             },
             method: {
                 closeDialog: () => {
-                    _search("#login_form").setAttribute("hidden", "")
+                    _hide("#login_form")
                     m.property.hidden = true
-                    _render()
+                    m.emit("change_visible",false)
+                    _render('closeDialog')
                 },
-
+                emit_status: () =>
+                    m.emit("change_login", {
+                        login: m.property.login,
+                        username: m.property.username
+                    }),
                 openDialog: () => {
                     switchForm('#login', '#register')
-                    _search("#login_form").removeAttribute("hidden")
+                    _visible("#login_form")
                     m.property.hidden = false
-                    _render()
+                    m.emit("change_visible", true)
+                    _render('openDialog')
                 },
                 logout: () => {
-                    _del_cookie("token", token)
-                    _del_cookie("username", username)
+                    _del_cookie("token")
+                    _del_cookie("username")
                     m.method.change_login(false, "unknown")
                 },
                 change_login: (login, username) => {
                     m.property.login = login
                     m.property.username = username
                     m.method.closeDialog();
-                    m.emit("change_login",{login, username})
+                    m.emit("change_login", {login, username})
                 }
             },
             slots: [
-                "change_login" // login, username
+                "change_login", // login, username
+                "change_visible" // isVisible
             ]
         }
         _add_module(m)
@@ -175,8 +182,9 @@
 <style>
     #login_form {
         padding: 1em;
-        background: lightslategrey;
+        background: azure;
         border-radius: 0 0 20px 20px;
+        border: lightslategrey 1px solid;
     }
 
     .error {

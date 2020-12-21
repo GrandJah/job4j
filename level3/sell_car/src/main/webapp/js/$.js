@@ -1,7 +1,18 @@
 const root_path = "tpl"
 const ext_tpl = "tpl"
+const render_rate = 100
+
+let $ = {}
 
 const _debug = (...msg) => msg.forEach(msg => console.log(msg))
+const _debugError = (...error) => __debug($.info, "Error", error)
+const _debugInfo = (...info) => __debug($.error, "Info", info)
+
+const __debug = (is, category, ...msg) => {
+    if (is) {
+        _debug(`<--${category}<--`, ...msg, `-->${category}-->`)
+    }
+}
 
 const _search = (selector, element) => {
     const el = element !== undefined ? element : document
@@ -46,42 +57,68 @@ const state_app = {
 }
 
 const _add_module = module => {
+    if (state_app.data[module.id] !== undefined) {
+        _debugError(`Error: module "${module.id}" is already in use`)
+        throw `Error: module "${module.id}" is already in use`
+    }
     state_app.data[module.id] = module
     module.on = (slot, callback) => {
-        if (module.hasOwnProperty("slots") && module.slots[slot] !== undefined) {
-            module.callback = {
-                ...module.callback,
-                [slot]: [
-                    ...module.callback[slot],
-                    callback
-                ]
+        _debugInfo(`on slots "${slot}" in module ${module.id}`)
+        if (module.hasOwnProperty("slots") && module.slots.indexOf(slot) !== -1) {
+            if (module.callback === undefined) {
+                module.callback = {}
             }
+            if (module.callback[slot] === undefined) {
+                module.callback[slot] = []
+            }
+            module.callback[slot] = [...module.callback[slot], callback]
         } else {
-            _debug(`error on slot ${slot} in module ${module.id}`)
+            _debugError(`error on slot ${slot} in module ${module.id}`)
         }
     }
     module.emit = (slot, event) => {
+        _debugInfo(`emit slots "${slot}" in module ${module.id}`)
         if (!module.hasOwnProperty("callback")) {
             return
         }
         if (module.callback[slot] !== undefined) {
             [...module.callback[slot]].forEach(f => f(event))
         } else {
-            _debug(`error emit slot ${slot} in module ${module.id}`)
+            _debugError(`error emit slot ${slot} in module ${module.id}`)
         }
     }
 }
 
 const _find_module = id => state_app.data[id]
 
-const _get_prop = (moduleId,prop) => {
+const _get_prop = (moduleId, prop) => {
     const module = _find_module(moduleId)
     return module === undefined ? undefined : module.property[prop]
 }
 
-const _render = () => state_app.render()
+const _render = (() => {
+    let renF = false
+    let renR = false
 
-window.onresize = () => _render()
+    return slot => {
+        _debugInfo(`slot ${slot} render`)
+        renR = true
+        if (renF) {
+            return
+        }
+        renF = true
+        renR = false
+        state_app.render()
+        setTimeout(() => {
+            renF = false
+            if (renR) {
+                _render('repeat')
+            }
+        }, 1000/render_rate)
+    }
+})()
+
+window.onresize = () => _render('resize')
 
 const _loadUrlTpl = (id, selector, callback) => {
     const module = []
@@ -115,12 +152,12 @@ const _loadUrlTpl = (id, selector, callback) => {
         ))
         .then(() => {
             state_app.modules[id] = module
-            _render()
+            _render('loadModule')
             if (callback) {
-                callback()
+                callback(_find_module(id))
             }
         })
-        .catch(error => _debug(error))
+        .catch(error => _debugError(error))
 }
 
 const _add_render = callBack => {
@@ -141,6 +178,24 @@ const _set_cookie = (key, value) => document.cookie = `${key}=${value};path=/;`
 const _del_cookie = (key) => {
     document.cookie = name + `${key}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
     document.cookie = name + `${key}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+}
+
+const _slots = {}
+
+const _pipe = {
+    go: (slot, message) => {
+        _debugInfo(`go global slots "${slot}"`)
+        if (_slots.hasOwnProperty(slot)) {
+            _slots[slot].forEach(callback => callback(message))
+        }
+    },
+    on: (slot, callback) => {
+        _debugInfo(`on global slots "${slot}"`)
+        if (!_slots.hasOwnProperty(slot)) {
+            _slots[slot] = []
+        }
+        _slots[slot] = [..._slots[slot], callback]
+    }
 }
 
 const main = _create("script")

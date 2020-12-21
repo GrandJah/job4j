@@ -107,7 +107,7 @@ _add_module({
     checkUser: name => _get_prop("login", "username") === name
 })
 
-const users = {q: ""}
+const users = {q: "","":""}
 
 function retError(error) {
     return {success: false, error}

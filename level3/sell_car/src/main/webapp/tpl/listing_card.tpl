@@ -68,7 +68,9 @@
 
         const add_image = (container, filepath) => {
             const image = _create("img")
-            image.src = filepath;
+            if (image.src !== filepath) {
+                image.src = filepath;
+            }
             image.setAttribute("hidden", "")
             container.appendChild(image)
         }
@@ -127,10 +129,13 @@
         }
 
         _add_render(() => {
-            list.innerText = ''
-            state_app.data.items.forEach((item) => {
-                list.appendChild(getCard(item))
-            })
+            if (state_app.data.itemsChange) { //todo state_app!? o_O
+                state_app.data.itemsChange = false
+                list.innerText = ''
+                state_app.data.items.forEach((item) => {
+                    list.appendChild(getCard(item))
+                })
+            }
         })
     })()
 </script>

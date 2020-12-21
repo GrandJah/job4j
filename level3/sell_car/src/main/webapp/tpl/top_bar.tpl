@@ -2,14 +2,18 @@
     <div id="col">
         <div class="top_bar">
             <div class="container">
+                <div id="create_button" hidden>
+                    <button>Новое Объявление</button>
+                </div>
                 <div>
                     <label id="user_name"></label>
                 </div>
                 <div>
                     <button id="user_button">OK!</button>
                 </div>
-                <div id="user_form"></div>
             </div>
+            <div id="user_form"></div>
+            <div id="create_form_site"></div>
         </div>
         <div class="opacity"></div>
         <div id="card_list_site" class="list"></div>
@@ -18,12 +22,13 @@
 <script src="js/$.js"></script>
 <script>
     (() => {
-        _loadUrlTpl("login", "#user_form", () => {
-            const user_button = _search("#user_button")
+        const create_button = _search("#create_button")
 
-            const user_name = _search("#user_name")
+        const user_button = _search("#user_button")
 
-            const login = _find_module("login")
+        const user_name = _search("#user_name")
+
+        _loadUrlTpl("login", "#user_form", login => {
             user_button.onclick = () => {
                 if (login.property.login) {
                     login.method.logout()
@@ -36,20 +41,29 @@
                 }
             }
 
-            _add_render(() => {
-                user_name.innerText = login.property.username
-
-                user_button.innerText = login.property.login
-                    ? user_button.innerText = "Выйти"
-                    : user_button.innerText = "Войти"
+            login.on("change_visible", isVisible => {
+                if (isVisible) _pipe.go("loginForm")
             })
 
-            _render()
-        })
+            login.on("change_login", e => {
+                const {login, username} = e
+                user_name.innerText = username
+                user_button.innerText = login ? "Выйти" : "Войти"
+                create_button.hidden = !login
+                if (!login) {
+                    _pipe.go("loginForm")
+                }
+            })
 
+            login.method.emit_status();
+        })
 
         _loadUrlTpl("listing_card", "#card_list_site")
 
+        _loadUrlTpl("create_form", "#create_form_site", create => {
+            _pipe.on("loginForm", create.method.closeDialog)
+            create_button.onclick = create.method.switch_form
+        })
 
         _add_render(() =>
             _search(".list").style.height =
@@ -64,7 +78,7 @@
         overflow: hidden;
     }
 
-    #user_form {
+    #user_form, #create_form_site {
         width: 80%;
         margin: 0 auto;
         top: 60pt;
@@ -73,6 +87,7 @@
 
     #col {
         max-width: 800px;
+        min-width: 450px;
         margin: auto;
     }
 
@@ -80,14 +95,22 @@
         float: right;
         right: 5pt;
         width: 15%;
+    }
+
+    .container button {
+        right: 20%;
         position: absolute;
         top: 50%;
         transform: translate(0, -50%);
     }
 
     #user_name {
-        float: right;
-        right: 18%;
+        color: blue;
+        float: left;
+        left: 2%;
+        font-size: x-large;
+        font-weight: bold;
+        font-family: Verdana, sans-serif;
         position: absolute;
         top: 50%;
         transform: translate(0, -50%);
@@ -98,7 +121,6 @@
         position: relative;
         height: 16pt;
         z-index: 100;
-        outline: blue 1px dotted;
         background-image: linear-gradient(rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
     }
 
@@ -130,7 +152,6 @@
         position: relative;
         height: 60pt;
         z-index: 100;
-        outline: blue 1px dotted;
     }
 
     .top_bar .container {
