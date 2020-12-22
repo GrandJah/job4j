@@ -1,5 +1,7 @@
 package ru.job4j.sell_car.environment;
 
+import org.apache.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 import ru.job4j.sell_car.environment.interfaces.AdvStorage;
@@ -16,33 +18,56 @@ import ru.job4j.sell_car.storage.hibernate.HbmShadows;
 import ru.job4j.sell_car.storage.hibernate.HbmUserStorage;
 
 public class Environment {
+   private static final Logger LOG = Logger.getLogger(Environment.class);
 
-   private static final Environment INSTANCE = new Environment();
+   private static Environment instance;
 
    public static Environment inst(Object userClass) {
-      return Environment.INSTANCE;
+      LOG.debug(String.format("Instance for %s", userClass));
+      if (instance == null) {
+         LOG.info("load default environment");
+         instance = new Environment();
+         instance.changeEnvironment(DEFAULT_ENVIRONMENT);
+      }
+      return Environment.instance;
    }
 
    private final Map<Class, Class> environment = new HashMap<>();
 
-   public <T> T get(Class<T> clazz) {
+   protected static final Map<Class, Class> DEFAULT_ENVIRONMENT = new HashMap<Class, Class>() {
+      {
+         put(Shadows.class, HbmShadows.class);
+         put(UserStorage.class, HbmUserStorage.class);
+         put(CarStorage.class, HbmCarStorage.class);
+         put(AdvStorage.class, HbmAdvStorage.class);
+         put(FileStorage.class, HbmFileStorage.class);
+         put(Upload.class, FileUploads.class);
+      }
+   };
+
+   public <T> T get(Class<T> interfaceClazz) {
       T instance = null;
       try {
-         instance = (T) environment.get(clazz).newInstance();
+         Class environmentClazz = environment.get(interfaceClazz);
+         if (environmentClazz == null) {
+            throw new RuntimeException(
+             String.format("not environment for interface : %s", interfaceClazz.getName()));
+         }
+         instance = (T) environmentClazz.newInstance();
       } catch (InstantiationException | IllegalAccessException e) {
          e.printStackTrace();
       }
       return instance;
    }
 
-   Environment() {
-      this.environment.put(Shadows.class, HbmShadows.class);
-      this.environment.put(UserStorage.class, HbmUserStorage.class);
-      this.environment.put(CarStorage.class, HbmCarStorage.class);
-      this.environment.put(AdvStorage.class, HbmAdvStorage.class);
-      this.environment.put(FileStorage.class, HbmFileStorage.class);
-      this.environment.put(Upload.class, FileUploads.class);
+   protected Environment() {
+      LOG.debug("environment initiation");
+      Environment.instance = this;
    }
 
-
+   protected void changeEnvironment(Map<Class, Class> environment) {
+      LOG.info("environment changed");
+      this.environment.putAll(environment);
+      Environment.instance = this;
+   }
 }
