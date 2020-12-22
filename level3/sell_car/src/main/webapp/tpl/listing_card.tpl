@@ -93,7 +93,6 @@
 
                     }
                 )
-
         }
 
         const getCard = item => {
@@ -129,11 +128,14 @@
         }
 
         _add_render(() => {
-            if (state_app.data.itemsChange) { //todo state_app!? o_O
-                state_app.data.itemsChange = false
-                list.innerText = ''
-                state_app.data.items.forEach((item) => {
-                    list.appendChild(getCard(item))
+            if (!state_app.data.itemsChange) { //todo state_app!? o_O
+                action.getAdverts({},data => {
+                    state_app.data.items = [...data]
+                    state_app.data.itemsChange = true
+                    list.innerText = ''
+                    state_app.data.items.forEach((item) => {
+                        list.appendChild(getCard(item))
+                    })
                 })
             }
         })
