@@ -1,5 +1,6 @@
 package ru.job4j.sell_car.models;
 
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,4 +26,26 @@ public class Shadow {
 
    @JoinColumn(name = "secret_hash", nullable = false)
    private String secretHash;
+
+   @JoinColumn(name = "token")
+   private String token;
+
+   public static Shadow of(User user, String pass) {
+      Shadow shadow = new Shadow();
+      shadow.setUser(user);
+      shadow.createSecretHash(pass);
+      return shadow;
+   }
+
+   public static String createToken(User user) {
+      return String.valueOf(Math.random()); //todo функция для создания токена
+   };
+
+   private String createSecretHash(String pass) {
+      return pass; //todo функция для создания хэша пароля
+   }
+
+   public boolean checkPass(String checkPass) {
+      return Objects.equals(this.secretHash, createSecretHash(checkPass));
+   }
 }

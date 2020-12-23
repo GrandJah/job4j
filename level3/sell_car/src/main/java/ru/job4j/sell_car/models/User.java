@@ -19,14 +19,20 @@ public class User {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
-   @JoinColumn(name = "name", nullable = false)
+   @JoinColumn(name = "name", unique = true, nullable = false)
    private String name;
 
-   @JoinColumn(name = "email", unique = true, nullable = false)
+   @JoinColumn(name = "email", unique = true)
    private String email;
 
-   @JoinColumn(name = "phone", unique = true, nullable = false)
+   @JoinColumn(name = "phone", unique = true)
    private String phone;
 
    private Timestamp registration = Timestamp.from(Instant.now());
+
+   public static User of(String name) {
+      User user = new User();
+      user.setName(name);
+      return user;
+   }
 }
