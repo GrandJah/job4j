@@ -6,8 +6,8 @@ import ru.job4j.sell_car.environment.interfaces.UserStorage;
 import ru.job4j.sell_car.models.User;
 
 public class StubUserStorage implements UserStorage {
-
    private static final Map<String, User> USER_MAP = new HashMap<>();
+   private static int genId = 77;
 
    @Override
    public User findByName(String name) {
@@ -16,7 +16,12 @@ public class StubUserStorage implements UserStorage {
 
    @Override
    public User save(User user) {
-      USER_MAP.put(user.getName(), user);
+      Integer id = user.getId();
+      if (id == null) {
+         id = genId++;
+         user.setId(id);
+         USER_MAP.put(user.getName(), user);
+      }
       return user;
    }
 }
