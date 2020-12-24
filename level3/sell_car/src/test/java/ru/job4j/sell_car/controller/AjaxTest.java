@@ -1,13 +1,19 @@
 package ru.job4j.sell_car.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,54 +31,88 @@ import ru.job4j.sell_car.models.User;
 public class AjaxTest {
 
    private static final Logger LOG = Logger.getLogger(AjaxTest.class);
+   private static final Map<String, String> VALUES = new HashMap<>();
 
    /**
     * main test method.
     *
-    * @param json   json action
-    * @param expect answer json
-    * @param user   user session
+    * @param json json action
     * @throws IOException IOException
     */
-   private void test(String json, String expectTemplate, AtomicReference<User> user) throws IOException {
+   private void t(String json, String expectTemplate) throws IOException {
       LOG.debug("JSON: " + json + " /");
-      AtomicReference<String> answer = new AtomicReference<>();
-      HttpServletRequest req = mock(HttpServletRequest.class);
-      HttpServletResponse resp = mock(HttpServletResponse.class);
+      BufferedReader reader = mock(BufferedReader.class);
+      when(reader.readLine()).thenReturn(json);
 
-//      BufferedReader reader = mock(BufferedReader.class);
-//      when(req.getReader()).thenReturn(reader);
-//      when(reader.readLine()).thenReturn(json);
-//      PrintWriter writer = mock(PrintWriter.class);
-//      when(resp.getWriter()).thenReturn(writer);
-//      HttpSession session = mock(HttpSession.class);
-//      when(req.getSession()).thenReturn(session);
-//      when(session.getAttribute(eq("user"))).thenReturn(user.get());
-//
-//      doAnswer(invocationOnMock -> {
-//         user.set(invocationOnMock.getArgumentAt(1, User.class));
-//         return null;
-//      }).when(session).setAttribute(eq("user"), any());
-//      doAnswer(invocationOnMock -> {
-//         answer.set(invocationOnMock.getArgumentAt(0, String.class));
-//         return null;
-//      }).when(writer).write(anyString());
+      HttpServletRequest req = mock(HttpServletRequest.class);
+      when(req.getReader()).thenReturn(reader);
+
+      PrintWriter writer = mock(PrintWriter.class);
+      AtomicReference<String> answer = new AtomicReference<>();
+      AtomicReference<String> expect = new AtomicReference<>();
+
+      doAnswer(invocationOnMock -> {
+         String strArg = invocationOnMock.getArgumentAt(0, String.class);
+         expect.set(extractValues(expectTemplate, strArg));
+         answer.set(strArg);
+         return null;
+      }).when(writer).write(anyString());
+
+      HttpServletResponse resp = mock(HttpServletResponse.class);
+      when(resp.getWriter()).thenReturn(writer);
 
       new Ajax().doPost(req, resp);
 
-      String actual = answer.get();
-      String expect = expectTemplate.replace("${token}", getToken("login"));
-      assertEquals(expect, actual);
+      assertEquals(expect.get(), answer.get());
       LOG.debug("ok!");
    }
 
-   private String getToken(String username) {
-      Environment env = Environment.inst(this);
-      User user = env.get(UserStorage.class).findByName(username);
-      return env.get(Shadows.class).findByUser(user).getToken();
+   private String injectValues(String expectTemplate) {
+      String actual = expectTemplate;
+      int i = 0;
+      while (true) {
+         i = expectTemplate.indexOf("${", i + 1);
+         int e = expectTemplate.indexOf("}", i);
+         if (i == -1) {
+            break;
+         }
+         String currentValue = expectTemplate.substring(i + 2, e);
+         actual = actual.replace(String.format("${%s}", currentValue), VALUES.get(currentValue));
+      }
+      return actual;
    }
 
-   private String action(String action) {
+   private String extractValues(String template, String actual) {
+      int i = 0;
+      int delta = 0;
+      while (true) {
+         i = template.indexOf("${", i + 1);
+         int e = template.indexOf("}", i);
+         if (i == -1) {
+            break;
+         }
+         String currentValue = template.substring(i + 2, e);
+         int j = actual.length();
+         String[] search = new String[]{"}", ",", "\""};
+         for (String s : search) {
+            int q = actual.indexOf(s, i + delta);
+            if (q > 0) {
+               j = Math.min(q, j);
+            }
+         }
+         String extract = actual.substring(i + delta, j);
+         VALUES.putIfAbsent(currentValue, extract);
+         delta = j - e - 1;
+      }
+      return injectValues(template);
+   }
+
+   String p(String key, String value) {
+      String valueMap = VALUES.get(value);
+      return valueMap == null ? "" : String.format("'%s':'%s'", key, valueMap);
+   }
+
+   private String act(String action) {
       return String.format("'action':'%s'", action);
    }
 
@@ -103,22 +143,46 @@ public class AjaxTest {
     */
    public void testSessionAjax() throws IOException {
       AtomicReference<User> user = new AtomicReference<>();
-      test(q(action("list_ad")), q("'data':[]", ok()), user);
-      test(q(action("login")), q(fail("errorUser")), user);
-      test(q(action("login"), "'username':'noLogin', 'pass':'noPass'"), q(fail("errorUser")), user);
-      test(q(action("login"), "'username':'login', 'pass':'noPass'"), q(fail("errorUser")), user);
-      test(q(action("login"), "'username':'noLogin', 'pass':'pass'"), q(fail("errorUser")), user);
-      test(q(action("login"), "'username':'login', 'pass':'pass'"), q(fail("errorUser")), user);
-      //todo регистрация и добавление юзера
-      test(q(action("register"), "'username':'login', 'pass':'pass'"), q(ok(), "'token':'${token}!'"), user);
+      t(q(act("list_ad")), q("'data':[]", ok()));
+      t(q(act("login")), q(fail("errorUser")));
+      t(q(act("login"), "'username':'noLogin', 'pass':'noPass'"), q(fail("errorUser")));
+      t(q(act("login"), "'username':'login', 'pass':'noPass'"), q(fail("errorUser")));
+      t(q(act("login"), "'username':'noLogin', 'pass':'pass'"), q(fail("errorUser")));
+      t(q(act("login"), "'username':'login', 'pass':'pass'"), q(fail("errorUser")));
+      t(q(act("register"), "'username':'login', 'pass':'pass'"), q(ok(), "'token':'${token1-1}'"));
+      t(q(act("register"), "'username':'login', 'pass':'pass'"), q(fail("errorName")));
+      t(q(act("login")), q(fail("errorUser")));
+      t(q(act("login"), "'username':'noLogin', 'pass':'noPass'"), q(fail("errorUser")));
+      t(q(act("login"), "'username':'login', 'pass':'noPass'"), q(fail("errorUser")));
+      t(q(act("login"), "'username':'noLogin', 'pass':'pass'"), q(fail("errorUser")));
+      t(q(act("register"), "'username':'login2', 'pass':'pass2'"),
+       q(ok(), "'token':'${token2-1}'"));
+      t(q(act("login"), "'username':'login', 'pass':'pass'"), q(ok(), "'token':'${token1-2}'"));
+      t(q(act("list_ad"), p("token", "token1-1")), q("'data':[]", ok()));
+      //todo добавление объявлений
+      t(q(act("create"), p("token", "token1-1")), q(fail("not authentication")));
+      t(q(act("create"), p("token", "token1-2")), q(fail("create - unknown error")));
+      t(q(act("changeStatus"), p("token", "token1-2"), "'id':23423"), q(fail("invalid ID")));
+      t(q(act("changeStatus"), p("token", "token1-2"), "'id':'23423'"), q(fail("invalid ID")));
+      String advert1 = "advert:{}";//user - "login"
+      t(q(act("create"), p("token", "token1-2"), advert1), q("'id_adv':${id_adv1}", ok()));
+      t(q(act("list_ad")), q(
+       "'data':[{'price':0,'created':'${regAdv1}','description':'','id':${id_adv1},'user':{'name':'login','registration':'${regLogin1}'},'status':false}]",
+       ok()));
+      t(q(act("changeStatus"), p("token", "token1-2"), p("id", "id_adv1")),
+       q(ok(), "'status':true"));
+      t(q(act("list_ad")), q(
+       "'data':[{'price':0,'created':'${regAdv1}','description':'','id':${id_adv1},'user':{'name':'login','registration':'${regLogin1}'},'status':true}]",
+       ok()));
+      t(q(act("changeStatus"), p("token", "token1-2"), p("id", "id_adv1")),
+       q(ok(), "'status':false"));
+      t(q(act("list_ad")), q(
+       "'data':[{'price':0,'created':'${regAdv1}','description':'','id':${id_adv1},'user':{'name':'login','registration':'${regLogin1}'},'status':false}]",
+       ok()));
 
 
-      //todo тесты после добавления пользователя
-      test(q(action("login")), q(fail("errorUser")), user);
-      test(q(action("login"), "'username':'noLogin', 'pass':'noPass'"), q(fail("errorUser")), user);
-      test(q(action("login"), "'username':'login', 'pass':'noPass'"), q(fail("errorUser")), user);
-      test(q(action("login"), "'username':'noLogin', 'pass':'pass'"), q(fail("errorUser")), user);
-      test(q(action("login"), "'username':'login', 'pass':'pass'"), q(ok()), user);
+      //todo устаревший токен
+      t(q(act("login"), "'username':'login2', 'pass':'pass2'"), q(ok(), "'token':'${token2-2}'"));
    }
 
    @Test
