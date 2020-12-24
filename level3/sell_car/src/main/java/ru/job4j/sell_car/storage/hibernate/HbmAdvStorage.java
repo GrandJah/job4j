@@ -9,4 +9,14 @@ public class HbmAdvStorage extends HbmStorage implements AdvStorage {
    public List<Advert> getAll() {
       return null;
    }
+
+   @Override
+   public Advert getById(Integer id) {
+      return null;
+   }
+
+   @Override
+   public long save(Advert adv) {
+      return 0;
+   }
 }

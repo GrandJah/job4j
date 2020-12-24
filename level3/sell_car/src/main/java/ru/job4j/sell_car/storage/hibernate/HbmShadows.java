@@ -19,4 +19,9 @@ public class HbmShadows extends HbmStorage implements Shadows {
    @Override
    public void save(Shadow shadow) {
    }
+
+   @Override
+   public User findByToken(String token) {
+      return null;
+   }
 }

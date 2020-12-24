@@ -5,4 +5,8 @@ import ru.job4j.sell_car.models.Advert;
 
 public interface AdvStorage {
    List<Advert> getAll();
+
+   Advert getById(Integer id);
+
+   long save(Advert adv);
 }

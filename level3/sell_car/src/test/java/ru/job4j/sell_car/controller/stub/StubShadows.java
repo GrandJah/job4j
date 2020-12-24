@@ -25,4 +25,11 @@ public class StubShadows implements Shadows {
       SHADOW_MAP.put(shadow.getUser(), shadow);
       new StubUserStorage().save(shadow.getUser());
    }
+
+   @Override
+   public User findByToken(String token) {
+      return SHADOW_MAP.entrySet().stream()
+                .filter(e->e.getValue().getToken().equals(token))
+                .map(Map.Entry::getKey).findFirst().orElse(null);
+   }
 }

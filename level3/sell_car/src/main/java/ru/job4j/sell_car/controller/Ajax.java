@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.servlet.http.HttpServlet;
@@ -41,6 +42,8 @@ public class Ajax extends HttpServlet {
       actions.put("list_ad", this::get);
       actions.put("login", this::login);
       actions.put("register", this::register);
+      actions.put("create", this::createAdv);
+      actions.put("changeStatus", this::changeStatus);
    }
 
    @Override
@@ -66,18 +69,14 @@ public class Ajax extends HttpServlet {
       return o;
    }
 
-   private List a(Object... values) {
-      List a = new ArrayList();
-      for (Object o : values) {
-         a.add(o);
-      }
-      return a;
+   private List<Object> a(Object... values) {
+      return new ArrayList<>(Arrays.asList(values));
    }
 
    private JSONObject ok(Map data) {
-      LOG.error(data.toString());
+      LOG.trace(data.toString());
       JSONObject answer = new JSONObject(data);
-      LOG.error(answer.toString());
+      LOG.debug(answer.toString());
       answer.put("success", true);
       return answer;
    }
@@ -118,21 +117,66 @@ public class Ajax extends HttpServlet {
    }
 
    private JSONObject register(JSONObject json) {
-      String name = json.getString("username");
-      String pass = json.getString("pass");
-      User user = userStorage.findByName(name);
-      if (user != null) {
-         return error("errorName");
+      try {
+         String name = json.getString("username");
+         String pass = json.getString("pass");
+         User user = userStorage.findByName(name);
+         if (user != null) {
+            return error("errorName");
+         }
+         user = User.of(name);
+         Shadow shadow = Shadow.of(user, pass);
+         shadows.save(shadow);
+         user = userStorage.save(user);
+         String token = shadows.createToken(user);
+         return ok(o("token", token));
+      } catch (JSONException e) {
+         LOG.error(e);
+         LOG.trace(exToStr(e));
+         return error("unknown error");
       }
-      user = User.of(name);
-      Shadow shadow = Shadow.of(user, pass);
-      shadows.save(shadow);
-      user = userStorage.save(user);
-      String token = shadows.createToken(user);
-      return ok(o("token", token));
+   }
+
+   private JSONObject createAdv(JSONObject json) {
+      try {
+         String token = json.getString("token");
+         User user = shadows.findByToken(token);
+         if (user == null) {
+            return error("not authentication");
+         }
+         return ok(o("id_adv", parseAdvert(json.getJSONObject("advert"), user)));
+      } catch (JSONException e) {
+         LOG.error(e);
+         LOG.trace(exToStr(e));
+         return error("create - unknown error");
+      }
+   }
+
+   private long parseAdvert(JSONObject advert, User user) { //todo parse adverts
+      Advert adv = new Advert();
+      adv.setUser(user);
+      return advStorage.save(adv);
+   }
+
+   private JSONObject changeStatus(JSONObject json) {
+      try {
+         Integer id = json.getInt("id");
+         Advert advert = advStorage.getById(id);
+         if (advert == null) {
+            return error("invalid ID");
+         }
+         String token = json.getString("token");
+         if (!Objects.equals(shadows.findByToken(token), advert.getUser())) {
+            return error("not authentication");
+         }
+         boolean status = advert.getStatus();
+         advert.setStatus(!status);
+         advStorage.save(advert);
+         return ok(o("status", !status));
+      } catch (JSONException e) {
+         LOG.error(e);
+         LOG.trace(exToStr(e));
+         return error("create - unknown error");
+      }
    }
 }
-
-
-
-

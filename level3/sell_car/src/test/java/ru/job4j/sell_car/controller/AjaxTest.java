@@ -164,7 +164,7 @@ public class AjaxTest {
       t(q(act("create"), p("token", "token1-2")), q(fail("create - unknown error")));
       t(q(act("changeStatus"), p("token", "token1-2"), "'id':23423"), q(fail("invalid ID")));
       t(q(act("changeStatus"), p("token", "token1-2"), "'id':'23423'"), q(fail("invalid ID")));
-      String advert1 = "advert:{}";//user - "login"
+      String advert1 = "advert:{}"; //user - "login"
       t(q(act("create"), p("token", "token1-2"), advert1), q("'id_adv':${id_adv1}", ok()));
       t(q(act("list_ad")), q(
        "'data':[{'price':0,'created':'${regAdv1}','description':'','id':${id_adv1},'user':{'name':'login','registration':'${regLogin1}'},'status':false}]",

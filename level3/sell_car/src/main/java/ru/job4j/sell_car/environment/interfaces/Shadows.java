@@ -22,4 +22,6 @@ public interface Shadows {
    Shadow update(Shadow shadow);
 
    void save(Shadow shadow);
+
+   User findByToken(String token);
 }
