@@ -3,6 +3,12 @@
         <div class="space"></div>
         <form id="create">
             <input type="text" name="model" value="Модель" title="model">
+            <input type="text" name="price" value="Стоимость" title="price">
+            <div id="categories"></div>
+            <label>
+                Комментарий продавца:
+                <textarea rows="5" wrap="soft" name="description"></textarea>
+            </label>
             <button>Опубликовать</button>
         </form>
         <div id="image_area"></div>
@@ -26,78 +32,19 @@
         _search("#create button").onclick = () => {
             _stub()
             _debug("click create")
+            const form = _search("#create");
+            const model = form.elements.model.value
+            const description = form.elements.description.value;
+            const submit = {model, description}
+            console.log(JSON.stringify(submit))
         }
 
-
-        // const switchForm = (visible, ...hide) => {
-        //     _stub()
-        //     if (visible) {
-        //         _visible(visible)
-        //     }
-        //     [...hide, "#error_user", "#error_name", "#error_pass", "#error_email"].forEach(el => _hide(el))
-        // }
-        //
-        // const action = _find_module("action")
-        //
-        // const set_user = (token, username) => {
-        //     _set_cookie("token", token)
-        //     _set_cookie("username", username)
-        //     m.method.change_login(true, username)
-        // }
-        //
-        // const login = () => {
-        //     _stub();
-        //     const form = _search("#login");
-        //     const username = form.elements.username.value
-        //     const pass = form.elements.password.value;
-        //
-        //     action.login({username, pass})
-        //         .then(data => set_user(data.token, username))
-        //         .catch(error => {
-        //             if (error === 'errorUser') {
-        //                 switchForm('#login', '#register')
-        //                 _visible('#error_user')
-        //             } else {
-        //                 _debug(`error login - ${error}`);
-        //             }
-        //         })
-        // }
-        //
-        // const register = () => {
-        //     _stub();
-        //     const form = _search("#register");
-        //     const username = form.elements.usernamesignup.value
-        //     const email = form.elements.emailsignup.value
-        //     const pass = form.elements.passwordsignup.value;
-        //
-        //     if (pass !== form.elements.passwordsignup_confirm.value) {
-        //         _visible('#error_pass')
-        //         return
-        //     }
-        //
-        //     action.register({username, email, pass})
-        //         .then(data => set_user(data.token, username))
-        //         .catch(error => {
-        //             if (error === 'errorName') {
-        //                 switchForm('#register', '#login')
-        //                 _visible('#')
-        //             }
-        //             if (error === 'errorEmail') {
-        //                 switchForm('#register', '#login')
-        //                 _visible('#error_email')
-        //             } else {
-        //                 _debug(`error register - ${error}`);
-        //             }
-        //         })
-        // }
-        //
         const m = {
             id: "create_form",
             //     data: {},
             property: {
                 hidden: true,
-                //         login: _cookies().token !== undefined,
-                //         username: _cookies().username !== undefined ? _cookies().username : "unknown"
+                categories: [],
             },
             method: {
                 closeDialog: () => { //todo
@@ -105,28 +52,41 @@
                     m.property.hidden = true
                     //             _render()
                 },
-                //         emit_status: () =>
-                //             m.emit("change_login", {
-                //                 login: m.property.login,
-                //                 username: m.property.username
-                //             }),
                 openDialog: () => { //todo
-                    //             switchForm('#login', '#register')
                     _visible("#create_form")
                     m.property.hidden = false
                     //             _render()
                 },
-                //         logout: () => {
-                //             _del_cookie("token", token)
-                //             _del_cookie("username", username)
-                //             m.method.change_login(false, "unknown")
-                //         },
-                //         change_login: (login, username) => {
-                //             m.property.login = login
-                //             m.property.username = username
-                //             m.method.closeDialog();
-                //             m.emit("change_login", {login, username})
-                //         },
+                setCategory: data => {
+                    m.property.categories = {...data.categories}
+                    m.method.fillCategories();
+                },
+                fillCategories: () => {
+                    const container = _create("div")
+                    for (let category in m.property.categories) {
+                        const sel = _create("select")
+                        const wrap = _create("div")
+                        const label = _create("label")
+                        const wrapLabel = _create("div")
+                        wrapLabel.classList.add("label")
+                        wrapLabel.appendChild(label)
+                        label.innerHTML = category
+                        wrap.appendChild(wrapLabel)
+                        wrap.appendChild(sel)
+                        sel.name = category
+                        const opt = _create("option")
+                        opt.select = true
+                        sel.appendChild(opt)
+                        for (let type of m.property.categories[category]) {
+                            const opt = _create("option")
+                            opt.value = type
+                            opt.innerText = type
+                            sel.appendChild(opt)
+                        }
+                        container.appendChild(wrap)
+                    }
+                    _search("#categories").innerHTML = container.innerHTML;
+                },
                 switch_form: () => {
                     if (m.property.hidden) {
                         m.method.openDialog()
@@ -134,15 +94,27 @@
                         m.method.closeDialog()
                     }
                 }
-            },
-            slots: [
-                //         "change_login" // login, username
-            ]
+            }
         }
         _add_module(m)
     })()
 </script>
 <style>
+    #create_form textarea {
+        width: 60%;
+        resize: vertical;
+    }
+
+    #create_form select {
+        width: 20%;
+        padding: 2pt;
+    }
+
+    #create_form .label {
+        width: 20%;
+        padding: 2pt;
+    }
+
     #create_form {
         padding: 1em;
         background: azure;

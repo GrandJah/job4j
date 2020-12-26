@@ -63,6 +63,7 @@
         _loadUrlTpl("create_form", "#create_form_site", create => {
             _pipe.on("loginForm", create.method.closeDialog)
             create_button.onclick = create.method.switch_form
+            _find_module("action").getCategories(create.method.setCategory)
         })
 
         _add_render(() =>

@@ -135,6 +135,16 @@
             if (data.action === "list_ad") {
                 return retOk({data: [...adv_generator(25, 10)]})
             }
+            if (data.action === "getCategories") {
+                return retOk({
+                    categories: {
+                        "car_type": ["CONVERTIBLE", "COUPE", "HATCHBACK", "MINIVAN", "PICKUP", "SEDAN", "SUV", "VAN", "WAGON"],
+                        "fuel_type": ["DIESEL", "LIQUEFIED_GAS", "PETROL"],
+                        "gear_type": ["AUTO", "MANUAL", "NONE"],
+                        "wd_type": ["FrontWD", "FullWD", "RearWD"]
+                    }
+                })
+            }
             throw `no stub for action : ${data.action}`
         }
 

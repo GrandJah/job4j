@@ -21,7 +21,8 @@ const _ajax_action = async (data, action) => {
         throw `ajax - error: <|${err}|>`
     }
     if (answer.success === true) {
-        return {...answer, success: undefined}
+        delete answer.success
+        return {...answer}
     }
     throw answer.error !== undefined ? answer.error : "Unknown error"
 }
@@ -30,6 +31,7 @@ _add_module({
     id: "action",
     login: data => _ajax_action(data, "login"),
     register: data => _ajax_action(data, "register"),
+    getCategories: callback => _ajax_action({}, "getCategories").then(callback),
     change_status: id_adv => _ajax_action({id: id_adv}, "changeStatus")
         .then(data => data.status),
     checkUser: name => _get_prop("login", "username") === name,

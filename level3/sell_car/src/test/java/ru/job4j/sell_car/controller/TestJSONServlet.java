@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class TestJSONServlet {
-   private static Map<String, String> VALUES = new HashMap<>();
+   private static Map<String, String> values = new HashMap<>();
 
 
    private HttpServletRequest req = mock(HttpServletRequest.class);
@@ -38,7 +38,7 @@ public class TestJSONServlet {
             String strArg = sortJSONObject(string);
             expectVariable.set(extractValues(expectTemplate, strArg));
             answerVariable.set(strArg);
-         }catch (Exception e) {
+         } catch (Exception e) {
             System.out.println(string);
             System.out.println(expectTemplate);
             throw new RuntimeException("error convert test string");
@@ -49,11 +49,11 @@ public class TestJSONServlet {
    }
 
    public static void clear() {
-      VALUES = new HashMap<>();
+      values = new HashMap<>();
    }
 
    public static String get(String value) {
-      return VALUES.get(value);
+      return values.get(value);
    }
 
    private String extractValues(String template, String actual) {
@@ -75,7 +75,7 @@ public class TestJSONServlet {
             }
          }
          String extract = actual.substring(i + delta, j);
-         VALUES.putIfAbsent(currentValue, extract);
+         values.putIfAbsent(currentValue, extract);
          delta = j - e - 1;
       }
       return injectValues(template);
@@ -91,7 +91,7 @@ public class TestJSONServlet {
             break;
          }
          String currentValue = expectTemplate.substring(i + 2, e);
-         actual = actual.replace(String.format("${%s}", currentValue), VALUES.get(currentValue));
+         actual = actual.replace(String.format("${%s}", currentValue), values.get(currentValue));
       }
       return actual;
    }
@@ -143,6 +143,7 @@ public class TestJSONServlet {
                   delimiter[delimiterIndex++] = index;
                }
                break;
+            default:
          }
       }
       LinkedList<String> list = new LinkedList<>();

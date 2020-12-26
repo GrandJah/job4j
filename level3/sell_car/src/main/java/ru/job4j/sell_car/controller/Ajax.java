@@ -1,6 +1,5 @@
 package ru.job4j.sell_car.controller;
 
-import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +15,7 @@ import java.util.function.Function;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.log4j.Log4j;
 import ru.job4j.sell_car.environment.Environment;
 import ru.job4j.sell_car.environment.interfaces.AdvStorage;
 import ru.job4j.sell_car.environment.interfaces.FileStorage;
@@ -24,16 +24,22 @@ import ru.job4j.sell_car.environment.interfaces.UserStorage;
 import ru.job4j.sell_car.models.Advert;
 import ru.job4j.sell_car.models.Shadow;
 import ru.job4j.sell_car.models.User;
+import ru.job4j.sell_car.models.categories.CarType;
+import ru.job4j.sell_car.models.categories.FuelType;
+import ru.job4j.sell_car.models.categories.GearType;
+import ru.job4j.sell_car.models.categories.WheelDriveType;
 
+@Log4j
 public class Ajax extends HttpServlet {
-   private static final Logger LOG = Logger.getLogger(Ajax.class);
 
    private final Environment env = Environment.inst(this);
 
    private final FileStorage fileStorage = env.get(FileStorage.class);
 
    private final AdvStorage advStorage = env.get(AdvStorage.class);
+
    private final UserStorage userStorage = env.get(UserStorage.class);
+
    private final Shadows shadows = env.get(Shadows.class);
 
    private final HashMap<String, Function<JSONObject, JSONObject>> actions = new HashMap<>();
@@ -44,6 +50,7 @@ public class Ajax extends HttpServlet {
       actions.put("register", this::register);
       actions.put("create", this::createAdv);
       actions.put("changeStatus", this::changeStatus);
+      actions.put("getCategories", this::getCategories);
    }
 
    @Override
@@ -63,8 +70,8 @@ public class Ajax extends HttpServlet {
       return actions.get(action).apply(json).toString();
    }
 
-   private Map o(String key, Object value) {
-      Map o = new HashMap();
+   private Map o(String key, Object value, Map... maps) {
+      Map o = (maps.length == 0 || maps[0] == null) ? new HashMap() : maps[0];
       o.put(key, value);
       return o;
    }
@@ -74,9 +81,9 @@ public class Ajax extends HttpServlet {
    }
 
    private JSONObject ok(Map data) {
-      LOG.trace(data.toString());
+      log.trace(data.toString());
       JSONObject answer = new JSONObject(data);
-      LOG.debug(answer.toString());
+      log.debug(answer.toString());
       answer.put("success", true);
       return answer;
    }
@@ -90,8 +97,7 @@ public class Ajax extends HttpServlet {
 
    private String exToStr(Exception e) {
       return Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString)
-                   .reduce(e.getMessage(),
-                    (a, b) -> String.format("%s%s%s", a, System.lineSeparator(), b));
+                   .reduce(e.getMessage(), (a, b) -> String.format("%s%s%s", a, System.lineSeparator(), b));
    }
 
    private JSONObject get(JSONObject json) {
@@ -110,8 +116,8 @@ public class Ajax extends HttpServlet {
          String token = shadows.createToken(user);
          return ok(o("token", token));
       } catch (JSONException e) {
-         LOG.error(e);
-         LOG.trace(exToStr(e));
+         log.error(e);
+         log.trace(exToStr(e));
          return error("errorUser");
       }
    }
@@ -131,8 +137,8 @@ public class Ajax extends HttpServlet {
          String token = shadows.createToken(user);
          return ok(o("token", token));
       } catch (JSONException e) {
-         LOG.error(e);
-         LOG.trace(exToStr(e));
+         log.error(e);
+         log.trace(exToStr(e));
          return error("unknown error");
       }
    }
@@ -146,8 +152,8 @@ public class Ajax extends HttpServlet {
          }
          return ok(o("id_adv", parseAdvert(json.getJSONObject("advert"), user)));
       } catch (JSONException e) {
-         LOG.error(e);
-         LOG.trace(exToStr(e));
+         log.error(e);
+         log.trace(exToStr(e));
          return error("create - unknown error");
       }
    }
@@ -174,9 +180,28 @@ public class Ajax extends HttpServlet {
          advStorage.save(advert);
          return ok(o("status", !status));
       } catch (JSONException e) {
-         LOG.error(e);
-         LOG.trace(exToStr(e));
+         log.error(e);
+         log.trace(exToStr(e));
          return error("create - unknown error");
       }
+   }
+
+   private JSONObject getCategories(JSONObject json) {
+      Map categories = o("car_type", CarType.values());
+      o("fuel_type", FuelType.values(), categories);
+      o("gear_type", GearType.values(), categories);
+      o("wd_type", WheelDriveType.values(), categories);
+
+
+      //      System.out.println(pack);
+      //      for (String p : categories){
+      //         log.debug(p);
+      //      }
+
+
+      //      System.out.println();
+      //      System.out.println(pack);
+
+      return ok(o("categories", categories));
    }
 }

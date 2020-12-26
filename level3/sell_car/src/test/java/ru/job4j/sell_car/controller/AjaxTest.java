@@ -2,12 +2,12 @@ package ru.job4j.sell_car.controller;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
+import lombok.extern.log4j.Log4j;
 import ru.job4j.sell_car.controller.stub.StabFileStorage;
 import ru.job4j.sell_car.controller.stub.StubAdvStorage;
 import ru.job4j.sell_car.controller.stub.StubShadows;
@@ -19,8 +19,8 @@ import ru.job4j.sell_car.environment.interfaces.Shadows;
 import ru.job4j.sell_car.environment.interfaces.UserStorage;
 import ru.job4j.sell_car.models.User;
 
+@Log4j
 public class AjaxTest {
-   private static final Logger LOG = Logger.getLogger(AjaxTest.class);
 
    /**
     * main test method.
@@ -29,11 +29,11 @@ public class AjaxTest {
     * @throws IOException IOException
     */
    private void t(String json, String expectTemplate) throws IOException {
-      LOG.debug("JSON: " + json + " /");
+      log.debug("JSON: " + json + " /");
       TestJSONServlet test = new TestJSONServlet(json, expectTemplate);
       new Ajax().doPost(test.request(), test.response());
       assertEquals(test.expect(), test.answer());
-      LOG.debug("ok!");
+      log.debug("ok!");
    }
 
    String p(String key, String value) {
@@ -106,36 +106,38 @@ public class AjaxTest {
       //user - "login" - новое объявление
       String advert1 = "advert:{}";
       t(q(act("create"), p("token", "token1-2"), advert1), q("'id_adv':${id_adv1}", ok()));
-      t(q(act("list_ad")), q(
-       "'data':[{'created':'${regAdv1}','description':'','id':${id_adv1},'price':0,'status':false,'user':{'id':${idLogin1},'name':'login','registration':'${regLogin1}'}}]",
-       ok()));
+      String advert1AnswerStatusFormat = "{'created':'${regAdv1}','description':'','id':${id_adv1},"
+       + "'price':0,'status':%s,'user':{'id':${idLogin1},'name':'login','registration':'${regLogin1}'}}";
+      t(q(act("list_ad")),
+       q(String.format("'data':[%s]", String.format(advert1AnswerStatusFormat, "false")), ok()));
       //Смена статуса
       t(q(act("changeStatus"), p("token", "token1-2"), p("id", "id_adv1")),
        q("'status':true", ok()));
-      t(q(act("list_ad")), q(
-       "'data':[{'created':'${regAdv1}','description':'','id':${id_adv1},'price':0,'status':true,'user':{'id':${idLogin1},'name':'login','registration':'${regLogin1}'}}]",
-       ok()));
+      t(q(act("list_ad")),
+       q(String.format("'data':[%s]", String.format(advert1AnswerStatusFormat, "true")), ok()));
       t(q(act("changeStatus"), p("token", "token1-2"), p("id", "id_adv1")),
        q("'status':false", ok()));
-      t(q(act("list_ad")), q(
-       "'data':[{'created':'${regAdv1}','description':'','id':${id_adv1},'price':0,'status':false,'user':{'id':${idLogin1},'name':'login','registration':'${regLogin1}'}}]",
-       ok()));
+      t(q(act("list_ad")),
+       q(String.format("'data':[%s]", String.format(advert1AnswerStatusFormat, "false")), ok()));
       t(q(act("login"), "'username':'login2', 'pass':'pass2'"), q(ok(), "'token':'${token2-2}'"));
    }
 
-   @Test
-   public void testWithDefaultEnvironment() throws IOException {
+   private void setDefaultEnvironment() {
       TestJSONServlet.clear();
       new Environment() {
          {
             changeEnvironment(Environment.DEFAULT_ENVIRONMENT);
          }
       };
-      testSessionAjax();
    }
 
    @Test
-   public void testWithTestEnvironment() throws IOException {
+   public void testWithDefaultEnvironment() throws IOException {
+      setDefaultEnvironment();
+      testSessionAjax();
+   }
+
+   private void setTestEnvironment() {
       TestJSONServlet.clear();
       new Environment() {
          {
@@ -151,7 +153,26 @@ public class AjaxTest {
             });
          }
       };
+   }
+
+   @Test
+   public void testWithTestEnvironment() throws IOException {
+      setTestEnvironment();
       testSessionAjax();
+   }
+
+   @Test
+   public void testGetCategories() throws IOException {
+      setTestEnvironment();
+      log.debug("test");
+      TestJSONServlet test = new TestJSONServlet(q(act("getCategories")), q("'categories':{"
+        + "'car_type':['CONVERTIBLE','COUPE','HATCHBACK','MINIVAN','PICKUP','SEDAN','SUV','VAN','WAGON'],"
+        + "'fuel_type':['DIESEL','LIQUEFIED_GAS','PETROL'],"
+        + "'gear_type':['AUTO','MANUAL','NONE']," + "'wd_type':['FrontWD','FullWD','RearWD']}",
+       ok()));
+      new Ajax().doPost(test.request(), test.response());
+      assertEquals(test.expect(), test.answer());
+      log.debug("ok!");
    }
 
 }
