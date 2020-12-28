@@ -35,6 +35,8 @@ public class Files extends HttpServlet {
          }
       }
       resp.setContentType("application/json");
+      resp.setHeader("Access-Control-Allow-Origin", "*");
+//      resp.setHeader("Access-Control-Allow-Headers", "Origin,Content-Type,Accept,X-Requested-With");
       resp.setCharacterEncoding("UTF-8");
       resp.getWriter().write(answer.toString());
    }

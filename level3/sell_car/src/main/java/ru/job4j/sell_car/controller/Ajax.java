@@ -56,6 +56,8 @@ public class Ajax extends HttpServlet {
    @Override
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
       resp.setContentType("application/json");
+      resp.setHeader("Access-Control-Allow-Origin", "*");
+//      resp.setHeader("Access-Control-Allow-Headers", "Origin,Content-Type,Accept,X-Requested-With");
       req.setCharacterEncoding("UTF-8");
       resp.setCharacterEncoding("UTF-8");
       resp.getWriter().write(execute(req.getReader().readLine()));
