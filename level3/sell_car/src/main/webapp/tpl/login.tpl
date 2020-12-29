@@ -33,7 +33,7 @@
                 <label hidden id='error_name' class="error">Данное имя уже существует</label>
             </p>
             <p>
-                <label for="emailsignup">Ваше имя</label>
+                <label for="emailsignup">Ваша почта</label>
                 <input id="emailsignup" name="emailsignup" required="required" type="email"
                        placeholder="myemail@com"
                        oninput="_hide('#error_email')"/>

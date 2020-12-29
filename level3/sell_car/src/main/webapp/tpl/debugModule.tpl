@@ -151,7 +151,8 @@
         return data => {
             if ($.local) {
                 return _stub(data)
-            } else _ajax(data)
+            }
+            return _ajax(data)
         }
     }
 
@@ -162,7 +163,9 @@
 
     $.info = 1
     $.error = 1
-    $.local = true
+    // $.local = true
+
+    pathApi = 'http://localhost:9000/s/'
 
     const users = {q: "", "": ""}
 </script>

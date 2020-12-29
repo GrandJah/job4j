@@ -4,14 +4,25 @@
         <form id="create">
             <input type="text" name="model" value="Модель" title="model">
             <input type="text" name="price" value="Стоимость" title="price">
-            <div id="categories"></div>
-            <label>
-                Комментарий продавца:
-                <textarea rows="5" wrap="soft" name="description"></textarea>
-            </label>
-            <button>Опубликовать</button>
+            <div id="image_area">
+                <div id="categories"></div>
+                <div class="img ratio ratio_img border_2">
+                    <div class="ratio-content">
+                        <div class="image_container"></div>
+                        <button class="left">&lt;</button>
+                        <button class="right">&gt;</button>
+                    </div>
+                </div>
+            </div>
+            <div class="comment">
+                <label>Комментарий продавца:
+                    <textarea rows="5" wrap="soft" name="description"></textarea>
+                </label>
+            </div>
+            <div class="submit">
+                <button class="right">Опубликовать</button>
+            </div>
         </form>
-        <div id="image_area"></div>
         <form id="upload">
             Загрузите фото: <input name="fileUpload" required multiple type="file"/>
             <button>Загрузить фото</button>
@@ -20,31 +31,69 @@
 </template>
 <script>
     (function () {
-        function upload() {
+        const action = _find_module("action")
+        const image_container = _search("#image_area .image_container")
+        const switch_image = (direction) => {
             _stub()
-            fetch("upload", {
-                method: 'post',
-                body: new FormData(document.querySelector("#upload"))
-            })
+            const images = [...image_container.childNodes]
+            for (let i in images) {
+                if (!images[i].hidden) {
+                    const new_i = direction ? (+i + 1) : (+i + images.length - 1)
+                    images[i].hidden = true
+                    images[new_i % images.length].hidden = false
+                    return
+                }
+            }
+        }
+        _search("button.left", image_container.parentNode).onclick = () => switch_image(false)
+        _search("button.right", image_container.parentNode).onclick = () => switch_image(true)
+        const submit = _search("#create .submit")
+        submit.hidden = true;
+
+        function upload() {
+            action.upload(
+                new FormData(document.querySelector("#upload")),
+                data => {
+                    if (data.success) {
+                        m.method.addPhoto(...data.files)
+                    }
+                    submit.hidden = !m.method.hasPhoto()
+                }
+            )
         }
 
         _search("#upload button").onclick = upload
-        _search("#create button").onclick = () => {
+
+
+        submit.onclick = () => {
             _stub()
-            _debug("click create")
             const form = _search("#create");
             const model = form.elements.model.value
-            const description = form.elements.description.value;
-            const submit = {model, description}
-            console.log(JSON.stringify(submit))
+            const price = form.elements.price.value
+            const description = form.elements.description.value
+            const photo = [...m.data.photos]
+            const advert = {model, price, photo, description}
+            for (let category in m.property.categories) {
+                advert[category] = form.elements[category].value
+            }
+            action.create_advert({advert}, () => {
+                document.querySelector("#upload").reset()
+                form.reset()
+                image_container.innerText = ""
+                m.data.photos = []
+                m.method.closeDialog()
+                _render();
+            })
         }
 
         const m = {
             id: "create_form",
-            //     data: {},
+            data: {
+                photos: []
+            },
             property: {
                 hidden: true,
-                categories: [],
+                categories: {},
             },
             method: {
                 closeDialog: () => { //todo
@@ -55,6 +104,7 @@
                 openDialog: () => { //todo
                     _visible("#create_form")
                     m.property.hidden = false
+                    submit.hidden = !m.method.hasPhoto()
                     //             _render()
                 },
                 setCategory: data => {
@@ -87,6 +137,21 @@
                     }
                     _search("#categories").innerHTML = container.innerHTML;
                 },
+                addPhoto: (...photos) => {
+                    for (let i in photos) {
+                        const filepath = "/img/" + photos[i];
+                        const image = _create("img")
+                        if (image.src !== filepath) {
+                            image.src = filepath;
+                            m.data.photos.push(photos[i])
+                        }
+                        if (+i !== 0) {
+                            image.setAttribute("hidden", "")
+                        }
+                        image_container.appendChild(image)
+                    }
+                },
+                hasPhoto: () => m.data.photos.length > 0,
                 switch_form: () => {
                     if (m.property.hidden) {
                         m.method.openDialog()
@@ -100,8 +165,34 @@
     })()
 </script>
 <style>
-    #create_form textarea {
+    #upload {
         width: 60%;
+        padding: 5px;
+    }
+
+    .submit button {
+        margin-top: 2em;
+    }
+
+    #image_area {
+        margin-top: 1em;
+        height: 12em;
+    }
+
+    #create_form label, .comment {
+        position: relative;
+        align-items: center;
+        width: 100%;
+        padding: 5px;
+    }
+
+    #categories {
+        width: 50%;
+        float: left;
+    }
+
+    #create_form textarea {
+        width: 80%;
         resize: vertical;
     }
 
@@ -110,9 +201,8 @@
         padding: 2pt;
     }
 
-    #create_form .label {
-        width: 20%;
-        padding: 2pt;
+    .right {
+        float: right;
     }
 
     #create_form {
