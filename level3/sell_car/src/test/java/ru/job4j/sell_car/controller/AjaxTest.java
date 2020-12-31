@@ -106,8 +106,8 @@ public class AjaxTest {
       //user - "login" - новое объявление
       String advert1 = "advert:{}";
       t(q(act("create"), p("token", "token1-2"), advert1), q("'id_adv':${id_adv1}", ok()));
-      String advert1AnswerStatusFormat = "{'created':'${regAdv1}','description':'','id':${id_adv1},"
-       + "'price':0,'status':%s,'user':{'id':${idLogin1},'name':'login','registration':'${regLogin1}'}}";
+      String advert1AnswerStatusFormat = "{'car':{'images':[],'model':''},'created':'${regAdv1}','description':'','id':${id_adv1},"
+       + "'status':%s,'user':{'id':${idLogin1},'name':'login','registration':'${regLogin1}'}}";
       t(q(act("list_ad")),
        q(String.format("'data':[%s]", String.format(advert1AnswerStatusFormat, "false")), ok()));
       //Смена статуса

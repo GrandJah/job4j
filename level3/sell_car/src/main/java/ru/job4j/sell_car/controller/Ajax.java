@@ -1,16 +1,18 @@
 package ru.job4j.sell_car.controller;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,8 @@ import ru.job4j.sell_car.environment.interfaces.FileStorage;
 import ru.job4j.sell_car.environment.interfaces.Shadows;
 import ru.job4j.sell_car.environment.interfaces.UserStorage;
 import ru.job4j.sell_car.models.Advert;
+import ru.job4j.sell_car.models.Car;
+import ru.job4j.sell_car.models.ImageFile;
 import ru.job4j.sell_car.models.Shadow;
 import ru.job4j.sell_car.models.User;
 import ru.job4j.sell_car.models.categories.CarType;
@@ -153,16 +157,70 @@ public class Ajax extends HttpServlet {
             return error("not authentication");
          }
          return ok(o("id_adv", parseAdvert(json.getJSONObject("advert"), user)));
-      } catch (JSONException e) {
+      } catch (Exception e) {
          log.error(e);
          log.trace(exToStr(e));
          return error("create - unknown error");
       }
    }
 
+   private String getVar(String variable, JSONObject json) {
+      try {
+         return json.getString(variable);
+      } catch (Exception e) {
+         return "";
+      }
+   }
+
+   private <T extends Enum> T getCat(Class<T> type, String value) {
+      try {
+         return (T) Enum.valueOf(type, value);
+      } catch (Exception e) {
+         log.error(e);
+         log.trace(exToStr(e));
+         return null;
+      }
+   }
+
    private long parseAdvert(JSONObject advert, User user) { //todo parse adverts
       Advert adv = new Advert();
       adv.setUser(user);
+      adv.setDescription(getVar("description", advert));
+      try {
+         adv.setPrice(Integer.parseInt(getVar("price", advert)));
+      } catch (Exception e) {
+         adv.setPrice(null);
+      }
+      Car car = new Car();
+      adv.setCar(car);
+      car.setModel(getVar("model", advert));
+
+      try {
+         JSONArray photo = advert.getJSONArray("photo");
+         Set<ImageFile> images = new HashSet<>();
+         for (Object o : photo) {
+            log.info(o);
+            log.info(this.fileStorage.getFile((String) o));
+            images.add(this.fileStorage.getFile((String) o));
+         }
+         car.setImages(images);
+      } catch (Exception e) {
+         log.error(e);
+         log.trace(exToStr(e));
+      }
+
+      try {
+         JSONObject categories = advert.getJSONObject("categories");
+         log.info(categories.length());
+         car.setCarType(getCat(CarType.class, getVar("car_type", categories)));
+         car.setDrive(getCat(WheelDriveType.class, getVar("wd_type", categories)));
+         car.setFuelType(getCat(FuelType.class, getVar("fuel_type", categories)));
+         car.setGearbox(getCat(GearType.class, getVar("gear_type", categories)));
+      } catch (Exception e) {
+         log.error(e);
+         log.trace(exToStr(e));
+      }
+
       return advStorage.save(adv);
    }
 
@@ -193,17 +251,6 @@ public class Ajax extends HttpServlet {
       o("fuel_type", FuelType.values(), categories);
       o("gear_type", GearType.values(), categories);
       o("wd_type", WheelDriveType.values(), categories);
-
-
-      //      System.out.println(pack);
-      //      for (String p : categories){
-      //         log.debug(p);
-      //      }
-
-
-      //      System.out.println();
-      //      System.out.println(pack);
-
       return ok(o("categories", categories));
    }
 }

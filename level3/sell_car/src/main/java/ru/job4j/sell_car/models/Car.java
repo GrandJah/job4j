@@ -1,11 +1,13 @@
 package ru.job4j.sell_car.models;
 
+import org.json.JSONPropertyIgnore;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,9 +28,14 @@ public class Car {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Integer id;
 
+   @JSONPropertyIgnore
+   public Integer getId() {
+      return this.id;
+   }
+
    private String model;
 
-   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(cascade = CascadeType.PERSIST,  orphanRemoval = true, fetch = FetchType.EAGER)
    private Set<ImageFile> images = new HashSet<>();
 
    @Enumerated(EnumType.STRING)

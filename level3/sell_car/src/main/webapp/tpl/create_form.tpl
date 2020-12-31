@@ -72,10 +72,11 @@
             const price = form.elements.price.value
             const description = form.elements.description.value
             const photo = [...m.data.photos]
-            const advert = {model, price, photo, description}
+            const categories = {}
             for (let category in m.property.categories) {
-                advert[category] = form.elements[category].value
+                categories[category] = form.elements[category].value
             }
+            const advert = {model, price, photo, description, categories}
             action.create_advert({advert}, () => {
                 document.querySelector("#upload").reset()
                 form.reset()
