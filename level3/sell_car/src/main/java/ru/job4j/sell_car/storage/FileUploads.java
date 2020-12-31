@@ -5,6 +5,10 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import ru.job4j.sell_car.environment.Environment;
@@ -30,8 +34,16 @@ public class FileUploads implements Upload {
       try {
          for (FileItem item : upload.parseRequest(req)) {
             if (item.getContentType().startsWith("image")) {
-               String path = this.fileStorage.addFile(item.getContentType(), item.get());
+               String path = this.fileStorage.addFile(item.getContentType(), item.getSize());
                if (path != null) {
+                  try {
+                     Files.createFile(Paths.get(path));
+                     try (FileOutputStream out = new FileOutputStream(path)) {
+                        out.write(item.get());
+                     }
+                  } catch (IOException e) {
+                     e.printStackTrace();
+                  }
                   list.add(path);
                }
             }

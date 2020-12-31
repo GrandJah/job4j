@@ -1,6 +1,7 @@
 package ru.job4j.sell_car.controller;
 
 import org.json.JSONObject;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -45,9 +46,9 @@ public class Files extends HttpServlet {
 
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-      assert this.fileStorage != null;
-      ImageFile image = this.fileStorage.getFile(req.getPathInfo().trim().toLowerCase());
       try {
+         assert this.fileStorage != null;
+         ImageFile image = this.fileStorage.getFile(req.getPathInfo().trim().toLowerCase().substring(1));
          if (image != null) {
             OutputStream out = resp.getOutputStream();
             resp.setContentType(image.getType());
@@ -59,8 +60,6 @@ public class Files extends HttpServlet {
                   n += in.read(buf, n, image.getSize() - n);
                } while (n < image.getSize());
                out.write(buf);
-            } catch (IOException e) {
-               e.printStackTrace();
             }
          }
       } catch (Exception e) {

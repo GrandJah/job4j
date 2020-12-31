@@ -140,7 +140,7 @@
                 },
                 addPhoto: (...photos) => {
                     for (let i in photos) {
-                        const filepath = "/img/" + photos[i];
+                        const filepath = `${pathApi}img/` + photos[i];
                         const image = _create("img")
                         if (image.src !== filepath) {
                             image.src = filepath;

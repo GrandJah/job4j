@@ -10,11 +10,11 @@ public class StabFileStorage implements FileStorage {
    private static int fileCount = 0;
 
    @Override
-   public String addFile(String contentType, byte[] content) {
+   public String addFile(String contentType, long contentSize) {
       String filepath = Integer.toString(fileCount++);
       ImageFile file = new ImageFile();
       file.setFilepath(filepath);
-      file.setSize(content.length);
+      file.setSize((int) contentSize);
       file.setType(contentType);
       FILES.put(filepath, file);
       return filepath;
