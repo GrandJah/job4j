@@ -1,6 +1,5 @@
 package ru.job4j.sell_car.storage.hibernate;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
@@ -13,12 +12,13 @@ public class HbmFileStorage extends HbmStorage implements FileStorage {
 
    public String addFile(String contentType, byte[] content) {
       ImageFile file = new ImageFile();
-      String path = UUID.randomUUID().toString().trim().toLowerCase();
+      String path = String
+       .format("%s/%s", ROOT_PATH, UUID.randomUUID().toString().trim().toLowerCase());
       file.setFilepath(path);
       file.setType(contentType);
-      file.setContent(content);
+      file.setSize(content.length);
       try {
-         FileOutputStream out = new FileOutputStream(ROOT_PATH + "/" + path);
+         FileOutputStream out = new FileOutputStream(path);
          out.write(content);
          out.close();
       } catch (IOException e) {
@@ -32,23 +32,7 @@ public class HbmFileStorage extends HbmStorage implements FileStorage {
    }
 
    public ImageFile getFile(String filepath) {
-      String path = ROOT_PATH + filepath;
-      ImageFile image = query(
-       sf -> sf.createQuery("from ImageFile where filepath = :path", ImageFile.class)
-               .setParameter("path", ROOT_PATH + filepath).getSingleResult());
-      if (image != null) {
-         byte[] buf = new byte[image.getSize()];
-         image.setContent(buf);
-         int s = 0;
-         try (FileInputStream in = new FileInputStream(filepath)) {
-            int n = 0;
-            do {
-               n += in.read(buf, n, image.getSize() - n);
-            } while (n < image.getSize());
-         } catch (IOException e) {
-            e.printStackTrace();
-         }
-      }
-      return image;
+      return query(sf -> sf.createQuery("from ImageFile where filepath = :path", ImageFile.class)
+                           .setParameter("path", filepath).getSingleResult());
    }
 }

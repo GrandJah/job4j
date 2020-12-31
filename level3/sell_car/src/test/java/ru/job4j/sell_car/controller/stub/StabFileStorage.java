@@ -14,7 +14,7 @@ public class StabFileStorage implements FileStorage {
       String filepath = Integer.toString(fileCount++);
       ImageFile file = new ImageFile();
       file.setFilepath(filepath);
-      file.setContent(content);
+      file.setSize(content.length);
       file.setType(contentType);
       FILES.put(filepath, file);
       return filepath;
