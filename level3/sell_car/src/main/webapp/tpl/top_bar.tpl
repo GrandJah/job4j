@@ -28,6 +28,8 @@
 
         const user_name = _search("#user_name")
 
+        const action = _find_module("action")
+
         _loadUrlTpl("login", "#user_form", login => {
             user_button.onclick = () => {
                 if (login.property.login) {
@@ -53,12 +55,15 @@
                 if (!login) {
                     _pipe.go("loginForm")
                 }
+                action.updateAdvList()
             })
 
             login.method.emit_status();
         })
 
-        _loadUrlTpl("listing_card", "#card_list_site")
+        _loadUrlTpl("listing_card", "#card_list_site", listing => {
+            action.updateAdvList()
+        })
 
         _loadUrlTpl("create_form", "#create_form_site", create => {
             _pipe.on("loginForm", create.method.closeDialog)
@@ -83,7 +88,9 @@
         width: 80%;
         margin: 0 auto;
         top: 60pt;
-        position: relative;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, 0);
     }
 
     #col {

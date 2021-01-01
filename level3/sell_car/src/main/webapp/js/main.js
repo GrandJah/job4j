@@ -34,18 +34,22 @@ const _ajax_action = async (data, action) => {
     throw answer.error !== undefined ? answer.error : "Unknown error"
 }
 
-_add_module({
+const action = {
     id: "action",
+    listing: undefined,
     login: data => _ajax_action(data, "login"),
     register: data => _ajax_action(data, "register"),
     getCategories: callback => _ajax_action({}, "getCategories").then(callback),
     change_status: id_adv => _ajax_action({id: id_adv}, "changeStatus")
         .then(data => data.status),
     checkUser: name => _get_prop("login", "username") === name,
-    getAdverts: (data, callback) => _ajax_action(data, "list_ad").then(data => callback(data.data)),
+    getAdverts: (callback) => _ajax_action({}, "list_ad").then(data => callback(data.data)),
     create_advert: (data, callback) => _ajax_action(data, "create").then(data => callback(data)),
-    upload
-})
+    upload,
+    updateAdvList: () => action.getAdverts(data => _pipe.go("update", data))
+}
+
+_add_module(action)
 
 _loadUrlTpl("debugModule", undefined, () => {
     _ajax = _ajax_stub(_ajax)

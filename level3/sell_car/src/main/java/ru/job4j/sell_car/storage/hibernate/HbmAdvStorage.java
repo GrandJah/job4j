@@ -7,7 +7,7 @@ import ru.job4j.sell_car.models.Advert;
 public class HbmAdvStorage extends HbmStorage implements AdvStorage {
    @Override
    public List<Advert> getAll() {
-      return query(sf -> sf.createQuery("from Advert", Advert.class).list());
+      return query(sf -> sf.createQuery("from Advert order by created desc", Advert.class).list());
    }
 
    @Override

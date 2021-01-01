@@ -105,7 +105,7 @@
             const car = item.car;
             if (car === undefined) {
                 _debugError("car not found", item)
-                return el
+                return
             }
             if (car.images === undefined || car.images.length === 0) {
                 add_image(image_container, "NoPhoto.png")
@@ -134,18 +134,36 @@
             return el
         }
 
-        _add_render(() => {
-            if (!state_app.data.itemsChange) { //todo state_app!? o_O
-                action.getAdverts({},data => {
-                    state_app.data.items = [...data]
-                    state_app.data.itemsChange = true
+        const m = {
+            id: "listing_card",
+            data: {
+                adverts: []
+            },
+            property: {},
+            method: {
+                updateData: data => {
+                    m.data.adverts = [...data]
+                    _debugInfo("GOGOGO111")
+                    m.method.fillAdverts()
+                    _debugInfo("GOGOGO222")
+                },
+                fillAdverts: () => {
+
+                    _debugInfo("GOGOGO")
+                    const adverts = m.data.adverts
                     list.innerText = ''
-                    state_app.data.items.forEach((item) => {
-                        list.appendChild(getCard(item))
+                    adverts.forEach((item) => {
+                        const node = getCard(item);
+                        if (node !== undefined) {
+                            list.appendChild(getCard(item))
+                        }
                     })
-                })
+                }
             }
-        })
+        }
+        _add_module(m)
+
+        _pipe.on("update",m.method.updateData)
     })()
 </script>
 <style>

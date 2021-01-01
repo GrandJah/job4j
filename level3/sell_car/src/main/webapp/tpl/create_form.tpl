@@ -84,6 +84,7 @@
                 image_container.innerText = ""
                 m.data.photos = []
                 m.method.closeDialog()
+                action.updateAdvList();
                 _render();
             })
         }
