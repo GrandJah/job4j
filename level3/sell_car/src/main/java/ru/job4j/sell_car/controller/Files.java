@@ -1,10 +1,12 @@
 package ru.job4j.sell_car.controller;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONObject;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServlet;
@@ -12,9 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j;
 import ru.job4j.sell_car.environment.Environment;
-import ru.job4j.sell_car.environment.interfaces.FileStorage;
 import ru.job4j.sell_car.environment.interfaces.Upload;
-import ru.job4j.sell_car.models.ImageFile;
 
 @Log4j
 public class Files extends HttpServlet {
@@ -22,48 +22,50 @@ public class Files extends HttpServlet {
 
    private final Upload upload = env.get(Upload.class);
 
-   private final FileStorage fileStorage = env.get(FileStorage.class);
-
    @Override
    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
       JSONObject answer = new JSONObject();
+      resp.setHeader("Access-Control-Allow-Origin", "*");
+      //      resp.setHeader("Access-Control-Allow-Headers", "Origin,Content-Type,Accept,X-Requested-With");
       answer.put("success", false);
-      assert this.upload != null;
-      if (this.upload.isUploaded(req)) {
+      if (ServletFileUpload.isMultipartContent(req)) {
          List<String> list = new ArrayList<>();
-         this.upload.upload(req, list);
+         ServletFileUpload upload = new ServletFileUpload(new DiskFileItemFactory());
+         try {
+            for (FileItem item : upload.parseRequest(req)) {
+               if (item.getContentType().startsWith("image")) {
+                  Upload.File file = new Upload.File(null, item.getContentType(), item.get());
+                  if (this.upload.saveFile(file)) {
+                     list.add(file.getPath());
+                  }
+               }
+            }
+         } catch (FileUploadException e) {
+            e.printStackTrace();
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("application/json");
+            answer.put("success", false);
+            answer.put("error", "error parse data!");
+         }
          if (list.size() != 0) {
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("application/json");
             answer.put("success", true);
             answer.put("files", list);
+            resp.getWriter().write(answer.toString());
          }
       }
-      resp.setContentType("application/json");
-      resp.setHeader("Access-Control-Allow-Origin", "*");
-//      resp.setHeader("Access-Control-Allow-Headers", "Origin,Content-Type,Accept,X-Requested-With");
-      resp.setCharacterEncoding("UTF-8");
-      resp.getWriter().write(answer.toString());
    }
 
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-      try {
-         assert this.fileStorage != null;
-         ImageFile image = this.fileStorage.getFile(req.getPathInfo().trim().toLowerCase().substring(1));
-         if (image != null) {
-            OutputStream out = resp.getOutputStream();
-            resp.setContentType(image.getType());
-            byte[] buf = new byte[image.getSize()];
-            int s = 0;
-            try (FileInputStream in = new FileInputStream(image.getFilepath())) {
-               int n = 0;
-               do {
-                  n += in.read(buf, n, image.getSize() - n);
-               } while (n < image.getSize());
-               out.write(buf);
-            }
-         }
-      } catch (Exception e) {
-         log.error(e);
+      resp.setHeader("Access-Control-Allow-Origin", "*");
+      //      resp.setHeader("Access-Control-Allow-Headers", "Origin,Content-Type,Accept,X-Requested-With");
+      Upload.File file = new Upload.File(req.getPathInfo().substring(1), null, null);
+      if (this.upload.getFile(file)) {
+         resp.setContentType(file.getType());
+         resp.getOutputStream().write(file.getContent());
+      } else {
          resp.sendError(404);
       }
    }

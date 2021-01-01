@@ -58,6 +58,7 @@
                         m.method.addPhoto(...data.files)
                     }
                     submit.hidden = !m.method.hasPhoto()
+                    _search("#upload").reset();
                 }
             )
         }
@@ -145,11 +146,16 @@
                         if (image.src !== filepath) {
                             image.src = filepath;
                             m.data.photos.push(photos[i])
-                        }
-                        if (+i !== 0) {
-                            image.setAttribute("hidden", "")
+                            image.hidden = true
                         }
                         image_container.appendChild(image)
+                    }
+                    const firstImage = image_container.childNodes[0]
+                    if (firstImage !== undefined) {
+                        firstImage.hidden = false
+                    }
+                    for (let i = 0; i < m.data.photos.length; i += 1) {
+                        switch_image(true);
                     }
                 },
                 hasPhoto: () => m.data.photos.length > 0,

@@ -1,19 +1,14 @@
 package ru.job4j.sell_car.storage;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import ru.job4j.sell_car.environment.Environment;
 import ru.job4j.sell_car.environment.interfaces.FileStorage;
 import ru.job4j.sell_car.environment.interfaces.Upload;
+import ru.job4j.sell_car.models.ImageFile;
 
 public class FileUploads implements Upload {
 
@@ -21,37 +16,45 @@ public class FileUploads implements Upload {
 
    private final FileStorage fileStorage = env.get(FileStorage.class);
 
-   private final DiskFileItemFactory factory = new DiskFileItemFactory();
+   private final String rootStorage = env.option("file.storage");
 
    @Override
-   public boolean isUploaded(HttpServletRequest req) {
-      return ServletFileUpload.isMultipartContent(req);
-   }
-
-   @Override
-   public void upload(HttpServletRequest req, List<String> list) {
-      ServletFileUpload upload = new ServletFileUpload(this.factory);
-      try {
-         for (FileItem item : upload.parseRequest(req)) {
-            if (item.getContentType().startsWith("image")) {
-               String path = this.fileStorage.addFile(item.getContentType(), item.getSize());
-               if (path != null) {
-                  try {
-                     Files.createFile(Paths.get(path));
-                     try (FileOutputStream out = new FileOutputStream(path)) {
-                        out.write(item.get());
-                     }
-                  } catch (IOException e) {
-                     e.printStackTrace();
-                  }
-                  list.add(path);
-               }
-            }
+   public boolean getFile(File file) {
+      ImageFile image = this.fileStorage.getFile(file.getPath().trim().toLowerCase());
+      if (image != null) {
+         byte[] buf = new byte[image.getSize()];
+         String path = String.format("%s/%s", rootStorage, image.getFilepath());
+         try (FileInputStream in = new FileInputStream(path)) {
+            int n = 0;
+            do {
+               n += in.read(buf, n, image.getSize() - n);
+            } while (n < image.getSize());
+            file.setContent(buf);
+            return true;
+         } catch (IOException e) {
+            e.printStackTrace();
          }
-      } catch (FileUploadException e) {
-         e.printStackTrace();
       }
+      return false;
    }
 
-
+   @Override
+   public boolean saveFile(File file) {
+      byte[] content = file.getContent();
+      String pathId = this.fileStorage.addFile(file.getType(), content.length);
+      if (pathId != null) {
+         String path = String.format("%s/%s", rootStorage, pathId);
+         try {
+            Files.createFile(Paths.get(path));
+            try (FileOutputStream out = new FileOutputStream(path)) {
+               out.write(content);
+               file.setPath(pathId);
+               return true;
+            }
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
+      }
+      return false;
+   }
 }

@@ -17,6 +17,7 @@ import ru.job4j.sell_car.storage.hibernate.HbmFileStorage;
 import ru.job4j.sell_car.storage.hibernate.HbmShadows;
 import ru.job4j.sell_car.storage.hibernate.HbmUserStorage;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class Environment {
    private static final Logger LOG = Logger.getLogger(Environment.class);
 
@@ -27,12 +28,13 @@ public class Environment {
       if (instance == null) {
          LOG.info("load default environment");
          instance = new Environment();
-         instance.changeEnvironment(DEFAULT_ENVIRONMENT);
+         instance.changeEnvironment(DEFAULT_ENVIRONMENT, DEFAULT_OPTIONS);
       }
       return Environment.instance;
    }
 
    private final Map<Class, Class> environment = new HashMap<>();
+   private final Map<String, String> options = new HashMap<>();
 
    protected static final Map<Class, Class> DEFAULT_ENVIRONMENT = new HashMap<Class, Class>() {
       {
@@ -42,6 +44,12 @@ public class Environment {
          put(AdvStorage.class, HbmAdvStorage.class);
          put(FileStorage.class, HbmFileStorage.class);
          put(Upload.class, FileUploads.class);
+      }
+   };
+
+   protected static final Map<String, String> DEFAULT_OPTIONS = new HashMap<String, String>() {
+      {
+         put("file.storage", "image_sell_car");
       }
    };
 
@@ -60,14 +68,19 @@ public class Environment {
       return instance;
    }
 
+   public String option(String option) {
+      return this.options.get(option);
+   }
+
    protected Environment() {
       LOG.debug("environment initiation");
       Environment.instance = this;
    }
 
-   protected void changeEnvironment(Map<Class, Class> environment) {
+   protected void changeEnvironment(Map<Class, Class> environment, Map<String, String> options) {
       LOG.info("environment changed");
       this.environment.putAll(environment);
+      this.options.putAll(options);
       Environment.instance = this;
    }
 }

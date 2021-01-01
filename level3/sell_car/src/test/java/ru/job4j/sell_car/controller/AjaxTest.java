@@ -70,7 +70,7 @@ public class AjaxTest {
     *
     * @throws IOException IOException
     */
-   public void testSessionAjax() throws IOException {
+   private void testSessionAjax() throws IOException {
       AtomicReference<User> user = new AtomicReference<>();
       //Пустая база
       t(q(act("list_ad")), q("'data':[]", ok()));
@@ -126,7 +126,7 @@ public class AjaxTest {
       TestJSONServlet.clear();
       new Environment() {
          {
-            changeEnvironment(Environment.DEFAULT_ENVIRONMENT);
+            changeEnvironment(Environment.DEFAULT_ENVIRONMENT, Environment.DEFAULT_OPTIONS);
          }
       };
    }
@@ -141,6 +141,7 @@ public class AjaxTest {
       TestJSONServlet.clear();
       new Environment() {
          {
+            //noinspection rawtypes
             changeEnvironment(new HashMap<Class, Class>() {
                {
                   put(FileStorage.class, StabFileStorage.class);
@@ -150,7 +151,7 @@ public class AjaxTest {
                   //            put(CarStorage.class, null);
                   //            put(Upload.class, null);
                }
-            });
+            }, Environment.DEFAULT_OPTIONS);
          }
       };
    }

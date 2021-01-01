@@ -1,11 +1,21 @@
 package ru.job4j.sell_car.environment.interfaces;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface Upload {
 
-   boolean isUploaded(HttpServletRequest req);
+   boolean saveFile(File file);
 
-   void upload(HttpServletRequest req, List<String> list);
+   boolean getFile(File file);
+
+   @AllArgsConstructor
+   @Getter
+   @Setter
+   class File {
+      private String path;
+      private String type;
+      private byte[] content;
+   }
 }
