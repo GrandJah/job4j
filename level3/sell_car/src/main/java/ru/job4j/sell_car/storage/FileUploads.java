@@ -1,9 +1,10 @@
 package ru.job4j.sell_car.storage;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import ru.job4j.sell_car.environment.Environment;
 import ru.job4j.sell_car.environment.interfaces.FileStorage;
@@ -20,20 +21,28 @@ public class FileUploads implements Upload {
 
    @Override
    public boolean getFile(File file) {
-      ImageFile image = this.fileStorage.getFile(file.getPath().trim().toLowerCase());
-      if (image != null) {
-         byte[] buf = new byte[image.getSize()];
-         String path = String.format("%s/%s", rootStorage, image.getFilepath());
-         try (FileInputStream in = new FileInputStream(path)) {
-            int n = 0;
-            do {
-               n += in.read(buf, n, image.getSize() - n);
-            } while (n < image.getSize());
-            file.setContent(buf);
-            return true;
-         } catch (IOException e) {
-            e.printStackTrace();
+      ImageFile image = null;
+      try {
+         if (!"NoPhoto.png".equals(file.getPath())) {
+            image = this.fileStorage.getFile(file.getPath().trim().toLowerCase());
          }
+         Path path = null;
+         if (image != null) {
+            path = Paths.get(String.format("%s/%s", rootStorage, image.getFilepath()));
+            if (!Files.exists(path)) {
+               image = null;
+            }
+         }
+         if (image == null) {
+            path = Paths.get(
+             URI.create(String.valueOf(getClass().getClassLoader().getResource("NoPhoto.png"))));
+         }
+         if (Files.exists(path)) {
+            file.setContent(Files.readAllBytes(path));
+            return true;
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
       }
       return false;
    }
@@ -41,7 +50,7 @@ public class FileUploads implements Upload {
    @Override
    public boolean saveFile(File file) {
       byte[] content = file.getContent();
-      String pathId = this.fileStorage.addFile(file.getType(), content.length);
+      String pathId = this.fileStorage.createNewFileName();
       if (pathId != null) {
          String path = String.format("%s/%s", rootStorage, pathId);
          try {

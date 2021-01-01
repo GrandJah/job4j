@@ -15,7 +15,6 @@ public interface Upload {
    @Setter
    class File {
       private String path;
-      private String type;
       private byte[] content;
    }
 }

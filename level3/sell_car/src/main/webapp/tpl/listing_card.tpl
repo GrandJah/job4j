@@ -68,10 +68,11 @@
 
         const add_image = (container, filepath) => {
             const image = _create("img")
-            if (image.src !== filepath) {
-                image.src = filepath;
+            const absPath = `${pathApi}img/${filepath}`
+            if (image.src !== absPath) {
+                image.src = absPath;
             }
-            image.setAttribute("hidden", "")
+            image.hidden = true
             container.appendChild(image)
         }
 
@@ -101,17 +102,23 @@
             _search("button.left", el).onclick = () => switch_image(false)
             _search("button.right", el).onclick = () => switch_image(true)
             const image_container = _search(".image_container", el)
-            if (item.car.images.length === 0) {
-                add_image(image_container, "image/NoPhoto1.png")
+            const car = item.car;
+            if (car === undefined) {
+                _debugError("car not found", item)
+                return el
             }
-            for (let img of item.car.images) {
-                add_image(image_container, img.filepath)
+            if (car.images === undefined || car.images.length === 0) {
+                add_image(image_container, "NoPhoto.png")
+            } else {
+                for (let img of car.images) {
+                    add_image(image_container, img.filepath)
+                }
             }
-            image_container.firstChild.removeAttribute("hidden")
-            _search(".price", el).innerText = item.price;
+            image_container.firstChild.hidden = false
+
+            _search(".price", el).innerText = item.price ? item.price : "это бесценно";
             _search(".status", el).innerText = item.status ? "Продано" : "Продаётся";
             const status = _search(".align_status", el);
-
             if (action.checkUser(item.user.name)) {
                 status.style.backgroundColor = "black";
                 _search(".align_status", el).style.width = "65%"

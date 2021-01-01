@@ -34,7 +34,7 @@ public class Files extends HttpServlet {
          try {
             for (FileItem item : upload.parseRequest(req)) {
                if (item.getContentType().startsWith("image")) {
-                  Upload.File file = new Upload.File(null, item.getContentType(), item.get());
+                  Upload.File file = new Upload.File(null, item.get());
                   if (this.upload.saveFile(file)) {
                      list.add(file.getPath());
                   }
@@ -61,9 +61,8 @@ public class Files extends HttpServlet {
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
       resp.setHeader("Access-Control-Allow-Origin", "*");
       //      resp.setHeader("Access-Control-Allow-Headers", "Origin,Content-Type,Accept,X-Requested-With");
-      Upload.File file = new Upload.File(req.getPathInfo().substring(1), null, null);
+      Upload.File file = new Upload.File(req.getPathInfo().substring(1), null);
       if (this.upload.getFile(file)) {
-         resp.setContentType(file.getType());
          resp.getOutputStream().write(file.getContent());
       } else {
          resp.sendError(404);

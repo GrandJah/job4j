@@ -21,10 +21,5 @@ public class ImageFile {
    @JoinColumn(name = "filepath", unique = true, nullable = false)
    private String filepath;
 
-   @JoinColumn(name = "type", nullable = false)
-   private String type;
-
    private Timestamp created = Timestamp.from(Instant.now());
-
-   private Integer size = 0;
 }
