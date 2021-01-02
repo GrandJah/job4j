@@ -61,9 +61,7 @@
             login.method.emit_status();
         })
 
-        _loadUrlTpl("listing_card", "#card_list_site", listing => {
-            action.updateAdvList()
-        })
+        _loadUrlTpl("listing_card", "#card_list_site")
 
         _loadUrlTpl("create_form", "#create_form_site", create => {
             _pipe.on("loginForm", create.method.closeDialog)

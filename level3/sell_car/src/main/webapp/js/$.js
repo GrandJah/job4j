@@ -4,6 +4,14 @@ const render_rate = 100
 
 let $ = {}
 
+const _ = string_en => {
+    if (I18L !== undefined && I18L[string_en] !== undefined) {
+        return I18L[string_en]
+    }
+    _debugInfo("not found translate", string_en)
+    return string_en;
+}
+
 const _debug = (...msg) => msg.forEach(msg => console.log(msg))
 const _debugError = (...error) => __debug($.info, "Error", error)
 const _debugInfo = (...info) => __debug($.error, "Info", info)
