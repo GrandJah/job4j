@@ -166,11 +166,15 @@ public class AjaxTest {
    public void testGetCategories() throws IOException {
       setTestEnvironment();
       log.debug("test");
-      TestJSONServlet test = new TestJSONServlet(q(act("getCategories")), q("'categories':{"
-        + "'car_type':['CONVERTIBLE','COUPE','HATCHBACK','MINIVAN','PICKUP','SEDAN','SUV','VAN','WAGON'],"
-        + "'fuel_type':['DIESEL','LIQUEFIED_GAS','PETROL'],"
-        + "'gear_type':['AUTO','MANUAL','NONE']," + "'wd_type':['FrontWD','FullWD','RearWD']}",
-       ok()));
+      TestJSONServlet test = new TestJSONServlet(q(act("getCategories")), q(
+       "'categories':{" + "'car_type':{'text':'Car type',"
+        + "'values':{'CONVERTIBLE':'Convertible','COUPE':'Coupe','HATCHBACK':'Hatchback',"
+        + "'MINIVAN':'Minivan','PICKUP':'Pickup','SEDAN':'Sedan','SUV':'SUV','VAN':'Van','WAGON':'Wagon'}},"
+        + "'fuel_type':{'text':'Fuel type',"
+        + "'values':{'DIESEL':'Diesel','LIQUEFIED_GAS':'Liquefied gas','PETROL':'Petrol'}},"
+        + "'gear_type':{'text':'Gear Type'," + "'values':{'AUTO':'Automatic','MANUAL':'Manual'}},"
+        + "'wd_type':{'text':'Wheel drive type',"
+        + "'values':{'FrontWD':'Front WD','FullWD':'Full WD','RearWD':'Rear WD'}}}", ok()));
       new Ajax().doPost(test.request(), test.response());
       assertEquals(test.expect(), test.answer());
       log.debug("ok!");

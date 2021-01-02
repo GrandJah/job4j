@@ -117,23 +117,24 @@
                 fillCategories: () => {
                     const container = _create("div")
                     for (let category in m.property.categories) {
+                        const cat = m.property.categories[category]
                         const sel = _create("select")
                         const wrap = _create("div")
                         const label = _create("label")
                         const wrapLabel = _create("div")
                         wrapLabel.classList.add("label")
                         wrapLabel.appendChild(label)
-                        label.innerHTML = category
+                        label.innerText = _(cat.text)
                         wrap.appendChild(wrapLabel)
                         wrap.appendChild(sel)
                         sel.name = category
                         const opt = _create("option")
                         opt.select = true
                         sel.appendChild(opt)
-                        for (let type of m.property.categories[category]) {
+                        for (let type in cat.values) {
                             const opt = _create("option")
                             opt.value = type
-                            opt.innerText = type
+                            opt.innerText = _(cat.values[type])
                             sel.appendChild(opt)
                         }
                         container.appendChild(wrap)
@@ -205,7 +206,7 @@
     }
 
     #create_form select {
-        width: 20%;
+        width: 50%;
         padding: 2pt;
     }
 

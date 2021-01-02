@@ -1,6 +1,7 @@
 package ru.job4j.sell_car.models;
 
 import org.json.JSONPropertyIgnore;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -39,14 +40,14 @@ public class Car {
    private Set<ImageFile> images = new HashSet<>();
 
    @Enumerated(EnumType.STRING)
-   private GearType gearbox;
+   private GearType.Value gearbox;
 
    @Enumerated(EnumType.STRING)
-   private FuelType fuelType;
+   private FuelType.Value fuelType;
 
    @Enumerated(EnumType.STRING)
-   private WheelDriveType drive;
+   private WheelDriveType.Value drive;
 
    @Enumerated(EnumType.STRING)
-   private CarType carType;
+   private CarType.Value carType;
 }

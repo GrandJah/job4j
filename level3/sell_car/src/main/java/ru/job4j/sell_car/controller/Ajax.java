@@ -3,9 +3,11 @@ package ru.job4j.sell_car.controller;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +31,9 @@ import ru.job4j.sell_car.models.ImageFile;
 import ru.job4j.sell_car.models.Shadow;
 import ru.job4j.sell_car.models.User;
 import ru.job4j.sell_car.models.categories.CarType;
+import ru.job4j.sell_car.models.categories.Categories;
+import ru.job4j.sell_car.models.categories.Category;
+import ru.job4j.sell_car.models.categories.CategoryValue;
 import ru.job4j.sell_car.models.categories.FuelType;
 import ru.job4j.sell_car.models.categories.GearType;
 import ru.job4j.sell_car.models.categories.WheelDriveType;
@@ -172,17 +177,18 @@ public class Ajax extends HttpServlet {
       }
    }
 
-   private <T extends Enum> T getCat(Class<T> type, String value) {
-      try {
-         return (T) Enum.valueOf(type, value);
-      } catch (Exception e) {
-         log.error(e);
-         log.trace(exToStr(e));
-         return null;
-      }
+   private <T extends Enum> T getCatValue(Class<? extends Category> type, JSONObject json) {
+      log.debug("getCatValue");
+      log.debug(type);
+      String propName = Categories.getNameProperty((Class<Category>) type);
+      log.debug(propName);
+      String value = getVar(propName, json);
+      log.debug(value);
+      Category category = Categories.getCategory(propName);
+      return (T) category.getValue(value);
    }
 
-   private long parseAdvert(JSONObject advert, User user) { //todo parse adverts
+   private long parseAdvert(JSONObject advert, User user) {
       Advert adv = new Advert();
       adv.setUser(user);
       adv.setDescription(getVar("description", advert));
@@ -199,8 +205,6 @@ public class Ajax extends HttpServlet {
          JSONArray photo = advert.getJSONArray("photo");
          Set<ImageFile> images = new HashSet<>();
          for (Object o : photo) {
-            log.info(o);
-            log.info(this.fileStorage.getFile((String) o));
             images.add(this.fileStorage.getFile((String) o));
          }
          car.setImages(images);
@@ -211,11 +215,10 @@ public class Ajax extends HttpServlet {
 
       try {
          JSONObject categories = advert.getJSONObject("categories");
-         log.info(categories.length());
-         car.setCarType(getCat(CarType.class, getVar("car_type", categories)));
-         car.setDrive(getCat(WheelDriveType.class, getVar("wd_type", categories)));
-         car.setFuelType(getCat(FuelType.class, getVar("fuel_type", categories)));
-         car.setGearbox(getCat(GearType.class, getVar("gear_type", categories)));
+         car.setCarType(getCatValue(CarType.class, categories));
+         car.setDrive(getCatValue(WheelDriveType.class, categories));
+         car.setFuelType(getCatValue(FuelType.class, categories));
+         car.setGearbox(getCatValue(GearType.class, categories));
       } catch (Exception e) {
          log.error(e);
          log.trace(exToStr(e));
@@ -247,10 +250,17 @@ public class Ajax extends HttpServlet {
    }
 
    private JSONObject getCategories(JSONObject json) {
-      Map categories = o("car_type", CarType.values());
-      o("fuel_type", FuelType.values(), categories);
-      o("gear_type", GearType.values(), categories);
-      o("wd_type", WheelDriveType.values(), categories);
-      return ok(o("categories", categories));
+      Collection<Category> categories = Categories.categories();
+      Map map = new HashMap();
+      for (Category category : categories) {
+         Map cat = new HashMap();
+         for (CategoryValue c : category.getSetValues()) {
+            o(c.name(), c.text(), cat);
+         }
+         Map prop = o("text", category.text());
+         o("values", cat, prop);
+         o(category.propertyName(), prop, map);
+      }
+      return ok(o("categories", map));
    }
 }
