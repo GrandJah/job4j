@@ -9,7 +9,7 @@ public class WheelDriveType implements Category {
 
    @Override
    public String propertyName() {
-      return "wd_type";
+      return "drive";
    }
 
    @Override

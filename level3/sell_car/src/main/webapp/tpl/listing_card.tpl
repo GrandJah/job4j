@@ -33,9 +33,14 @@
                                     </div>
                                     <div class="ratio ratio_description">
                                         <div class="ratio-content">
-                                            <div class="description out">
-
+                                            <div class="category out">
+                                                <div class="model"></div>
+                                                <div class="car_type cat"></div>
+                                                <div class="fuel_type cat"></div>
+                                                <div class="gear_type cat"></div>
+                                                <div class="wd_type cat"></div>
                                             </div>
+                                            <div class="description out"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -130,7 +135,23 @@
             }
             _search(".description", el).innerText = item.description
 
-            //todo загрузка параметров автомобиля
+            const cat = _find_module("create_form").property.categories
+            const parseCategory = val => {
+                if(car[val] !== undefined && cat.hasOwnProperty(val) ) {
+                    return _(cat[val].values[car[val]])
+                }
+                if (car[val] !== undefined) {
+                    _debugInfo("oo", cat[val])
+                    return cat[val]
+                }
+                return ""
+            }
+
+            _search(".wd_type", el).innerText = parseCategory("drive")
+            _search(".model", el).innerText = car.model
+            _search(".car_type", el).innerText = parseCategory("carType")
+            _search(".gear_type", el).innerText = parseCategory("gearbox")
+            _search(".fuel_type", el).innerText = parseCategory("fuelType")
             return el
         }
 
@@ -328,13 +349,35 @@
 
     .description {
         left: -2%;
+        width: 64%;
+        margin: 2%;
         overflow-y: scroll;
         overflow-x: hidden;
-        max-height: 100%;
-        font-size: small;
+        height: 93%;
+        float: right;
+        outline: lightblue 1px solid;
+    }
+
+    .category {
+        left: -2%;
+        width: 30%;
+        overflow: hidden;
+        height: 100%;
+        float: left;
     }
 
     .out {
-        outline: red 1px dashed;
+        /*outline: red 1px dashed;*/
+    }
+
+    .cat {
+        padding: 5px;
+        font-size: medium;
+    }
+
+    .model {
+        font-size: large;
+        font-weight: bold;
+        padding: 3px;
     }
 </style>

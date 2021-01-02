@@ -9,7 +9,7 @@ public class CarType implements Category {
 
    @Override
    public String propertyName() {
-      return "car_type";
+      return "carType";
    }
 
    @Override

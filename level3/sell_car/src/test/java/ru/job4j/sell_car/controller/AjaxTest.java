@@ -167,14 +167,15 @@ public class AjaxTest {
       setTestEnvironment();
       log.debug("test");
       TestJSONServlet test = new TestJSONServlet(q(act("getCategories")), q(
-       "'categories':{" + "'car_type':{'text':'Car type',"
+       "'categories':{" + "'carType':{'text':'Car type',"
         + "'values':{'CONVERTIBLE':'Convertible','COUPE':'Coupe','HATCHBACK':'Hatchback',"
         + "'MINIVAN':'Minivan','PICKUP':'Pickup','SEDAN':'Sedan','SUV':'SUV','VAN':'Van','WAGON':'Wagon'}},"
-        + "'fuel_type':{'text':'Fuel type',"
+        + "'drive':{'text':'Wheel drive type',"
+        + "'values':{'FrontWD':'Front WD','FullWD':'Full WD','RearWD':'Rear WD'}},"
+        + "'fuelType':{'text':'Fuel type',"
         + "'values':{'DIESEL':'Diesel','LIQUEFIED_GAS':'Liquefied gas','PETROL':'Petrol'}},"
-        + "'gear_type':{'text':'Gear Type'," + "'values':{'AUTO':'Automatic','MANUAL':'Manual'}},"
-        + "'wd_type':{'text':'Wheel drive type',"
-        + "'values':{'FrontWD':'Front WD','FullWD':'Full WD','RearWD':'Rear WD'}}}", ok()));
+        + "'gearbox':{'text':'Gear Type'," + "'values':{'AUTO':'Automatic','MANUAL':'Manual'}}"
+        + "}", ok()));
       new Ajax().doPost(test.request(), test.response());
       assertEquals(test.expect(), test.answer());
       log.debug("ok!");

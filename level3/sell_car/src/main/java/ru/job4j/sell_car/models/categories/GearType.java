@@ -9,7 +9,7 @@ public class GearType implements Category {
 
    @Override
    public String propertyName() {
-      return "gear_type";
+      return "gearbox";
    }
 
    @Override

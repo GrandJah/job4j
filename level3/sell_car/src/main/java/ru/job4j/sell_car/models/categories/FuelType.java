@@ -9,7 +9,7 @@ public class FuelType implements Category {
 
    @Override
    public String propertyName() {
-      return "fuel_type";
+      return "fuelType";
    }
 
    @Override
