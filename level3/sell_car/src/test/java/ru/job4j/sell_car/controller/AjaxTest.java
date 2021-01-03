@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import ru.job4j.sell_car.controller.stub.StabFileStorage;
 import ru.job4j.sell_car.controller.stub.StubAdvStorage;
 import ru.job4j.sell_car.controller.stub.StubShadows;
@@ -19,7 +19,7 @@ import ru.job4j.sell_car.environment.interfaces.Shadows;
 import ru.job4j.sell_car.environment.interfaces.UserStorage;
 import ru.job4j.sell_car.models.User;
 
-@Log4j
+@Log4j2
 public class AjaxTest {
 
    /**

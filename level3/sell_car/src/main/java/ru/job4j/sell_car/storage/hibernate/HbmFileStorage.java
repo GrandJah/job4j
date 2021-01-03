@@ -1,11 +1,11 @@
 package ru.job4j.sell_car.storage.hibernate;
 
 import java.util.UUID;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import ru.job4j.sell_car.environment.interfaces.FileStorage;
 import ru.job4j.sell_car.models.ImageFile;
 
-@Log4j
+@Log4j2
 public class HbmFileStorage extends HbmStorage implements FileStorage {
 
    @Override

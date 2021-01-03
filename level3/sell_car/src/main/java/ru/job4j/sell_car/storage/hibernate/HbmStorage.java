@@ -1,6 +1,5 @@
 package ru.job4j.sell_car.storage.hibernate;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -9,9 +8,10 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.util.function.Function;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public abstract class HbmStorage {
-   private static final Logger LOG = Logger.getLogger(HbmStorage.class);
 
    private final SessionFactory sf = Connect.sf();
 
@@ -35,7 +35,7 @@ public abstract class HbmStorage {
       private static final Connect CONNECT = new Connect();
 
       private Connect() {
-         LOG.debug("Create Connect");
+         log.debug("Create Connect");
       }
 
       public static SessionFactory sf() {

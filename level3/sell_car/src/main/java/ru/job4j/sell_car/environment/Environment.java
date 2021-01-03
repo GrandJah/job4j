@@ -1,9 +1,8 @@
 package ru.job4j.sell_car.environment;
 
-import org.apache.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.log4j.Log4j2;
 import ru.job4j.sell_car.environment.interfaces.AdvStorage;
 import ru.job4j.sell_car.environment.interfaces.CarStorage;
 import ru.job4j.sell_car.environment.interfaces.FileStorage;
@@ -18,15 +17,14 @@ import ru.job4j.sell_car.storage.hibernate.HbmShadows;
 import ru.job4j.sell_car.storage.hibernate.HbmUserStorage;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
+@Log4j2
 public class Environment {
-   private static final Logger LOG = Logger.getLogger(Environment.class);
-
    private static Environment instance;
 
    public static Environment inst(Object userClass) {
-      LOG.debug(String.format("Instance for %s", userClass));
+      log.debug(String.format("Instance for %s", userClass));
       if (instance == null) {
-         LOG.info("load default environment");
+         log.info("load default environment");
          instance = new Environment();
          instance.changeEnvironment(DEFAULT_ENVIRONMENT, DEFAULT_OPTIONS);
       }
@@ -73,12 +71,12 @@ public class Environment {
    }
 
    protected Environment() {
-      LOG.debug("environment initiation");
+      log.debug("environment initiation");
       Environment.instance = this;
    }
 
    protected void changeEnvironment(Map<Class, Class> environment, Map<String, String> options) {
-      LOG.info("environment changed");
+      log.info("environment changed");
       this.environment.putAll(environment);
       this.options.putAll(options);
       Environment.instance = this;

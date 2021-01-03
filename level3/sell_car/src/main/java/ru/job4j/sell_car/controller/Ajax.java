@@ -19,7 +19,7 @@ import java.util.function.Function;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import ru.job4j.sell_car.environment.Environment;
 import ru.job4j.sell_car.environment.interfaces.AdvStorage;
 import ru.job4j.sell_car.environment.interfaces.FileStorage;
@@ -38,7 +38,7 @@ import ru.job4j.sell_car.models.categories.FuelType;
 import ru.job4j.sell_car.models.categories.GearType;
 import ru.job4j.sell_car.models.categories.WheelDriveType;
 
-@Log4j
+@Log4j2
 public class Ajax extends HttpServlet {
 
    private final Environment env = Environment.inst(this);

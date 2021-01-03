@@ -12,11 +12,11 @@ import java.util.List;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import ru.job4j.sell_car.environment.Environment;
 import ru.job4j.sell_car.environment.interfaces.Upload;
 
-@Log4j
+@Log4j2
 public class Files extends HttpServlet {
    private final Environment env = Environment.inst(this);
 
