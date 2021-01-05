@@ -16,5 +16,7 @@
         <property name="use_sql_comments">true</property>
 
         <mapping class="ru.job4j.candidate.models.Candidate"/>
+        <mapping class="ru.job4j.candidate.models.VacancyBase"/>
+        <mapping class="ru.job4j.candidate.models.Vacancy"/>
     </session-factory>
 </hibernate-configuration>

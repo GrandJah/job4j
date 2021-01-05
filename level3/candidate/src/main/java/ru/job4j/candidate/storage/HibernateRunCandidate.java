@@ -4,6 +4,8 @@ package ru.job4j.candidate.storage;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import ru.job4j.candidate.models.Candidate;
+import ru.job4j.candidate.models.Vacancy;
+import ru.job4j.candidate.models.VacancyBase;
 
 @Log4j2
 public class HibernateRunCandidate extends HbmStorage {
@@ -27,22 +29,40 @@ public class HibernateRunCandidate extends HbmStorage {
       log.info(app.findByName("Zulfia Kirova"));
       app.updSalaryAndExp(2, 100000, 8);
       log.info(app.findById(2));
+
+      app.updVacancyBase(1, new VacancyBase().addVacancy(Vacancy.of("Cool Job!!!")));
+      log.info(app.findById(1));
+      log.info(app.findFetchById(1));
+
       app.delete(1);
       app.delete(2);
       app.delete(3);
       log.info(app.getAll());
-
-
    }
 
    public List<Candidate> getAll() {
-      return query(sf -> sf.createQuery("from Candidate").list());
+      return query(sf -> sf.createQuery("from Candidate", Candidate.class).list());
    }
 
    public Candidate findById(Integer id) {
       return (Candidate) query(
        sf -> sf.createQuery("from Candidate c where c.id = :cid").setParameter("cid", id)
                .uniqueResult());
+   }
+
+   public Candidate findFetchById(Integer id) {
+      return (Candidate) query(sf -> sf.createQuery(
+       "from Candidate c join fetch c.vacancyBase b join fetch b.vacancies where c.id = :cid").setParameter("cid", id).uniqueResult());
+   }
+
+   public void updVacancyBase(Integer id, VacancyBase vacancyBase) {
+      query(sf -> {
+         sf.persist(vacancyBase);
+         return sf.createQuery(
+          "update Candidate c set c.vacancyBase =:vacancyBase where c.id = :id")
+                  .setParameter("id", id).setParameter("vacancyBase", vacancyBase)
+                  .executeUpdate();
+      });
    }
 
    public Candidate findByName(String name) {
