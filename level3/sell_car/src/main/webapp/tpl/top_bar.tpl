@@ -2,6 +2,7 @@
     <div id="col">
         <div class="top_bar">
             <div class="container">
+                <button class="upd">Обновить</button>
                 <div id="create_button" hidden>
                     <button>Новое Объявление</button>
                 </div>
@@ -29,6 +30,9 @@
         const user_name = _search("#user_name")
 
         const action = _find_module("action")
+
+        const upd = _search("button.upd")
+        upd.onclick = action.updateAdvList;
 
         _loadUrlTpl("login", "#user_form", login => {
             user_button.onclick = () => {
@@ -77,6 +81,12 @@
     })()
 </script>
 <style>
+    button.upd {
+        position: absolute;
+        float: left;
+        left: 1%;
+    }
+
     body {
         margin: 0;
         overflow: hidden;
@@ -113,7 +123,7 @@
     #user_name {
         color: blue;
         float: left;
-        left: 2%;
+        left: 20%;
         font-size: x-large;
         font-weight: bold;
         font-family: Verdana, sans-serif;
@@ -129,7 +139,6 @@
         z-index: 100;
         background-image: linear-gradient(rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
     }
-
 
     button {
         display: inline-block;
