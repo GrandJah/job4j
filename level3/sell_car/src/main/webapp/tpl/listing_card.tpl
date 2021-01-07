@@ -164,13 +164,9 @@
             method: {
                 updateData: data => {
                     m.data.adverts = [...data]
-                    _debugInfo("GOGOGO111")
                     m.method.fillAdverts()
-                    _debugInfo("GOGOGO222")
                 },
                 fillAdverts: () => {
-
-                    _debugInfo("GOGOGO")
                     const adverts = m.data.adverts
                     list.innerText = ''
                     adverts.forEach((item) => {
