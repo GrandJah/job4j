@@ -3,6 +3,7 @@
         <div class="top_bar">
             <div class="container">
                 <button class="upd">Обновить</button>
+                <button class="filter">&or;</button>
                 <div id="create_button" hidden>
                     <button>Новое Объявление</button>
                 </div>
@@ -17,6 +18,26 @@
             <div id="create_form_site"></div>
         </div>
         <div class="opacity"></div>
+        <form id="upd" onsubmit="_stub()">
+            <div class="filter">
+                <div>
+                    <label>
+                        <input type="checkbox" name="onDay">
+                        показать за последний день
+                    </label>
+                    <label>
+                        <input type="checkbox" name="isPhoto" >
+                        показать с фото
+                    </label>
+                    <label>
+                        <input type="checkbox" name="likeModel">
+                        показать определенной марки
+                        <br>
+                        <input type="text" name="model">
+                    </label>
+                </div>
+            </div>
+        </form>
         <div id="card_list_site" class="list"></div>
     </div>
 </template>
@@ -32,7 +53,25 @@
         const action = _find_module("action")
 
         const upd = _search("button.upd")
-        upd.onclick = action.updateAdvList;
+
+        const filter_form = _search("div.filter")
+        filter_form.hidden = true
+
+        upd.onclick = () => {
+            filter_form.hidden = true
+            const filter = {};
+            const f = new FormData(_search("#upd"));
+            for (let [name, value] of f) {
+                filter[name] = value
+            }
+            action.updateAdvList({filter});
+        }
+
+        const filter_btn = _search("button.filter")
+        filter_btn.onclick = () => {
+            filter_form.hidden = !filter_form.hidden
+            setTimeout(()=> {filter_form.hidden = true}, 10000)
+        };
 
         _loadUrlTpl("login", "#user_form", login => {
             user_button.onclick = () => {
@@ -81,6 +120,36 @@
     })()
 </script>
 <style>
+    div.filter {
+        position: absolute;
+        float: left;
+        padding: 5px;
+        top: 60pt;
+        left: 20%;
+        margin: 0 auto;
+        z-index: 200;
+        background: white;
+        border-radius: 10px;
+        border: gray 1px solid;
+    }
+
+    div.filter div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    div.filter label {
+        margin: 5px;
+    }
+
+
+    button.filter {
+        float: left;
+        padding-left: 5px;
+        padding-right: 5px;
+        left: 16%;
+    }
+
     button.upd {
         position: absolute;
         float: left;

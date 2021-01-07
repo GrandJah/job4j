@@ -43,10 +43,10 @@ const action = {
     change_status: id_adv => _ajax_action({id: id_adv}, "changeStatus")
         .then(data => data.status),
     checkUser: name => _get_prop("login", "username") === name,
-    getAdverts: (callback) => _ajax_action({}, "list_ad").then(data => callback(data.data)),
+    getAdverts: (callback, filter) => _ajax_action({...filter}, "list_ad").then(data => callback(data.data)),
     create_advert: (data, callback) => _ajax_action(data, "create").then(data => callback(data)),
     upload,
-    updateAdvList: () => action.getAdverts(data => _pipe.go("update", data))
+    updateAdvList: filter => action.getAdverts(data => _pipe.go("update", data),filter)
 }
 
 _add_module(action)
