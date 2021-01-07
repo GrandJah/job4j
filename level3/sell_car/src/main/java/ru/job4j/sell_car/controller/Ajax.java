@@ -112,7 +112,8 @@ public class Ajax extends HttpServlet {
    }
 
    private JSONObject get(JSONObject json) {
-      List<Advert> data = Optional.ofNullable(this.advStorage.getAll()).orElse(new ArrayList<>());
+      Map<String, Object> filter = Optional.ofNullable((JSONObject) json.opt("filter")).orElse(new JSONObject()).toMap();
+      List<Advert> data = Optional.ofNullable(this.advStorage.getAllWithFilter(filter)).orElse(new ArrayList<>());
       return ok(o("data", data));
    }
 
