@@ -131,7 +131,7 @@ public class AjaxTest {
       };
    }
 
-   @Test
+//   @Test
    public void testWithDefaultEnvironment() throws IOException {
       setDefaultEnvironment();
       testSessionAjax();

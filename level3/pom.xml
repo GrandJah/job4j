@@ -16,7 +16,7 @@
         <module>books</module>
         <module>cars</module>
         <module>todolist</module>
-        <module>tracker</module>
+<!--        <module>tracker</module>-->
         <module>entityCars</module>
         <module>sell_car</module>
         <module>candidate</module>
