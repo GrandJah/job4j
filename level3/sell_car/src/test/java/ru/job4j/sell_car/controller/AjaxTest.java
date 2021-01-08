@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.log4j.Log4j2;
 import ru.job4j.sell_car.controller.stub.StabFileStorage;
 import ru.job4j.sell_car.controller.stub.StubAdvStorage;
@@ -17,7 +16,6 @@ import ru.job4j.sell_car.environment.interfaces.AdvStorage;
 import ru.job4j.sell_car.environment.interfaces.FileStorage;
 import ru.job4j.sell_car.environment.interfaces.Shadows;
 import ru.job4j.sell_car.environment.interfaces.UserStorage;
-import ru.job4j.sell_car.models.User;
 
 @Log4j2
 public class AjaxTest {
@@ -71,7 +69,6 @@ public class AjaxTest {
     * @throws IOException IOException
     */
    private void testSessionAjax() throws IOException {
-      AtomicReference<User> user = new AtomicReference<>();
       //Пустая база
       t(q(act("list_ad")), q("'data':[]", ok()));
       //Отсутствуют данные
@@ -131,7 +128,7 @@ public class AjaxTest {
       };
    }
 
-//   @Test
+   @Test
    public void testWithDefaultEnvironment() throws IOException {
       setDefaultEnvironment();
       testSessionAjax();
