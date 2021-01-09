@@ -3,7 +3,6 @@ package ru.job4j.integration;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,11 +15,12 @@ import java.util.List;
 
 public class OrdersStoreTest {
    private final BasicDataSource pool = new BasicDataSource();
+   private static int serialDB = 0;
 
    @Before
    public void setUp() throws SQLException {
       pool.setDriverClassName("org.hsqldb.jdbcDriver");
-      pool.setUrl("jdbc:hsqldb:mem:tests;sql.syntax_pgs=true;");
+      pool.setUrl(String.format("jdbc:hsqldb:mem:%s;sql.syntax_pgs=true;", serialDB++));
       pool.setUsername("sa");
       pool.setPassword("");
       pool.setMaxTotal(2);
@@ -32,11 +32,6 @@ public class OrdersStoreTest {
          e.printStackTrace();
       }
       pool.getConnection().prepareStatement(builder.toString()).executeUpdate();
-   }
-
-   @After
-   public void close() throws SQLException {
-      pool.getConnection().prepareStatement("DROP TABLE orders").executeUpdate();
    }
 
    @Test
