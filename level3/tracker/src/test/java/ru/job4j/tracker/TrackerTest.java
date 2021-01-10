@@ -1,9 +1,8 @@
 package ru.job4j.tracker;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 import ru.job4j.tracker.expire.Item;
 
@@ -14,17 +13,19 @@ import ru.job4j.tracker.expire.Item;
  * @version 0.1
  * @since 24.05.2017
  */
-public class TrackerTest {
+public abstract class TrackerTest {
 
     /**
      * Тестируемый трекер.
      */
-    private Tracker tracker = new TrackerArray();
+    private final Tracker tracker;
 
-    /** Установка тестируемого трекера.
+    /**
+     * Установка тестируемого трекера.
+     *
      * @param tracker tracker
      */
-    void setTracker(Tracker tracker) {
+    protected TrackerTest(Tracker tracker) {
         this.tracker = tracker;
     }
 
@@ -37,7 +38,7 @@ public class TrackerTest {
         this.tracker.add(new Item("Заявка1"));
         this.tracker.add(new Item("Заявка2"));
         this.tracker.add(new Item("Заявка3"));
-        assertThat(tracker.getAll().size(), is(3));
+        assertEquals(3, tracker.getAll().size());
     }
 
     /**
@@ -47,9 +48,9 @@ public class TrackerTest {
     @Test
     public void whenAddItemThenTrackerHasItem() throws Tracker.ErrorValue {
         Item item = new Item("Заявка");
-        this.tracker.add(item);
+        item = this.tracker.add(item);
         Item result = tracker.getAll().get(0);
-        assertThat(result, is(item));
+        assertEquals(item, result);
     }
 
     /**
@@ -60,11 +61,10 @@ public class TrackerTest {
     @Test
     public void whenUpdateItemThenItemUpdate() throws Tracker.NotFound, Tracker.ErrorValue {
         Item item = new Item("Заявка");
-        this.tracker.add(item);
+        item = this.tracker.add(item);
         item.setName("Редактированная");
         this.tracker.update(item);
-        assertThat(tracker.getAll().get(0).getName(),
-                is("Редактированная"));
+        assertEquals("Редактированная", tracker.getAll().get(0).getName());
     }
 
     /**
@@ -75,10 +75,10 @@ public class TrackerTest {
     @Test
     public void whenDeleteItemThenTrackerNoHasItem() throws Tracker.NotFound, Tracker.ErrorValue {
         Item item = new Item("Заявка");
-        this.tracker.add(item);
+        item = this.tracker.add(item);
         this.tracker.delete(item);
         int result = this.tracker.getAll().size();
-        assertThat(result, is(0));
+        assertEquals(0, result);
     }
 
     /**
@@ -89,9 +89,9 @@ public class TrackerTest {
     @Test
     public void whenFindByIdThenReturnItemId() throws Tracker.NotFound, Tracker.ErrorValue {
         Item item = new Item("Заявка");
-        this.tracker.add(item);
+        item = this.tracker.add(item);
         Item result = tracker.findById(item.getId());
-        assertThat(result, is(item));
+        assertEquals(item, result);
     }
 
     /**
@@ -102,9 +102,9 @@ public class TrackerTest {
     @Test
     public void whenFindByNameThenReturnItemName() throws Tracker.NotFound, Tracker.ErrorValue {
         Item item = new Item("Заявка");
-        this.tracker.add(item);
+        item = this.tracker.add(item);
         Item result = tracker.findByName("Заявка");
-        assertThat(result, is(item));
+        assertEquals(item, result);
     }
 
     /**
@@ -127,7 +127,7 @@ public class TrackerTest {
             result.append(", ");
         }
         String expectOrder = "Второй, Четвертый, Пятый, ";
-        assertThat(result.toString(), is(expectOrder));
+        assertEquals(expectOrder, result.toString());
         this.tracker.delete(this.tracker.findByName("Второй"));
         this.tracker.delete(this.tracker.findByName("Пятый"));
         this.tracker.delete(this.tracker.findByName("Четвертый"));
@@ -136,6 +136,6 @@ public class TrackerTest {
             result.append(item.getName());
             result.append(", ");
         }
-        assertThat(result.toString(), is(""));
+        assertEquals("", result.toString());
     }
 }

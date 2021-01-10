@@ -1,9 +1,9 @@
 package ru.job4j.tracker.adapters;
 
 import java.util.ArrayList;
+import ru.job4j.tracker.Item;
 import ru.job4j.tracker.Store;
 import ru.job4j.tracker.Tracker;
-import ru.job4j.tracker.Item;
 
 public final class StoreToTrackerAdapter implements Tracker {
    private final Store store;
@@ -29,32 +29,40 @@ public final class StoreToTrackerAdapter implements Tracker {
    }
 
    @Override
-   public ru.job4j.tracker.expire.Item add(ru.job4j.tracker.expire.Item item) throws ErrorValue {
+   public ru.job4j.tracker.expire.Item add(ru.job4j.tracker.expire.Item item) {
       return convert(store.add(convert(item)));
    }
 
    @Override
    public ru.job4j.tracker.expire.Item findById(String id) throws NotFound {
-      return convert(store.findById(id));
+      try {
+         return convert(store.findById(Integer.parseInt(id)));
+      } catch (Exception e) {
+         throw new NotFound();
+      }
    }
 
    @Override
    public ru.job4j.tracker.expire.Item findById(Integer id) throws NotFound {
-      return convert(store.findById(String.valueOf(id)));
+      try {
+         return convert(store.findById(id));
+      } catch (Exception e) {
+         throw new NotFound();
+      }
    }
 
    @Override
-   public void update(ru.job4j.tracker.expire.Item item) throws NotFound, ErrorValue {
-      store.replace(item.getId().toString(), item);
+   public void update(ru.job4j.tracker.expire.Item item) {
+      store.replace(item.getId().toString(), convert(item));
    }
 
    @Override
-   public void delete(ru.job4j.tracker.expire.Item item) throws NotFound, ErrorValue {
+   public void delete(ru.job4j.tracker.expire.Item item) {
       store.delete(item.getId().toString());
    }
 
    @Override
-   public ru.job4j.tracker.expire.Item findByName(String key) throws NotFound {
+   public ru.job4j.tracker.expire.Item findByName(String key) {
       return convert(store.findByName(key).get(0));
    }
 

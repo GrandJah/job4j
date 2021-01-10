@@ -12,6 +12,7 @@ import ru.job4j.tracker.expire.Item;
  * @since 24.05.2017
  */
 public class TrackerArray implements Tracker {
+    private static int genId = 0;
     /**
      * Массив заявок.
      */
@@ -51,6 +52,11 @@ public class TrackerArray implements Tracker {
 
     @Override
     public Item add(Item item) throws ErrorValue {
+        if (item.getId() == null) {
+            item.setId(genId++);
+        } else {
+            throw new ErrorValue();
+        }
         validate(item);
         this.items.add(item);
         return item;
@@ -84,7 +90,11 @@ public class TrackerArray implements Tracker {
 
     @Override
     public ArrayList<Item> getAll() {
-        return (ArrayList<Item>) this.items.clone();
+        return new ArrayList<Item>() {
+            {
+                addAll(items);
+            }
+        };
     }
 
 }

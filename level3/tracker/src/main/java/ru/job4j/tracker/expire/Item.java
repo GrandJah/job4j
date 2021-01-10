@@ -1,7 +1,5 @@
 package ru.job4j.tracker.expire;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,6 @@ import lombok.ToString;
 @NoArgsConstructor(force = true)
 @ToString(callSuper = true)
 public class Item extends ru.job4j.tracker.Item {
-   private static int genId = (int) System.currentTimeMillis();
 
    /**
     * Комментарии к заявки.
@@ -35,7 +32,6 @@ public class Item extends ru.job4j.tracker.Item {
     */
    public Item(String name) {
       super(name);
-      setId(Item.genId++);
    }
 
    /**
@@ -62,23 +58,5 @@ public class Item extends ru.job4j.tracker.Item {
       setId(id);
       setCreated(created);
       this.comments = comments;
-   }
-
-   /**
-    * Сборка Item из запросов БД.
-    *
-    * @param item     Строка item
-    * @param comments Строка comments
-    * @return Item
-    * @throws SQLException ошибка БД
-    */
-   public static Item convertFromDB(ResultSet item, ResultSet comments) throws SQLException {
-      List<String> commentArray = new ArrayList<>();
-      while (comments.next()) {
-         commentArray.add(comments.getString("comment"));
-      }
-
-      return new Item(item.getInt("id"), item.getString("name"), item.getString("description"),
-       item.getTimestamp("created"), commentArray);
    }
 }

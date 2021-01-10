@@ -13,7 +13,7 @@ public class HbmTracker implements AutoCloseable, Store {
    private final StandardServiceRegistry registry;
    private final SessionFactory sf;
 
-   HbmTracker() {
+   public HbmTracker() {
       this.registry = new StandardServiceRegistryBuilder().configure().build();
       this.sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
    }
@@ -61,21 +61,19 @@ public class HbmTracker implements AutoCloseable, Store {
 
    @Override
    public List<Item> findAll() {
-      return query(sf -> sf
-       .createQuery("from ru.job4j.tracker.Item")
+      return query(sf -> sf.createQuery("from Item", Item.class)
        .list());
    }
 
    @Override
    public List<Item> findByName(String key) {
-      return query(sf -> sf
-       .createQuery("from ru.job4j.tracker.Item where name = :name")
+      return query(sf -> sf.createQuery("from Item where name = :name", Item.class)
        .setParameter("name", key)
        .list());
    }
 
    @Override
-   public Item findById(String id) {
+   public Item findById(Integer id) {
       return query(sf -> sf.get(Item.class, id));
    }
 }

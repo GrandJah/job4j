@@ -1,8 +1,6 @@
 package ru.job4j.tracker;
 
 
-import ru.job4j.tracker.adapters.StoreToTrackerAdapter;
-
 /**
  * junior.
  *
@@ -10,12 +8,12 @@ import ru.job4j.tracker.adapters.StoreToTrackerAdapter;
  * @version 0.1
  * @since 20.12.2017
  */
-public class TrackerDBTest extends TrackerTest {
+public class TrackerArrayTest extends TrackerTest {
 
     /**
      *  Настройка класса трекера на БД.
      */
-    public TrackerDBTest() {
-        super(new StoreToTrackerAdapter(new HbmTracker()));
+    public TrackerArrayTest() {
+        super(new TrackerArray());
     }
 }

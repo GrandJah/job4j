@@ -2,12 +2,12 @@ package ru.job4j.tracker;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.temporal.ChronoField;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -45,7 +45,7 @@ public class Item {
   /**
    * Время создания.
    */
-  private Timestamp created = Timestamp.from(Instant.now());
+  private Timestamp created = Timestamp.from(Instant.now().with(ChronoField.MILLI_OF_SECOND, 0));
 
   /**
    * @param name Имя пользователя

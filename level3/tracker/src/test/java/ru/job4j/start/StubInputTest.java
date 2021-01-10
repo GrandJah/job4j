@@ -1,13 +1,11 @@
 package ru.job4j.start;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
-import ru.job4j.tracker.expire.Item;
 import ru.job4j.tracker.Tracker;
-import ru.job4j.tracker.TrackerArray;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import ru.job4j.tracker.expire.Item;
 
 /**
  * junior.
@@ -16,27 +14,23 @@ import static org.junit.Assert.assertThat;
  * @version 0.1
  * @since 27.05.2017
  */
-public class StubInputTest {
+public abstract class StubInputTest {
     /**
      * Тестовый трекер.
      */
-    private Tracker tracker;
+    private final Tracker tracker;
+
     /**
      * Тестовая заявка №3.
      */
     private Item itemTest;
 
     /**
-     * Создаем трекер и заполняем поля.
-     */
-    public StubInputTest() {
-        setTracker(new TrackerArray());
-    }
-
-    /** Установка тестируемого трекера.
+     * Установка тестируемого трекера.
+     *
      * @param tracker tracker
      */
-    void setTracker(Tracker tracker) {
+    public StubInputTest(Tracker tracker) {
         this.tracker = tracker;
         fillTracker();
     }
@@ -47,8 +41,7 @@ public class StubInputTest {
         try {
             this.tracker.add(new Item("Один"));
             this.tracker.add(new Item("Два"));
-            this.itemTest = new Item("Три");
-            this.tracker.add(itemTest);
+            this.itemTest = this.tracker.add(new Item("Три"));
             this.tracker.add(new Item("Четыре"));
             this.tracker.add(new Item("Пять"));
         } catch (Tracker.ErrorValue errorValue) {
@@ -69,7 +62,7 @@ public class StubInputTest {
             builder.append(string);
         }
         String menu = String.format("0. Add new Item%1$s1. Show all items%1$s2. Edit item%1$s3. Delete item%1$s4. Find item by Id%1$s5. Find items by name%1$s6. Exit Program%1$s%1$sSelect : ", System.lineSeparator());
-        assertThat(builder.toString(), is(String.format("%sПрограмма завершена%s", menu, System.lineSeparator())));
+        assertEquals(String.format("%sПрограмма завершена%s", menu, System.lineSeparator()), builder.toString());
     }
 
     /**
@@ -80,7 +73,7 @@ public class StubInputTest {
         String[] answer = {"0", "name", "desc", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
-        assertThat(this.tracker.getAll().get(5).getName(), is("name"));
+        assertEquals("name", this.tracker.getAll().get(5).getName());
     }
 
     /**
@@ -95,7 +88,7 @@ public class StubInputTest {
         for (Item item : this.tracker.getAll()) {
             builder.append(item.getName());
         }
-        assertThat(builder.toString(), is("ОдинДваТриЧетыреПять"));
+        assertEquals("ОдинДваТриЧетыреПять", builder.toString());
     }
 
     /**
@@ -110,7 +103,7 @@ public class StubInputTest {
         for (Item item : this.tracker.getAll()) {
             builder.append(item.getName());
         }
-        assertThat(builder.toString(), is("ОдинДваЧетыреПять"));
+        assertEquals("ОдинДваЧетыреПять", builder.toString());
     }
 
     /**
@@ -121,7 +114,7 @@ public class StubInputTest {
         String[] answer = {"4", this.itemTest.getId().toString(), "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
-        assertThat(input.getOut()[3], is(String.format("%s%s", this.itemTest.toString(), System.lineSeparator())));
+        assertEquals(String.format("%s%s", this.itemTest.toString(), System.lineSeparator()), input.getOut()[3]);
     }
 
     /**
@@ -132,7 +125,7 @@ public class StubInputTest {
         String[] answer = {"5", "Три", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
-        assertThat(input.getOut()[3], is(String.format("%s%s", this.itemTest.toString(), System.lineSeparator())));
+        assertEquals(String.format("%s%s", this.itemTest.toString(), System.lineSeparator()), input.getOut()[3]);
     }
 
     /**
@@ -144,7 +137,7 @@ public class StubInputTest {
         String[] answer = {"2", this.itemTest.getId().toString(), "НольТриПятнадцать", "Новое описание", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
-        assertThat(this.tracker.findById(this.itemTest.getId()).getName(), is("НольТриПятнадцать"));
+        assertEquals("НольТриПятнадцать", this.tracker.findById(this.itemTest.getId()).getName());
     }
 
     /**
@@ -155,6 +148,6 @@ public class StubInputTest {
         String[] answer = {"2", "123", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
-        assertThat(input.getOut()[3], is(String.format("Заявка не найдена.%s", System.lineSeparator())));
+        assertEquals(String.format("Заявка не найдена.%s", System.lineSeparator()), input.getOut()[3]);
     }
 }
