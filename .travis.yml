@@ -22,7 +22,6 @@ services:
 
 before_install:
   - psql -c "CREATE DATABASE \"job4j-test\";" -U postgres
-  - psql -c "CREATE DATABASE tracker;" -U postgres
 
 notifications:
   email:
