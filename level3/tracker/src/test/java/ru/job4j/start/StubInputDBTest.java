@@ -1,7 +1,6 @@
 package ru.job4j.start;
 
 import ru.job4j.tracker.HbmTracker;
-import ru.job4j.tracker.adapters.StoreToTrackerAdapter;
 
 /**
  * junior.
@@ -15,6 +14,6 @@ public class StubInputDBTest extends StubInputTest {
      * Настройка класса трекера на БД.
      */
     public StubInputDBTest() {
-        super(new StoreToTrackerAdapter(new HbmTracker()));
+        super(new HbmTracker());
     }
 }

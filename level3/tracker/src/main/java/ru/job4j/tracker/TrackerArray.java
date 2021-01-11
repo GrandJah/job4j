@@ -2,7 +2,6 @@ package ru.job4j.tracker;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
-import ru.job4j.tracker.expire.Item;
 
 /**
  * junior.
@@ -45,9 +44,10 @@ public class TrackerArray implements Tracker {
     }
 
     @Override
-    public void update(Item item) throws NotFound, ErrorValue {
+    public boolean update(Item item) throws NotFound, ErrorValue {
         validate(item);
         iteratorFindId(item.getId()).set(item);
+        return true;
     }
 
     @Override
@@ -63,9 +63,10 @@ public class TrackerArray implements Tracker {
     }
 
     @Override
-    public void delete(Item item) throws NotFound, ErrorValue {
+    public boolean delete(Item item) throws NotFound, ErrorValue {
         validate(item);
         iteratorFindId(item.getId()).remove();
+        return true;
     }
 
     @Override
@@ -79,7 +80,7 @@ public class TrackerArray implements Tracker {
     }
 
     @Override
-    public Item findByName(String key) throws NotFound {
+    public Item findByNameFirst(String key) throws NotFound {
         for (Item item : this.items) {
             if (item.getName().equals(key)) {
                 return item;
@@ -89,7 +90,7 @@ public class TrackerArray implements Tracker {
     }
 
     @Override
-    public ArrayList<Item> getAll() {
+    public ArrayList<Item> findAll() {
         return new ArrayList<Item>() {
             {
                 addAll(items);

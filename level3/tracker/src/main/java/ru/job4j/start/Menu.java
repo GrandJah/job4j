@@ -1,6 +1,6 @@
 package ru.job4j.start;
 
-import ru.job4j.tracker.expire.Item;
+import ru.job4j.tracker.Item;
 import ru.job4j.tracker.Tracker;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ class Menu {
         addAction(new BaseAction("Show all items") {
             @Override
             public void execute(Input input, Tracker tracker) {
-                for (Item item : tracker.getAll()) {
+                for (Item item : tracker.findAll()) {
                     input.println(item.toString());
                 }
             }
@@ -72,7 +72,7 @@ class Menu {
         addAction(new BaseAction("Find items by name") {
             @Override
             public void execute(Input input, Tracker tracker) throws Tracker.NotFound {
-                input.println(tracker.findByName(input.ask("Введите имя:")).toString());
+                input.println(tracker.findByNameFirst(input.ask("Введите имя:")).toString());
             }
         });
         addAction(new Exit());

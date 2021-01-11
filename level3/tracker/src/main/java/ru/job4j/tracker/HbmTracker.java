@@ -41,8 +41,7 @@ public class HbmTracker implements AutoCloseable, Store {
    }
 
    @Override
-   public boolean replace(String id, Item item) {
-      item.setId(Integer.valueOf(id));
+   public boolean update(Item item) {
       return query(sf -> {
          sf.update(item);
          return sf.get(Item.class, item.getId()).equals(item);
@@ -50,9 +49,7 @@ public class HbmTracker implements AutoCloseable, Store {
    }
 
    @Override
-   public boolean delete(String id) {
-      Item item = new Item();
-      item.setId(Integer.valueOf(id));
+   public boolean delete(Item item) {
       return query(sf -> {
          sf.delete(item);
          return sf.get(Item.class, item.getId()) == null;
@@ -61,19 +58,22 @@ public class HbmTracker implements AutoCloseable, Store {
 
    @Override
    public List<Item> findAll() {
-      return query(sf -> sf.createQuery("from Item", Item.class)
-       .list());
+      return query(sf -> sf.createQuery("from Item", Item.class).list());
    }
 
    @Override
    public List<Item> findByName(String key) {
-      return query(sf -> sf.createQuery("from Item where name = :name", Item.class)
-       .setParameter("name", key)
-       .list());
+      return query(
+       sf -> sf.createQuery("from Item where name = :name", Item.class).setParameter("name", key)
+               .list());
    }
 
    @Override
-   public Item findById(Integer id) {
-      return query(sf -> sf.get(Item.class, id));
+   public Item findById(Integer id) throws NotFound {
+      Item item = query(sf -> sf.get(Item.class, id));
+      if (item == null) {
+         throw new NotFound();
+      }
+      return item;
    }
 }

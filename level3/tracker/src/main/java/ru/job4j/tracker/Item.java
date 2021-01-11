@@ -3,11 +3,14 @@ package ru.job4j.tracker;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -47,11 +50,27 @@ public class Item {
    */
   private Timestamp created = Timestamp.from(Instant.now().with(ChronoField.MILLI_OF_SECOND, 0));
 
+
+  /**
+   * Комментарии к заявки.
+   */
+  @Transient
+  private List<String> comments = new ArrayList<>();
+
   /**
    * @param name Имя пользователя
    */
   public Item(String name) {
     this.name = name;
+  }
+
+  /**
+   * @param name        Имя пользователя
+   * @param description Описание заявки
+   */
+  public Item(String name, String description) {
+    this(name);
+    setDescription(description);
   }
 }
 

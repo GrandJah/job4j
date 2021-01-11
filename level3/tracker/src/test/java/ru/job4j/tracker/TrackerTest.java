@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import ru.job4j.tracker.expire.Item;
-
 /**
  * junior.
  *
@@ -38,7 +36,7 @@ public abstract class TrackerTest {
         this.tracker.add(new Item("Заявка1"));
         this.tracker.add(new Item("Заявка2"));
         this.tracker.add(new Item("Заявка3"));
-        assertEquals(3, tracker.getAll().size());
+        assertEquals(3, tracker.findAll().size());
     }
 
     /**
@@ -49,7 +47,7 @@ public abstract class TrackerTest {
     public void whenAddItemThenTrackerHasItem() throws Tracker.ErrorValue {
         Item item = new Item("Заявка");
         item = this.tracker.add(item);
-        Item result = tracker.getAll().get(0);
+        Item result = tracker.findAll().get(0);
         assertEquals(item, result);
     }
 
@@ -64,7 +62,7 @@ public abstract class TrackerTest {
         item = this.tracker.add(item);
         item.setName("Редактированная");
         this.tracker.update(item);
-        assertEquals("Редактированная", tracker.getAll().get(0).getName());
+        assertEquals("Редактированная", tracker.findAll().get(0).getName());
     }
 
     /**
@@ -77,7 +75,7 @@ public abstract class TrackerTest {
         Item item = new Item("Заявка");
         item = this.tracker.add(item);
         this.tracker.delete(item);
-        int result = this.tracker.getAll().size();
+        int result = this.tracker.findAll().size();
         assertEquals(0, result);
     }
 
@@ -103,7 +101,7 @@ public abstract class TrackerTest {
     public void whenFindByNameThenReturnItemName() throws Tracker.NotFound, Tracker.ErrorValue {
         Item item = new Item("Заявка");
         item = this.tracker.add(item);
-        Item result = tracker.findByName("Заявка");
+        Item result = tracker.findByNameFirst("Заявка");
         assertEquals(item, result);
     }
 
@@ -119,20 +117,20 @@ public abstract class TrackerTest {
         this.tracker.add(new Item("Третий"));
         this.tracker.add(new Item("Четвертый"));
         this.tracker.add(new Item("Пятый"));
-        this.tracker.delete(this.tracker.findByName("Третий"));
-        this.tracker.delete(this.tracker.findByName("Первый"));
+        this.tracker.delete(this.tracker.findByNameFirst("Третий"));
+        this.tracker.delete(this.tracker.findByNameFirst("Первый"));
         StringBuilder result = new StringBuilder();
-        for (Item item : this.tracker.getAll()) {
+        for (Item item : this.tracker.findAll()) {
             result.append(item.getName());
             result.append(", ");
         }
         String expectOrder = "Второй, Четвертый, Пятый, ";
         assertEquals(expectOrder, result.toString());
-        this.tracker.delete(this.tracker.findByName("Второй"));
-        this.tracker.delete(this.tracker.findByName("Пятый"));
-        this.tracker.delete(this.tracker.findByName("Четвертый"));
+        this.tracker.delete(this.tracker.findByNameFirst("Второй"));
+        this.tracker.delete(this.tracker.findByNameFirst("Пятый"));
+        this.tracker.delete(this.tracker.findByNameFirst("Четвертый"));
         result = new StringBuilder();
-        for (Item item : this.tracker.getAll()) {
+        for (Item item : this.tracker.findAll()) {
             result.append(item.getName());
             result.append(", ");
         }

@@ -1,7 +1,6 @@
 package ru.job4j.start;
 
 import ru.job4j.tracker.HbmTracker;
-import ru.job4j.tracker.adapters.StoreToTrackerAdapter;
 
 /**
  * junior.
@@ -15,7 +14,7 @@ public class MainDB {
      * @param args аргументы
      */
     public static void main(String[] args) {
-        StartUI startUI = new StartUI(new StoreToTrackerAdapter(new HbmTracker()), new ValidateInput());
+        StartUI startUI = new StartUI(new HbmTracker(), new ValidateInput());
         startUI.run();
     }
 }

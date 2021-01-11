@@ -1,7 +1,6 @@
 package ru.job4j.tracker;
 
-import java.util.ArrayList;
-import ru.job4j.tracker.expire.Item;
+import java.util.List;
 
 /**
  * junior.
@@ -21,14 +20,16 @@ public interface Tracker {
     /** Получение всех заявок.
      * @return массив заявок
      */
-    ArrayList<Item> getAll();
+    List<Item> findAll();
 
     /** Поиск по ID.
      * @param id ID заявки
      * @return заявка
      * @throws NotFound ненайденый элемент
      */
-    Item findById(String id) throws NotFound;
+    default Item findById(String id) throws NotFound {
+        return findById(Integer.parseInt(id));
+    }
 
     /**
      * Поиск по ID.
@@ -44,22 +45,24 @@ public interface Tracker {
      * @param item Заявка
      * @throws ErrorValue Ошибка в параметрах
      * @throws NotFound ненайденый элемент
+     * @return update or not
      */
-    void update(Item item) throws NotFound, ErrorValue;
+    boolean update(Item item) throws NotFound, ErrorValue;
 
     /** Удаление заявки.
      * @param item Заявка
      * @throws ErrorValue Ошибка в параметрах
      * @throws NotFound ненайденый элемент
+     * @return delete or not
      */
-    void delete(Item item) throws NotFound, ErrorValue;
+    boolean delete(Item item) throws NotFound, ErrorValue;
 
     /** Поиск по названию заявки.
      * @param key ключ поиска
      * @return найденая заявка
      * @throws NotFound ненайденый элемент
      */
-    Item findByName(String key) throws NotFound;
+    Item findByNameFirst(String key) throws NotFound;
 
     /**
      * элемент не найден.

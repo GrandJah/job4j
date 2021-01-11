@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import ru.job4j.tracker.Tracker;
-import ru.job4j.tracker.expire.Item;
+import ru.job4j.tracker.Item;
 
 /**
  * junior.
@@ -73,7 +73,7 @@ public abstract class StubInputTest {
         String[] answer = {"0", "name", "desc", "6"};
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
-        assertEquals("name", this.tracker.getAll().get(5).getName());
+        assertEquals("name", this.tracker.findAll().get(5).getName());
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class StubInputTest {
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
-        for (Item item : this.tracker.getAll()) {
+        for (Item item : this.tracker.findAll()) {
             builder.append(item.getName());
         }
         assertEquals("ОдинДваТриЧетыреПять", builder.toString());
@@ -100,7 +100,7 @@ public abstract class StubInputTest {
         StubInput input = new StubInput(answer, 10);
         new StartUI(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
-        for (Item item : this.tracker.getAll()) {
+        for (Item item : this.tracker.findAll()) {
             builder.append(item.getName());
         }
         assertEquals("ОдинДваЧетыреПять", builder.toString());
