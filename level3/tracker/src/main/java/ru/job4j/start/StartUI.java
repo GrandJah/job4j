@@ -13,23 +13,23 @@ public class StartUI {
     /**
      * Ввод-вывод.
      */
-    private Input input;
+    private final Input input;
 
     /**
      * Трэкер заявок.
      */
-    private Tracker tracker;
+    private final Tracker tracker;
 
     /**
      * Меню.
      */
-    private Menu menu;
+    private final Menu menu;
 
     /**
      * @param tracker трэкер
      * @param input интерфейс пользователя
      */
-    StartUI(Tracker tracker, Input input) {
+    public StartUI(Tracker tracker, Input input) {
         this.input = input;
         this.tracker = tracker;
         this.menu = new Menu();
@@ -38,7 +38,7 @@ public class StartUI {
     /**
      * Application body.
      */
-    void run() {
+    public void run() {
         TrackerAction action = null;
         do {
             this.input.println(this.menu.toString());

@@ -23,7 +23,7 @@ public class ConsoleInput implements Input {
     /**
      * default constructor.
      */
-    ConsoleInput() {
+    public ConsoleInput() {
         this.input = new Scanner(System.in);
         this.out = System.out;
     }
@@ -40,7 +40,7 @@ public class ConsoleInput implements Input {
 
     @Override
     public int ask(String question, int range) {
-        throw new RuntimeException("ConsoleInput.ask - not realisation"); //все равно перекрываем
+        return Integer.parseInt(ask(question));
     }
 
     /** Вывод данных в консоль.
