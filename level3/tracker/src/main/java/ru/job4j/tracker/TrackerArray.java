@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.ListIterator;
  * @since 24.05.2017
  */
 @Component
+@Scope("prototype")
 public class TrackerArray implements Tracker {
     private static int genId = 0;
     /**
