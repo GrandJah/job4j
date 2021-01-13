@@ -1,5 +1,6 @@
 package ru.job4j.start;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.job4j.tracker.Tracker;
@@ -16,26 +17,31 @@ public class StartUI {
     /**
      * Ввод-вывод.
      */
-    private final Input input;
+    @Autowired
+    private Input input;
 
     /**
      * Трэкер заявок.
      */
-    private final Tracker tracker;
+    @Autowired
+    private Tracker tracker;
 
     /**
      * Меню.
      */
-    private final Menu menu;
+    @Autowired
+    private Menu menu;
 
     /**
      * @param tracker трэкер
-     * @param input интерфейс пользователя
+     * @param input   интерфейс пользователя
      */
-    public StartUI(Tracker tracker, Input input) {
-        this.input = input;
-        this.tracker = tracker;
-        this.menu = new Menu();
+    public static StartUI of(Tracker tracker, Input input) {
+        StartUI instance = new StartUI();
+        instance.input = input;
+        instance.tracker = tracker;
+        instance.menu = new Menu();
+        return instance;
     }
 
     /**

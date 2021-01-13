@@ -13,7 +13,7 @@ public class MainArray {
      * @param args аргументы
      */
     public static void main(String[] args) {
-        StartUI startUI = new StartUI(new TrackerArray(), new ValidateInput());
+        StartUI startUI = StartUI.of(new TrackerArray(), new ValidateInput());
         startUI.run();
     }
 }

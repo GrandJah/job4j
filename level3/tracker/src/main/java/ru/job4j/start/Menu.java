@@ -1,9 +1,10 @@
 package ru.job4j.start;
 
-import ru.job4j.tracker.Item;
-import ru.job4j.tracker.Tracker;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import ru.job4j.tracker.Item;
+import ru.job4j.tracker.Tracker;
 
 /**
  * junior.
@@ -12,6 +13,7 @@ import java.util.ArrayList;
  * @version 0.1
  * @since 25.05.2017
  */
+@Component
 class Menu {
     /**
      * User menu.

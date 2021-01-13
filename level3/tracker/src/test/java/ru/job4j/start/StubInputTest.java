@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import ru.job4j.tracker.Tracker;
 import ru.job4j.tracker.Item;
+import ru.job4j.tracker.Tracker;
 
 /**
  * junior.
@@ -56,7 +56,7 @@ public abstract class StubInputTest {
     public void whenExitThenExit() {
         String[] answer = {"6"};
         StubInput input = new StubInput(answer, 3);
-        new StartUI(this.tracker, input).run();
+        StartUI.of(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
         for (String string : input.getOut()) {
             builder.append(string);
@@ -72,7 +72,7 @@ public abstract class StubInputTest {
     public void whenAddThenAdd() {
         String[] answer = {"0", "name", "desc", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(this.tracker, input).run();
+        StartUI.of(this.tracker, input).run();
         assertEquals("name", this.tracker.findAll().get(5).getName());
     }
 
@@ -83,7 +83,7 @@ public abstract class StubInputTest {
     public void whenGetAllThenReturnAll() {
         String[] answer = {"1", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(this.tracker, input).run();
+        StartUI.of(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
         for (Item item : this.tracker.findAll()) {
             builder.append(item.getName());
@@ -98,7 +98,7 @@ public abstract class StubInputTest {
     public void whenDeleteItemThenSaveOrder() {
         String[] answer = {"3", this.itemTest.getId().toString(), "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(this.tracker, input).run();
+        StartUI.of(this.tracker, input).run();
         StringBuilder builder = new StringBuilder();
         for (Item item : this.tracker.findAll()) {
             builder.append(item.getName());
@@ -113,8 +113,9 @@ public abstract class StubInputTest {
     public void whenFindByIdThenReturnCorrect() {
         String[] answer = {"4", this.itemTest.getId().toString(), "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(this.tracker, input).run();
-        assertEquals(String.format("%s%s", this.itemTest.toString(), System.lineSeparator()), input.getOut()[3]);
+        StartUI.of(this.tracker, input).run();
+        assertEquals(String.format("%s%s", this.itemTest.toString(), System.lineSeparator()),
+          input.getOut()[3]);
     }
 
     /**
@@ -124,8 +125,9 @@ public abstract class StubInputTest {
     public void whenFindByNameThenReturnCorrect() {
         String[] answer = {"5", "Три", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(this.tracker, input).run();
-        assertEquals(String.format("%s%s", this.itemTest.toString(), System.lineSeparator()), input.getOut()[3]);
+        StartUI.of(this.tracker, input).run();
+        assertEquals(String.format("%s%s", this.itemTest.toString(), System.lineSeparator()),
+          input.getOut()[3]);
     }
 
     /**
@@ -136,7 +138,7 @@ public abstract class StubInputTest {
     public void whenEditThenEditCorrect() throws Tracker.NotFound {
         String[] answer = {"2", this.itemTest.getId().toString(), "НольТриПятнадцать", "Новое описание", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(this.tracker, input).run();
+        StartUI.of(this.tracker, input).run();
         assertEquals("НольТриПятнадцать", this.tracker.findById(this.itemTest.getId()).getName());
     }
 
@@ -147,7 +149,8 @@ public abstract class StubInputTest {
     public void whenIdFoundNotResultThenCorrectMessage() {
         String[] answer = {"2", "123", "6"};
         StubInput input = new StubInput(answer, 10);
-        new StartUI(this.tracker, input).run();
-        assertEquals(String.format("Заявка не найдена.%s", System.lineSeparator()), input.getOut()[3]);
+        StartUI.of(this.tracker, input).run();
+        assertEquals(String.format("Заявка не найдена.%s", System.lineSeparator()),
+          input.getOut()[3]);
     }
 }

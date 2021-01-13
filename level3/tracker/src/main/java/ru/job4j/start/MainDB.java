@@ -14,7 +14,7 @@ public class MainDB {
      * @param args аргументы
      */
     public static void main(String[] args) {
-        StartUI startUI = new StartUI(new HbmTracker(), new ValidateInput());
+        StartUI startUI = StartUI.of(new HbmTracker(), new ValidateInput());
         startUI.run();
     }
 }
