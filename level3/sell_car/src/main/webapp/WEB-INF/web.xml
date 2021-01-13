@@ -28,4 +28,16 @@
         <servlet-name>Ajax</servlet-name>
         <url-pattern>/ajax</url-pattern>
     </servlet-mapping>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error</location>
+    </error-page>
+    <servlet-mapping>
+        <servlet-name>ErrorHandler</servlet-name>
+        <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ErrorHandler</servlet-name>
+        <servlet-class>ru.job4j.sell_car.controller.ErrorHandler</servlet-class>
+    </servlet>
 </web-app>

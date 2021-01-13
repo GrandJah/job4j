@@ -1,6 +1,5 @@
 <template>
     <div id="listing-card">
-        <h1>Тут заголовок листинга</h1>
         <div>
             <div hidden id="card-item">
                 <div class="card_adv">

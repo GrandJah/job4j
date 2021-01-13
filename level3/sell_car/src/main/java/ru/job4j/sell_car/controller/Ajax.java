@@ -106,14 +106,11 @@ public class Ajax extends HttpServlet {
       return answer;
    }
 
-   private String exToStr(Exception e) {
-      return Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString)
-                   .reduce(e.getMessage(), (a, b) -> String.format("%s%s%s", a, System.lineSeparator(), b));
-   }
-
    private JSONObject get(JSONObject json) {
-      Map<String, Object> filter = Optional.ofNullable((JSONObject) json.opt("filter")).orElse(new JSONObject()).toMap();
-      List<Advert> data = Optional.ofNullable(this.advStorage.getAllWithFilter(filter)).orElse(new ArrayList<>());
+      Map<String, Object> filter = Optional.ofNullable((JSONObject) json.opt("filter"))
+                                           .orElse(new JSONObject()).toMap();
+      List<Advert> data = Optional.ofNullable(this.advStorage.getAllWithFilter(filter))
+                                  .orElse(new ArrayList<>());
       return ok(o("data", data));
    }
 
@@ -128,8 +125,7 @@ public class Ajax extends HttpServlet {
          String token = shadows.createToken(user);
          return ok(o("token", token));
       } catch (JSONException e) {
-         log.error(e);
-         log.trace(exToStr(e));
+         ErrorHandler.logError(log, e);
          return error("errorUser");
       }
    }
@@ -149,8 +145,7 @@ public class Ajax extends HttpServlet {
          String token = shadows.createToken(user);
          return ok(o("token", token));
       } catch (JSONException e) {
-         log.error(e);
-         log.trace(exToStr(e));
+         ErrorHandler.logError(log, e);
          return error("unknown error");
       }
    }
@@ -164,8 +159,7 @@ public class Ajax extends HttpServlet {
          }
          return ok(o("id_adv", parseAdvert(json.getJSONObject("advert"), user)));
       } catch (Exception e) {
-         log.error(e);
-         log.trace(exToStr(e));
+         ErrorHandler.logError(log, e);
          return error("create - unknown error");
       }
    }
@@ -210,8 +204,7 @@ public class Ajax extends HttpServlet {
          }
          car.setImages(images);
       } catch (Exception e) {
-         log.error(e);
-         log.trace(exToStr(e));
+         ErrorHandler.logError(log, e);
       }
 
       try {
@@ -221,8 +214,7 @@ public class Ajax extends HttpServlet {
          car.setFuelType(getCatValue(FuelType.class, categories));
          car.setGearbox(getCatValue(GearType.class, categories));
       } catch (Exception e) {
-         log.error(e);
-         log.trace(exToStr(e));
+         ErrorHandler.logError(log, e);
       }
 
       return advStorage.save(adv);
@@ -244,8 +236,7 @@ public class Ajax extends HttpServlet {
          advStorage.save(advert);
          return ok(o("status", !status));
       } catch (JSONException e) {
-         log.error(e);
-         log.trace(exToStr(e));
+         ErrorHandler.logError(log, e);
          return error("create - unknown error");
       }
    }
