@@ -1,5 +1,7 @@
 package ru.job4j.start;
 
+import org.springframework.stereotype.Component;
+
 import java.io.PrintStream;
 import java.util.Scanner;
 
@@ -10,6 +12,7 @@ import java.util.Scanner;
  * @version 0.1
  * @since 25.05.2017
  */
+@Component
 public class ConsoleInput implements Input {
     /**
      * Ввод.

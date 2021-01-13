@@ -1,5 +1,7 @@
 package ru.job4j.start;
 
+import org.springframework.stereotype.Component;
+
 import ru.job4j.tracker.Tracker;
 
 /**
@@ -9,6 +11,7 @@ import ru.job4j.tracker.Tracker;
  * @version 0.1
  * @since 25.05.2017
  */
+@Component
 public class StartUI {
     /**
      * Ввод-вывод.
