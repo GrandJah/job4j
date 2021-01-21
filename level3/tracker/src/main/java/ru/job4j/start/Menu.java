@@ -1,9 +1,8 @@
 package ru.job4j.start;
 
+import java.util.ArrayList;
 import ru.job4j.tracker.Item;
 import ru.job4j.tracker.Tracker;
-
-import java.util.ArrayList;
 
 /**
  * junior.
@@ -33,9 +32,7 @@ class Menu {
         addAction(new BaseAction("Show all items") {
             @Override
             public void execute(Input input, Tracker tracker) {
-                for (Item item : tracker.findAll()) {
-                    input.println(item.toString());
-                }
+                tracker.findAllReactStyle(item -> input.println(item.toString()));
             }
         });
         addAction(new BaseAction("Edit item") {

@@ -101,4 +101,8 @@ public class TrackerArray implements Tracker {
         };
     }
 
+    @Override
+    public void findAllReactStyle(Observe observe) {
+        items.forEach(observe::receive);
+    }
 }

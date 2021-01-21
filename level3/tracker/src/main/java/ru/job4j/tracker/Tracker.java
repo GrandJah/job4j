@@ -17,12 +17,34 @@ public interface Tracker {
      */
     Item add(Item item) throws ErrorValue;
 
-    /** Получение всех заявок.
+    /**
+     * Получение всех заявок.
+     *
      * @return массив заявок
      */
     List<Item> findAll();
 
-    /** Поиск по ID.
+    /**
+     * Получение всех заявок в реактивном стиле.
+     *
+     * @param observe наблюдатель для заявок
+     */
+    default void findAllReactStyle(Observe observe) {
+        for (Item item : findAll()) {
+            observe.receive(item);
+        }
+    }
+
+    /**
+     * Наблюдатель для заявок.
+     */
+    interface Observe {
+        void receive(Item item);
+    }
+
+    /**
+     * Поиск по ID.
+     *
      * @param id ID заявки
      * @return заявка
      * @throws NotFound ненайденый элемент
